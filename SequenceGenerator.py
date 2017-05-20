@@ -28,11 +28,11 @@ def plotSequence(axarr, seq, domain, attrName, curr_state):
             if seq[i] == domain[j]:
                 p[j] = axarr.barh(ind, 1, left=i, color=colors[j] )
 
-    axarr.set_xlabel('Liczba probek')
+    axarr.set_xlabel('State nr')
     axarr.set_ylabel('Attribute '+attrName)
     axarr.set_yticks([])
     axarr.set_yticklabels(['Attr_1'])
 
-    #axarr.set_xticklabels(numpy.arange(-curr_state, len(seq)-curr_state+1, 10),minor=False)
-    axarr.set_xticks(numpy.arange(0, len(seq)+1, math.floor(len(seq)/10)),minor=False)
+    axarr.set_xticklabels(numpy.arange(-curr_state, len(seq)-curr_state+1, 10),minor=False)
+    axarr.set_xticks(numpy.arange(0, len(seq)+1, 10),minor=False)
     axarr.legend((p), (domain))
