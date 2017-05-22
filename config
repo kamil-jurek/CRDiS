@@ -1,0 +1,4 @@
+arg = 'b';domain = ['a', 'b', 'z']; from = -40; to = 0; probability = 0.1
+arg = 'd';domain = ['c', 'd']; from = -30; to = 0; probability = 0.5
+arg = 'fack';domain = ['ekacg', 'fack']; from = -10; to = 0; probability = 0.8
+arg = 3 ;domain = [1,2,3,4]; probability = 1.0
