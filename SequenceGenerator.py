@@ -5,11 +5,11 @@ def generateSequence(sequence, domain, value, operator, probability, fr, to):
     if operator == 'eq':
         prob = [(1.0 - probability) / (len(domain) - 1) for i in domain]
         prob[domain.index(value)] = probability
-
+        seq = list(sequence)
         for i in range(fr, to):
-            sequence[i] = numpy.random.choice(domain, p = prob)
+            seq[i] = numpy.random.choice(domain, p = prob)
 
-        return sequence
+        return seq
 
 def testSequence(seq, value, prob):
     counter = seq.count(value)

@@ -1,4 +1,6 @@
-arg = 'b';domain = ['a', 'b', 'z']; from = -40; to = 0; probability = 0.1
-arg = 'd';domain = ['c', 'd']; from = -30; to = 0; probability = 0.5
-arg = 'fack';domain = ['ekacg', 'fack']; from = -10; to = 0; probability = 0.8
-arg = 3 ;domain = [1,2,3,4]; probability = 1.0
+attr = 'arg_1';value='z';domain = ['a', 'b', 'z','h']; from = -50; to = -30; probability = 0.8
+attr = 'arg_1';value='b';domain = ['a', 'b', 'z','h']; from = -30; to = -15; probability = 0.8
+attr = 'arg_1';value='h';domain = ['a', 'b', 'z','h']; from = -15; to = 0; probability = 0.8
+attr = 'arg_2';value='d';domain = ['c', 'd']; from = -30; to = 0; probability = 0.8
+attr = 'arg_2';value='d';domain = ['c', 'd']; from = -60; to = -50; probability = 0.8
+attr = 'arg_4';value=2;domain = [1,2,3,4]; probability = 1.0
