@@ -3,4 +3,7 @@ attr = 'arg_1';value='b';domain = ['a', 'b', 'z','h']; from = -30; to = -15; pro
 attr = 'arg_1';value='h';domain = ['a', 'b', 'z','h']; from = -15; to = 0; probability = 0.8
 attr = 'arg_2';value='d';domain = ['c', 'd']; from = -30; to = 0; probability = 0.8
 attr = 'arg_2';value='d';domain = ['c', 'd']; from = -60; to = -50; probability = 0.8
-attr = 'arg_4';value=2;domain = [1,2,3,4]; probability = 1.0
+attr = 'arg_3';value='ana';domain = ['ana','ben'];from = -60; to = 0; probability = 0.8
+attr = 'arg_4';value=2;domain = [1,2,3,4]; probability = 0.8
+attr = 'arg_2';value='d';domain = ['c', 'd']; from = -70; to = -60; probability = 1.0
+attr = 'arg_5';value=3;domain = [1,2,3,4]; probability = 0.8

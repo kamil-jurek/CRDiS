@@ -1,10 +1,17 @@
+import argparse
 import SequenceGenerator as sg
 import matplotlib.pyplot as plt
 import numpy
 import math
 import ast
 
-with open('config') as f:
+parser = argparse.ArgumentParser(description='Sequence Generator.')
+parser.add_argument('-i','--input', help='Config input file name',required=True)
+parser.add_argument('-s','--save', action="store_true", help='Save generated sequence?', default=False, required=False)
+parser.add_argument('-p','--plot', action="store_true", help='Plot generated sequence?', default=False, required=False)
+args = parser.parse_args()
+
+with open(args.input) as f:
     lines = f.readlines()
 
 config_list = []
@@ -30,13 +37,13 @@ for config in config_list:
         attr_dict = [d for d in grouped_config_list if d['attr_name'] == key][0]
         attr_dict['value'].append(config)
 
-for conf in grouped_config_list:
-    for key, value in conf.items():
-        print key,": ", value if key == 'attr_name' else ' '
-        if key != 'attr_name':
-            for v in value:
-                print "\t", v
-    print
+# for conf in grouped_config_list:
+#     for key, value in conf.items():
+#         print key,": ", value if key == 'attr_name' else ' '
+#         if key != 'attr_name':
+#             for v in value:
+#                 print "\t", v
+#     print
 
 curr_state = max([abs(int(float(config_list[i]['from']))) for i in range(len(config_list)) if 'from' in config_list[i]])*2
 last_state = curr_state + curr_state/2
@@ -61,10 +68,14 @@ for config in grouped_config_list:
                 to = abs(int(float(config_values[z]['to'])))
 
         seq = sg.generateSequence(seq, domain, value, operator, probability, curr_state-fr, curr_state-to)
-        sg.plotSequence(axarr[j], seq, domain, config['attr_name'], curr_state)
+
+        if(args.plot):
+            sg.plotSequence(axarr[j], seq, domain, config['attr_name'], curr_state)
     j += 1
     seqs.append(seq)
 
-plt.show()
+if args.plot:
+    plt.show()
 
-#sg.saveToCsv(li, seqs)
+if args.save:
+    sg.saveToCsv(grouped_config_list, seqs)

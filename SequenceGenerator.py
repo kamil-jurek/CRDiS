@@ -1,5 +1,7 @@
 import numpy
 import math
+import csv
+import time
 
 def generateSequence(sequence, domain, value, operator, probability, fr, to):
     if operator == 'eq':
@@ -36,3 +38,12 @@ def plotSequence(axarr, seq, domain, attrName, curr_state):
     axarr.set_xticklabels(numpy.arange(-curr_state, len(seq)-curr_state+1, 10),minor=False)
     axarr.set_xticks(numpy.arange(0, len(seq)+1, 10),minor=False)
     axarr.legend((p), (domain))
+
+
+def saveToCsv(listOfConfigs, sequences):
+    timestr = time.strftime("%Y_%m_%d-%H:%M:%S")
+    with open('sequence_'+timestr+'.csv','wb') as csv_file:
+        writer = csv.writer(csv_file, delimiter=',')
+        writer.writerow([config['attr_name'] for config in listOfConfigs])
+        for i in range(len(sequences[0])):
+            writer.writerow([seq[i] for seq in sequences])
