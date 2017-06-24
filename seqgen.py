@@ -5,10 +5,14 @@ import numpy
 import math
 import ast
 
+past_states = 1.5
+future_states = 1.5
+
 parser = argparse.ArgumentParser(description='Sequence Generator.')
 parser.add_argument('-i','--input', help='Config input file name',required=True)
 parser.add_argument('-s','--save', action="store_true", help='Save generated sequence?', default=False, required=False)
 parser.add_argument('-p','--plot', action="store_true", help='Plot generated sequence?', default=False, required=False)
+parser.add_argument('-r','--random', action="store_true", help='Random initialization?', default=False, required=False)
 args = parser.parse_args()
 
 with open(args.input) as f:
@@ -45,8 +49,8 @@ for config in config_list:
 #                 print "\t", v
 #     print
 
-curr_state = max([abs(int(float(config_list[i]['from']))) for i in range(len(config_list)) if 'from' in config_list[i]])*2
-last_state = curr_state + curr_state/2
+curr_state = int(max([abs(int(float(config_list[i]['from']))) for i in range(len(config_list)) if 'from' in config_list[i]])*past_states)
+last_state = int(curr_state*future_states)
 seqs = []
 k = len(grouped_config_list)
 f, axarr = plt.subplots(k)
@@ -54,7 +58,11 @@ j = 0
 for config in grouped_config_list:
     config_values = config['value']
     init_value = ast.literal_eval(config_values[0]['domain'])[0]
-    seq = [init_value for k in range(0, last_state)]
+
+    if args.random:
+        seq = [numpy.random.choice(ast.literal_eval(config_values[0]['domain'])) for k in range(0, last_state)]
+    else:
+        seq = [init_value for k in range(0, last_state)]
     domain = ast.literal_eval(config_values[0]['domain'])
     operator = 'eq'
     for z in range(0,len(config_values)):
@@ -66,6 +74,8 @@ for config in grouped_config_list:
             fr = abs(int(float(config_values[z]['from'])))
             if config_values[z]['to'] != '0':
                 to = abs(int(float(config_values[z]['to'])))
+            else:
+                to = 0
 
         seq = sg.generateSequence(seq, domain, value, operator, probability, curr_state-fr, curr_state-to)
 

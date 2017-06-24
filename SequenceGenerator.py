@@ -31,7 +31,7 @@ def plotSequence(axarr, seq, domain, attrName, curr_state):
                 p[j] = axarr.barh(ind, 1, left=i, color=colors[j] )
 
     axarr.set_xlabel('State nr')
-    axarr.set_ylabel('Attribute '+str(attrName))
+    axarr.set_ylabel(str(attrName))
     axarr.set_yticks([])
     axarr.set_yticklabels(['Attr_1'])
 
