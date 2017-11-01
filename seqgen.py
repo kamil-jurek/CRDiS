@@ -57,13 +57,14 @@ f, axarr = plt.subplots(k)
 j = 0
 for config in grouped_config_list:
     config_values = config['value']
-    init_value = ast.literal_eval(config_values[0]['domain'])[0]
+    domain = ast.literal_eval(config_values[0]['domain'])
+    init_value = domain[0]
 
     if args.random:
-        seq = [numpy.random.choice(ast.literal_eval(config_values[0]['domain'])) for k in range(0, last_state)]
+        seq = [numpy.random.choice(domain) for k in range(0, last_state)]
     else:
         seq = [init_value for k in range(0, last_state)]
-    domain = ast.literal_eval(config_values[0]['domain'])
+
     operator = 'eq'
     for z in range(0,len(config_values)):
         value = ast.literal_eval(config_values[z]['value'])
