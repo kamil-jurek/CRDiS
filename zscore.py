@@ -23,7 +23,7 @@ def thresholding_algo(y, lag, threshold, influence):
             avgFilter[i] = np.mean(filteredY[(i-lag):i])
             stdFilter[i] = np.std(filteredY[(i-lag):i])
         else:
-            signals[i] = 0
+            signals[i] = signals[i]
             filteredY[i] = y[i]
             avgFilter[i] = np.mean(filteredY[(i-lag):i])
             stdFilter[i] = np.std(filteredY[(i-lag):i])
