@@ -101,7 +101,6 @@ class ChangeDetector(object):
 
 
 class OnlineSimulator(object):
-
     def __init__(self, change_detector, signal):
         self.signal = signal
         self.change_detector = change_detector
@@ -112,25 +111,21 @@ class OnlineSimulator(object):
         signal = self.signal
         detector = self.change_detector
 
-        # Check
         if detector.has_started is True:
             raise Exception("Detector must be re-initialized.")
 
-        # Run simulation
         residuals_history = defaultdict(list)
-        for value in signal:
-            # Step to get residuals and check stopping rules
+
+        for i, value in enumerate(signal):
             res = next(detector.step(value))
 
-            # Store residual_history (for plotting only)
             for k, v in res.items():
                 residuals_history[k].append(v)
 
             if detector.rules_triggered is True:
-                self.stops.append(value)
+                self.stops.append(i)
 
         def dict_to_arrays(ddict):
-            """Convenience func to bundle residuals into a dict"""
             new_dict = {}
             for k, v in ddict.items():
                 new_dict[k] = np.array(v)
@@ -139,7 +134,6 @@ class OnlineSimulator(object):
         residuals_history = dict_to_arrays(residuals_history)
         self.residuals_history = residuals_history
 
-        # Display results
         if plot is True:
             self.display_results(**kwargs)
 
@@ -149,27 +143,16 @@ class OnlineSimulator(object):
         signal = self.signal
         detector = self.change_detector
         residuals_history = self.residuals_history
-        """Print out the results of our experiment. """
 
-        print("Residuals: {}".format(
-            [res for res in residuals_history.keys()]
-            ))
-
-        # Print results
-        if detector.rules_triggered is True:
-            # Length of any residual array tells us when the rule was triggered
-            some_res = next(iter(residuals_history.items()))
-            #print(some_res)
-            #print("residuals: ", residuals_history)
-            print(self.stops)
-            stop_point = len(some_res) - 1
-            # Quick sanity check
-            assert (stop_point > 0) & (stop_point <= len(signal))
-            print("Change detected. Stopping Rule triggered at {}.\n".format(
-                stop_point))
-        else:
-            stop_point = None
-            print("Stopping rule not triggered.")
+        # if detector.rules_triggered is True:
+        #     some_res = next(iter(residuals_history.items()))
+        #     #print(some_res)
+        #     #print("residuals: ", residuals_history)
+        #     #print("stops: ", self.stops)
+        #     stop_point = len(some_res) - 1
+        # else:
+        #     stop_point = None
+        #     print("Stopping rule not triggered.")
 
         # Generate axes to plot signal and residuals"""
         plotcount = 1 + len(residuals_history)
@@ -181,9 +164,15 @@ class OnlineSimulator(object):
             ax = axes[0]
         elif plotcount == 1:
             ax = axes
-        ax.plot(self.stops, 'o')
+
+        avgFilter = np.asarray(detector.avgFilter)
+        stdFilter = np.asarray(detector.stdFilter)
+        #ax.plot(self.stops, 'o')
         ax.plot(signal, 'b.')
         ax.plot(signal, 'b-', alpha=0.15)
+        ax.plot(avgFilter, color="red", lw=2)
+        ax.plot(avgFilter + detector.threshold * stdFilter,  color="green", lw=2)
+        ax.plot(avgFilter - detector.threshold * stdFilter, color="green", lw=2)
         ax.set_title(signal_name)
 
         # Scale signal
@@ -194,7 +183,8 @@ class OnlineSimulator(object):
 
         # Plot a horizontal line where the stop_point is indicated
         if detector.rules_triggered is True:
-            ax.vlines(x=stop_point, ymin=0, ymax=ax.get_ylim()[1],
+            for s in self.stops:
+                ax.vlines(x=s, ymin=0, ymax=ax.get_ylim()[1],
                       colors='r', linestyles='dotted')
 
         # Plot each residual
@@ -206,85 +196,55 @@ class OnlineSimulator(object):
             ax.set_ylim(
                 np.nanmin(res_values)*0.5,
                 np.nanmax(res_values)*1.5)
-            if stop_point is not None:
-                ax.vlines(x=stop_point, ymin=0, ymax=ax.get_ylim()[1],
-                          colors='r', linestyles='dotted')
+            for s in self.stops:
+                ax.vlines(x=s, ymin=0, ymax=ax.get_ylim()[1],
+                      colors='r', linestyles='dotted')
 
         plt.show()
 
 class MeanDetector(ChangeDetector):
-    """
-    Static Mean Detector
-
-    Residuals:
-        mean_: the mean of signal values seen so far
-        diff_: the difference between new value and mean_
-
-    Stopping Rule:
-        Stop if diff_ exceeds some threshold percentage value.
-        Default is 5%.
-    """
 
     def __init__(self, threshold=0.05):
         super( MeanDetector, self ).__init__()
-
-        # Save hyper-parameter(s)
         self.threshold = threshold
-
-        # Required Attributes
-        self.total_val = 0  # Used for calculating mean
-
-        # new residuals(s)
+        self.total_val = 0
         self.diff_ = np.nan
 
     def update_residuals(self, new_signal_value):
         self._update_base_residuals(new_signal_value)
-
-        # Update attributes
         self.total_val += new_signal_value
-
-        #Update residuals
         self.mean_ = self.total_val / self.signal_size
         self.diff_ = np.absolute(self.mean_ - new_signal_value)
 
     def check_stopping_rules(self, new_signal_value):
-        #check if new value is more than % different from mean
         threshold_level = self.mean_ * self.threshold
+        self.rules_triggered = False
 
         if self.diff_ > threshold_level:
             self.rules_triggered = True
+            self.total_val = 0
+            self.signal_size = 0
 
 from collections import deque
 
 class ZScoreDetector(ChangeDetector):
     def __init__(self, window_size = 100, threshold=0.05):
         super( ZScoreDetector, self ).__init__()
-
-        # hyper-parameters
         self.threshold = threshold
         self.window_size = window_size
-
-        # Interim and calculated values
         self.k = 0  # total signal_size
         self.g_mean = 0.0  # global mean
         self.s = 0.0  # for Welford's method. variance = s / (k + 1)
-
-        # This is the window
         self.window = deque(maxlen = window_size)
-
-        # ... and, finally, our residuals
         self.z_score_ = np.nan
         self.z_array = []
+        self.mymean = []
 
     def update_residuals(self, new_signal_value):
         self._update_base_residuals(new_signal_value)
         x = new_signal_value
-
-        # Add new value to local window (deque will
-        #  automatically drop a value to maintain window size)
         self.window.append(x)
 
-        """Calculate Statistics on global and local window """
         # Calculate global statistics using welford's method
         oldm = self.g_mean
         newm = oldm + (x - oldm) / (self.k + 1)
@@ -293,33 +253,62 @@ class ZScoreDetector(ChangeDetector):
         g_mean = newm  # Global mean
         g_std = np.sqrt(s / (self.k+1))  # Global std
 
-        # Calculate local statistics on the window
-        #  We have all values stored for the window, so
-        #  can use built-in numpy stats methods
         w_mean = np.mean(self.window)  # Window mean
         w_std = np.std(self.window)  # Window std
 
-        """Calculate variables required for Zscore"""
-        # Calculate SE, see formula above
         std_diff = (g_std - w_std) / g_std
         SE = g_std / np.sqrt(self.window_size)
 
-        # Difference between the means
         mean_diff = (g_mean - w_mean) / g_mean
-
-        # Z-score (residual)
+        self.mymean.append(newm)
         self.z_score_ = (w_mean - g_mean) / SE
         self.z_array.append(self.z_score_)
-
-        # Store attributes
         self.g_mean = g_mean
         self.s = s
-
-        # Update k (size of global window).
-        #   This must be done at the end!
         self.k += 1
 
     def check_stopping_rules(self, new_signal_value):
-        # Check stopping rule!
-        if np.abs(self.z_score_) > self.threshold:
+        self.rules_triggered = False
+        if np.absolute(self.z_score_) > self.threshold:
+            #print("value:  ", new_signal_value)
+            #print("zscore: ", np.absolute(self.z_score_))
             self.rules_triggered = True
+
+class MyZScoreDetector(ChangeDetector):
+    def __init__(self, y, lag=30, threshold=1.0, influence=0.0):
+        super( MyZScoreDetector, self ).__init__()
+        self.y = y
+        self.lag = lag
+        self.threshold = float(threshold)
+        self.influence = influence
+        self.itt = -1
+        self.signals = np.zeros(len(y))
+        self.filteredY = np.array(y)
+        self.avgFilter = [0]*len(y)
+        self.stdFilter = [0]*len(y)
+        for i in np.arange(0, lag):
+            self.avgFilter[i] = np.mean(y[0:i])
+            self.stdFilter[i] = np.std(y[0:i])
+        self.avgFilter[lag - 1] = np.mean(y[0:lag])
+        self.stdFilter[lag - 1] = np.std(y[0:lag])
+        self.rules_triggered = False
+
+    def update_residuals(self, new_signal_value):
+        self._update_base_residuals(new_signal_value)
+        self.itt += 1
+
+    def check_stopping_rules(self, new_signal_value):
+        if self.itt > self.lag:
+            print("1: ",np.abs(self.y[self.itt] - self.avgFilter[self.itt-1]))
+            print("2: ",self.threshold * self.stdFilter[self.itt-1])
+            if np.abs(self.y[self.itt] - self.avgFilter[self.itt-1]) > self.threshold * self.stdFilter[self.itt-1]:
+                self.rules_triggered = True
+
+                self.filteredY[self.itt] = self.influence * self.y[self.itt] + (1 - self.influence) * self.filteredY[self.itt-1]
+                self.avgFilter[self.itt] = np.mean(self.filteredY[(self.itt-self.lag):self.itt])
+                self.stdFilter[self.itt] = np.std(self.filteredY[(self.itt-self.lag):self.itt])
+            else:
+                self.rules_triggered = False
+                self.filteredY[self.itt] = self.y[self.itt]
+                self.avgFilter[self.itt] = np.mean(self.filteredY[(self.itt-self.lag):self.itt])
+                self.stdFilter[self.itt] = np.std(self.filteredY[(self.itt-self.lag):self.itt])

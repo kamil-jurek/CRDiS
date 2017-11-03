@@ -15,7 +15,7 @@ y = df['attr_1']
 # Settings: lag = 30, threshold = 5, influence = 0
 lag = 30
 threshold = 1.5
-influence = 0.5
+influence = 0.
 
 # Run algo with settings from above
 result = zs.thresholding_algo(y, lag=lag, threshold=threshold, influence=influence)
