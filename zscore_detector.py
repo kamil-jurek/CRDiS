@@ -44,15 +44,19 @@ class ZScoreDetector(ChangeDetector):
         self.s_ = s
         self.k += 1
 
+    def reset(self):
+        self.k = 0
+        self.g_mean_ = 0.0
+        self.s_ = 0.0
+        self.z_score_ = np.nan
+        self.window_mean_ = 0.0
+        self.g_std_ = 0.0
+        self.window.clear()
+
     def check_stopping_rules(self, new_signal_value):
         self.rules_triggered = False
         if np.absolute(self.z_score_) > self.threshold:
             #print("value:  ", new_signal_value)
             #print("zscore: ", np.absolute(self.z_score_))
             self.rules_triggered = True
-            # self.k = 0  # total signal_size
-            # self.g_mean_ = 0.0  # global mean
-            # self.s_ = 0.0  # for Welford's method. variance = s / (k + 1)
-            # self.z_score_ = np.nan
-            # self.window_mean_ = 0.0
-            # self.g_std_ = 0.0
+            self.reset()

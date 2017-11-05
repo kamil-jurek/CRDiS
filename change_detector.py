@@ -154,6 +154,7 @@ class OnlineSimulator(object):
                 np.nanmin(res_values)*0.5,
                 np.nanmax(res_values)*1.5)
             for s in self.stops:
+                print(s)
                 ax.vlines(x=s, ymin=0, ymax=ax.get_ylim()[1],
                       colors='r', linestyles='dotted')
 
