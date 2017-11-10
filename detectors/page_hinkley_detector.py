@@ -1,5 +1,5 @@
 import numpy as np
-from change_detector import ChangeDetector
+from detector import ChangeDetector
 
 class PageHinkleyDetector(ChangeDetector):
 
@@ -14,16 +14,15 @@ class PageHinkleyDetector(ChangeDetector):
         self.num = 0
         self.rules_triggered = False
 
-    def update_residuals(self, new_signal_value):
-        self._update_base_residuals(new_signal_value)
+    def update(self, new_signal_value):
+        super(PageHinkleyDetector, self).update(new_signal_value)
         self.num += 1
-
-    def check_stopping_rules(self, new_signal_value):
         x = new_signal_value
         #self.x_mean_ = (x + self.x_mean_ * (self.num - 1)) / self.num
         self.x_mean_ = self.x_mean_ + (x - self.x_mean_) / self.num
         self.sum_ = self.sum_ * self.alpha + x - self.x_mean_ - self.delta
 
+    def check_stopping_rules(self, new_signal_value):
         self.rules_triggered = False
         if self.sum_ > self.lambd or self.sum_ < -self.lambd:
             self.rules_triggered = True

@@ -148,13 +148,16 @@ class OnlineSimulator(object):
             #print("res:",res_name, res_values)
             ax = axes[ii+1]
             #[len(res_values)-1]
+            #print(res_values)
             ax.plot(res_values, 'g.', alpha=0.7)
             ax.set_title("Residual #{}: {}".format(ii+1, res_name))
+            #print("namin:",np.min(res_values)*0.5)
+            #print("namax:",np.max(res_values)*1.5)
             ax.set_ylim(
                 np.nanmin(res_values)*0.5,
                 np.nanmax(res_values)*1.5)
             for s in self.stops:
-                print(s)
+                #print(s)
                 ax.vlines(x=s, ymin=0, ymax=ax.get_ylim()[1],
                       colors='r', linestyles='dotted')
 

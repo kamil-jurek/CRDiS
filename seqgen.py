@@ -1,5 +1,5 @@
 import argparse
-import SequenceGenerator as sg
+import sequence_generator as sg
 import matplotlib.pyplot as plt
 import numpy
 import math

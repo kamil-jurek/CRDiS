@@ -1,4 +1,4 @@
-import SequenceGenerator as sg
+import sequence_generator as sg
 import matplotlib.pyplot as plt
 import numpy
 import math
@@ -30,11 +30,11 @@ sg.plotSequence(axarr[2], seq3, domain3, '3', curr_state)
 #f.set_size_inches(w=10,h=5)
 plt.show()
 
-import csv
-import time
-
-timestr = time.strftime("%Y_%m_%d-%H:%M:%S")
-with open('sequence_'+timestr+'.csv','wb') as csv_file:
-    writer = csv.writer(csv_file, delimiter=',')
-    for i in range(len(seq1)):
-        writer.writerow([i,seq1[i],seq2[i],seq3[i]])
+# import csv
+# import time
+#
+# timestr = time.strftime("%Y_%m_%d-%H:%M:%S")
+# with open('sequence_'+timestr+'.csv','wb') as csv_file:
+#     writer = csv.writer(csv_file, delimiter=',')
+#     for i in range(len(seq1)):
+#         writer.writerow([i,seq1[i],seq2[i],seq3[i]])

@@ -1,34 +1,47 @@
 import math
 import numpy as np
-from change_detector import ChangeDetector
+from detector import ChangeDetector
 
 class DDMDetector(ChangeDetector):
 
-    def __init__(self, m_p=1, m_n=1, m_s=0):
+    def __init__(self, m_p=1, m_s=0):
         super( DDMDetector, self ).__init__()
         self.m_p_ = m_p
-        self.m_n = m_n
+        self.n = 1
         self.m_s_ = m_s
         self.m_pmin = 9999
         self.m_psmin = 9999
         self.m_smin_ = 9999
         self.rules_triggered = False
+        self.mean_ = 0
+        self.sum_ = 0
+        self.lambd = 5
+        self.delta = 0.005
 
-    def update_residuals(self, new_signal_value):
-        self._update_base_residuals(new_signal_value)
+    def update(self, new_signal_value):
+        super(DDMDetector, self).update(new_signal_value)
         if self.rules_triggered:
             self.m_p_ = 1
-            self.m_n = 1
+            self.n = 1
             self.m_s_ = 0
             self.m_pmin = 9999
             self.m_psmin = 9999
             self.m_smin_ = 9999
+            self.mean_ = 0
+            self.sum_ = 0
 
-        prediction = new_signal_value % 2
-        print(prediction)
-        self.m_p_ = self.m_p_ + (prediction - self.m_p_) / self.m_n;
-        self.m_s_ = math.sqrt(self.m_p_ * (1 - self.m_p_) / self.m_n);
-        self.m_n += 1
+        x = new_signal_value
+        self.mean_ = self.mean_ + (x - self.mean_) / self.n;
+        self.sum_ = self.sum_ + x - self.mean_ - self.delta;
+
+        if np.abs(np.sum(self.sum_)) > self.lambd:
+            prediction = 1
+        else:
+            prediction = 0
+
+        self.m_p_ = self.m_p_ + (prediction - self.m_p_) / self.n;
+        self.m_s_ = math.sqrt(self.m_p_ * (1 - self.m_p_) / self.n);
+        self.n += 1
 
         self.estimation = self.m_p_;
         self.delay = 0;
