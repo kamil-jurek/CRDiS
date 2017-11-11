@@ -16,38 +16,29 @@ from sklearn.preprocessing import LabelEncoder
 from sklearn.preprocessing import OneHotEncoder
 import category_encoders as ce
 
-def encode2(data):
-    # Specify the columns to encode then fit and transform
+def encode(data):
+    #encoder = ce.BinaryEncoder( ) #obiecujacy
+    encoder = ce.HelmertEncoder( ) #obiecujacy
+    #encoder = ce.OrdinalEncoder( ) #simple but working
+
     #encoder = ce.polynomial.PolynomialEncoder()
     #encoder = ce.OneHotEncoder()
     #encoder = ce.BackwardDifferenceEncoder()
-    #encoder = ce.BinaryEncoder( ) #obiecujacy
     #encoder = ce.HashingEncoder( )
-    encoder = ce.HelmertEncoder( ) #obiecujacy
-    #encoder = ce.OrdinalEncoder( ) #simple but working
     #encoder = ce.SumEncoder()
     encoder.fit(data, verbose=1)
     data = encoder.transform(data)
     data = data.values.tolist()
 
-    print(data[:5])
+    print(data[len(signal)-1])
     return data
 
-def encode(data):
+def encode_int(data):
     values = np.array(data)
-    #print("Values:", values)
-    # integer encode
     label_encoder = LabelEncoder()
     integer_encoded = label_encoder.fit_transform(values)+1
-    #print("Integer encoded:", integer_encoded)
-    # binary encode
-    #onehot_encoder = OneHotEncoder(sparse=False)
-    #integer_encoded = integer_encoded.reshape(len(integer_encoded), 1)
-    #onehot_encoded = onehot_encoder.fit_transform(integer_encoded)
-    #print("One hot encoded:", onehot_encoded)
 
     return integer_encoded
-    #return onehot_encoded
 
 # df = pd.read_csv('sequences/sequence_2017_11_05-14.11.15.csv')
 # signal = np.array(df['attr_1'])
@@ -61,17 +52,22 @@ def encode(data):
 # df = pd.read_csv('sequences/sequence_2017_11_05-18.50.48.csv')
 # signal = np.array(df['attr_1'])
 
-df = pd.read_csv('sequences/sequence_2017_11_08-22.06.35.csv')
+# Symbolic data
+#df = pd.read_csv('sequences/sequence_2017_11_11-12.16.43.csv')
+df = pd.read_csv('sequences/sequence_2017_11_11-12.17.26.csv')
+#df = pd.read_csv('sequences/sequence_2017_11_08-22.06.35.csv')
 signal = np.array(df['attr_1'])
-signal = encode2(signal)
+signal = encode_int(signal)
 
+win_size = int(len(signal)*(5/180))
+print("win size:", win_size)
 # Create detector
-#detector = MeanDetector(threshold=0.3)
-detector = ZScoreDetector(window_size = 5, threshold=2)
+#detector = MeanDetector(threshold=0.85)
+detector = ZScoreDetector(window_size = win_size, threshold=2.5)
 #detector = StackZScoreDetector(signal, lag=55, threshold=1, influence=0.3)
-#detector = PageHinkleyDetector(delta=0.001, lambd=4.5, alpha=0.99)
-#detector = DDMDetector(m_p=1, m_s=0)
-#detector = CusumDetector(delta=0.005, lambd=5)
+#detector = PageHinkleyDetector(delta=0.001, lambd=15, alpha=0.99)
+#detector = DDMDetector(m_p=1, m_s=0, lambd=20)
+#detector = CusumDetector(delta=0.005, lambd=20)
 #detector = AdwinDetector(delta = 0.01)
 OnlineSimulator(detector, signal).run()
 

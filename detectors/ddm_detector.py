@@ -4,7 +4,7 @@ from detector import ChangeDetector
 
 class DDMDetector(ChangeDetector):
 
-    def __init__(self, m_p=1, m_s=0):
+    def __init__(self, m_p=1, m_s=0, lambd=5):
         super( DDMDetector, self ).__init__()
         self.m_p_ = m_p
         self.n = 1
@@ -15,7 +15,7 @@ class DDMDetector(ChangeDetector):
         self.rules_triggered = False
         self.mean_ = 0
         self.sum_ = 0
-        self.lambd = 5
+        self.lambd = lambd
         self.delta = 0.005
 
     def update(self, new_signal_value):

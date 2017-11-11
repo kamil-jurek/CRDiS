@@ -1,5 +1,5 @@
 import numpy as np
-from change_detector import ChangeDetector
+from detector import ChangeDetector
 
 class MeanDetector(ChangeDetector):
 
@@ -9,8 +9,8 @@ class MeanDetector(ChangeDetector):
         self.total_val = 0
         self.diff_ = np.nan
 
-    def update_residuals(self, new_signal_value):
-        self._update_base_residuals(new_signal_value)
+    def update(self, new_signal_value):
+        super(MeanDetector, self).update(new_signal_value)
         self.total_val += new_signal_value
         self.mean_ = self.total_val / self.signal_size
         self.diff_ = np.absolute(self.mean_ - new_signal_value)
@@ -23,3 +23,5 @@ class MeanDetector(ChangeDetector):
             self.rules_triggered = True
             self.total_val = 0
             self.signal_size = 0
+            self.mean_ = 0
+            self.diff_ = 0
