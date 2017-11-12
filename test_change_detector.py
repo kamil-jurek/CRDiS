@@ -11,6 +11,7 @@ from stack_zscore_detector import StackZScoreDetector
 from ddm_detector import DDMDetector
 from cusum_detector import CusumDetector
 from adwin_detector import AdwinDetector
+from entropy_detector import EntropyDetector
 
 from sklearn.preprocessing import LabelEncoder
 from sklearn.preprocessing import OneHotEncoder
@@ -40,8 +41,8 @@ def encode_int(data):
 
     return integer_encoded
 
-# df = pd.read_csv('sequences/sequence_2017_11_05-14.11.15.csv')
-# signal = np.array(df['attr_1'])
+df = pd.read_csv('sequences/sequence_2017_11_05-14.11.15.csv')
+signal = np.array(df['attr_1'])
 
 # df = pd.read_csv('sequences/sequence_2017_11_05-18.43.29.csv')
 # signal = np.array(df['attr_1'])
@@ -54,21 +55,22 @@ def encode_int(data):
 
 # Symbolic data
 #df = pd.read_csv('sequences/sequence_2017_11_11-12.16.43.csv')
-df = pd.read_csv('sequences/sequence_2017_11_11-12.17.26.csv')
+#df = pd.read_csv('sequences/sequence_2017_11_11-12.17.26.csv')
 #df = pd.read_csv('sequences/sequence_2017_11_08-22.06.35.csv')
-signal = np.array(df['attr_1'])
-signal = encode_int(signal)
+#signal = np.array(df['attr_1'])
+#signal = encode_int(signal)
 
 win_size = int(len(signal)*(5/180))
 print("win size:", win_size)
 # Create detector
 #detector = MeanDetector(threshold=0.85)
-detector = ZScoreDetector(window_size = win_size, threshold=2.5)
+#detector = ZScoreDetector(window_size = win_size, threshold=2.5)
 #detector = StackZScoreDetector(signal, lag=55, threshold=1, influence=0.3)
 #detector = PageHinkleyDetector(delta=0.001, lambd=15, alpha=0.99)
-#detector = DDMDetector(m_p=1, m_s=0, lambd=20)
+detector = DDMDetector(lambd=20)
 #detector = CusumDetector(delta=0.005, lambd=20)
 #detector = AdwinDetector(delta = 0.01)
+#detector = EntropyDetector(threshold=1)
 OnlineSimulator(detector, signal).run()
 
 adwin =  AdwinDetector(delta = 0.01)
