@@ -12,9 +12,8 @@ class EntropyDetector(ChangeDetector):
         super(EntropyDetector, self).update(new_signal_value)
         x = new_signal_value
 
-        self.p_x_ = float(self.signal.count(x)) / self.signal_size
-        if self.p_x_ > 0:
-           self.entropy_ += - self.p_x_ * math.log(self.p_x_, 2)
+        for block in (self.signal[x:20+x] for x in range(self.signal_size-20)):
+            self.entropy_ = self.entrop(block)
 
     def check_stopping_rules(self, new_signal_value):
         self.rules_triggered = False
@@ -22,6 +21,16 @@ class EntropyDetector(ChangeDetector):
 
         if self.entropy_ > self.threshold:
             self.rules_triggered = True
-            self.entropy_ = 0
-            self.signal = []
-            self.signal_size = 0
+            #self.entropy_ = 0
+            #self.signal = []
+            #self.signal_size = 0
+    def entrop(self, data):
+        if not data:
+            return 0
+
+        entropy = 0
+        for x in range(len(data)):
+            p_x = float(data.count(x))/len(data)
+            if p_x > 0:
+                entropy += - p_x*math.log(p_x, 2)
+        return entropy

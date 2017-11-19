@@ -44,6 +44,7 @@ class ZScoreDetector(ChangeDetector):
         mean_diff = (g_mean_ - w_mean) / g_mean_
 
         self.z_score_ = (w_mean - g_mean_) / SE
+        #self.z_score_ = (w_mean - g_std) / SE
         #print("zscore:", self.z_score_)
         self.g_mean_ = g_mean_
         self.g_std_ = g_std

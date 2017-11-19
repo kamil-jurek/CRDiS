@@ -95,6 +95,16 @@ class OnlineSimulator(object):
             np.nanmin(signal)*.5,
             np.nanmax(signal)*1.5)
         ax.set_xlim(0, len(signal))
+        #fig.canvas.draw()
+        #print("Xticks:", np.arange(int(-0.5*len(signal)), int(0.5*len(signal))))
+        xl = ax.get_xticks()
+        ticks = xl - int(2/3 * len(signal))
+        xl = ax.get_xticks()
+        print(xl)
+        print(ticks)
+        #ax.xticks(ticks, ticks)
+        #ax.set_xticks(ticks)
+        ax.set_xticklabels(ticks)
 
         # Plot a horizontal line where the stop_point is indicated
         for s in self.stops:
