@@ -31,7 +31,7 @@ def encode(data):
     data = encoder.transform(data)
     data = data.values.tolist()
 
-    print(data[len(signal)-1])
+    #print(data[len(signal)-1])
     return data
 
 def encode_int(data):
@@ -40,6 +40,10 @@ def encode_int(data):
     integer_encoded = label_encoder.fit_transform(values)+1
 
     return integer_encoded
+
+data = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun']
+print("Encode", encode(data))
+
 
 df = pd.read_csv('sequences/sequence_2017_11_05-14.11.15.csv')
 signal = np.array(df['attr_1'])
@@ -50,22 +54,23 @@ signal = np.array(df['attr_1'])
 # df = pd.read_csv('sequences/sequence_2017_11_05-18.43.33.csv')
 # signal = np.array(df['attr_1'])
 
-# df = pd.read_csv('sequences/sequence_2017_11_05-18.50.48.csv')
-# signal = np.array(df['attr_1'])
+df = pd.read_csv('sequences/sequence_2017_11_22-20.43.46.csv')
+signal = np.array(df['attr_1'])
 
 # Symbolic data
-df = pd.read_csv('sequences/sequence_2017_11_11-12.16.43.csv')
+#df = pd.read_csv('sequences/sequence_2017_11_22-19.27.01.csv')
+#df = pd.read_csv('sequences/sequence_2017_11_11-12.16.43.csv')
 #df = pd.read_csv('sequences/sequence_2017_11_11-12.17.26.csv')
 #df = pd.read_csv('sequences/sequence_2017_11_08-22.06.35.csv')
-signal = np.array(df['attr_1'])
-signal = encode(signal)
+#signal = np.array(df['day_of_week'])
+#signal = encode(signal)
 #print(signal)
 
-win_size = int(len(signal)*(5/200))
+win_size = int(len(signal)*(5/250))
 print("win size:", win_size)
 # Create detector
 #detector = MeanDetector(threshold=0.85)
-detector = ZScoreDetector(window_size = win_size, threshold=2.5)
+detector = ZScoreDetector(window_size = win_size, threshold=2)
 #detector = StackZScoreDetector(signal, lag=55, threshold=1, influence=0.3)
 #detector = PageHinkleyDetector(delta=0.001, lambd=15, alpha=0.99)
 #detector = DDMDetector(lambd=20)
@@ -74,9 +79,8 @@ detector = ZScoreDetector(window_size = win_size, threshold=2.5)
 #detector = EntropyDetector(threshold=1)
 OnlineSimulator(detector, signal).run()
 
-adwin =  AdwinDetector(delta = 0.01)
-data_stream = [1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.7]
-
+#adwin =  AdwinDetector(delta = 0.01)
+#data_stream = [1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.7]
 # for data in data_stream:
 #   if (adwin.update(data)):
 #     print("Change has been detected in data: ", str(data))

@@ -1,0 +1,4 @@
+attr = 'day_of_week';value='Tue';domain = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun']; from = -800; to = -600; probability = 0.90
+attr = 'day_of_week';value='Wed';domain = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun']; from = -600; to = -300; probability = 0.80
+attr = 'day_of_week';value='Fri';domain = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun']; from = -300; to = 0; probability = 0.85
+attr = 'attr_2';value='Sun';domain = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun']; probability = 1.0

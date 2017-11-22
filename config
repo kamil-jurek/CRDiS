@@ -1,4 +1,0 @@
-attr = 'attr_1';value='Tue';domain = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun']; from = -800; to = -500; probability = 0.90
-attr = 'attr_1';value='Wed';domain = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun']; from = -500; to = -300; probability = 0.80
-attr = 'attr_1';value='Fri';domain = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun']; from = -300; to = 0; probability = 0.85
-attr = 'attr_3';value='Sun';domain = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun']; probability = 1.0

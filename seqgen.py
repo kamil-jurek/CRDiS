@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import numpy
 import math
 import ast
+import time
 
 past_states = 1.5
 future_states = 1.5
@@ -87,6 +88,8 @@ for config in grouped_config_list:
 
 if args.plot:
     plt.show()
+    timestr = time.strftime("%Y_%m_%d-%H.%M.%S")
+    plt.savefig("plots/plot_" + timestr + '.png')
 
 if args.save:
     sg.saveToCsv(grouped_config_list, seqs)

@@ -2,6 +2,7 @@ import numpy
 import math
 import csv
 import time
+import matplotlib.pyplot as plt
 
 def generateSequence(sequence, domain, value, operator, probability, fr, to):
     if operator == 'eq':
@@ -35,8 +36,8 @@ def plotSequence(axarr, seq, domain, attrName, curr_state):
     axarr.set_yticks([])
     axarr.set_yticklabels(['Attr_1'])
 
-    axarr.set_xticklabels(numpy.arange(-curr_state, len(seq)-curr_state+1, 10),minor=False)
-    axarr.set_xticks(numpy.arange(0, len(seq)+1, 10),minor=False)
+    axarr.set_xticklabels(numpy.arange(-curr_state, len(seq)-curr_state+1, 100),minor=False)
+    axarr.set_xticks(numpy.arange(0, len(seq)+1, 100),minor=False)
     axarr.legend((p), (domain))
 
 
