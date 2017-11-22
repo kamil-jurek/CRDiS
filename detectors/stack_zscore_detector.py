@@ -1,5 +1,5 @@
 import numpy as np
-from change_detector import ChangeDetector
+from detector import ChangeDetector
 
 class StackZScoreDetector(ChangeDetector):
     def __init__(self, y, lag=30, threshold=1.0, influence=0.0):

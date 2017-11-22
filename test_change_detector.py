@@ -54,8 +54,8 @@ signal = np.array(df['attr_1'])
 # df = pd.read_csv('sequences/sequence_2017_11_05-18.43.33.csv')
 # signal = np.array(df['attr_1'])
 
-df = pd.read_csv('sequences/sequence_2017_11_22-20.43.46.csv')
-signal = np.array(df['attr_1'])
+#df = pd.read_csv('sequences/sequence_2017_11_22-20.43.46..csv')
+#signal = np.array(df['attr_1'])
 
 # Symbolic data
 #df = pd.read_csv('sequences/sequence_2017_11_22-19.27.01.csv')
