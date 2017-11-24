@@ -42,6 +42,9 @@ class OnlineSimulator(object):
         self.signal_size = len(signal)
         self.stops = []
 
+    def get_detected_changes(self):
+        return self.stops
+
     def run(self, plot=True, **kwargs):
         signal = self.signal
         detector = self.change_detector

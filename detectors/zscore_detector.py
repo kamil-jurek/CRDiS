@@ -1,4 +1,6 @@
 import numpy as np
+import scipy as sp
+from scipy import signal
 
 from collections import deque
 from detector import ChangeDetector
@@ -7,7 +9,7 @@ class ZScoreDetector(ChangeDetector):
     def __init__(self, window_size = 100, threshold=0.05):
         super( ZScoreDetector, self ).__init__()
         self.threshold = threshold
-        self.signal = []
+        #self.signal = []
         self.window_size = window_size
         self.k = 0  # total signal_size
         self.g_mean_ = 0.0  # global mean
@@ -19,7 +21,8 @@ class ZScoreDetector(ChangeDetector):
 
     def update(self, new_signal_value):
         super(ZScoreDetector, self).update(new_signal_value)
-        #self.signal.append(new_signal_value)
+
+        self.signal = sp.signal.medfilt(self.signal,5).tolist()
         x = new_signal_value
         self.window.append(x)
         x = np.mean(x)

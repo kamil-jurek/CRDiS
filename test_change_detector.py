@@ -17,6 +17,9 @@ from sklearn.preprocessing import LabelEncoder
 from sklearn.preprocessing import OneHotEncoder
 import category_encoders as ce
 
+import scipy as sp
+from scipy import signal
+
 def encode(data):
     #encoder = ce.BinaryEncoder( ) #obiecujacy
     encoder = ce.HelmertEncoder( ) #obiecujacy
@@ -45,7 +48,7 @@ data = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun']
 print("Encode", encode(data))
 
 
-df = pd.read_csv('sequences/sequence_2017_11_05-14.11.15.csv')
+df = pd.read_csv('sequences/sequence_2017_11_24-20.16.00.csv')
 signal = np.array(df['attr_1'])
 
 # df = pd.read_csv('sequences/sequence_2017_11_05-18.43.29.csv')
@@ -63,21 +66,25 @@ signal = np.array(df['attr_1'])
 #df = pd.read_csv('sequences/sequence_2017_11_11-12.17.26.csv')
 #df = pd.read_csv('sequences/sequence_2017_11_08-22.06.35.csv')
 #signal = np.array(df['day_of_week'])
-#signal = encode(signal)
+#signal = encode_int(signal)
+#signal = sp.signal.medfilt(signal,21)
 #print(signal)
 
 win_size = int(len(signal)*(5/250))
 print("win size:", win_size)
 # Create detector
 #detector = MeanDetector(threshold=0.85)
-detector = ZScoreDetector(window_size = win_size, threshold=2)
+detector = ZScoreDetector(window_size = win_size, threshold=2.5)
 #detector = StackZScoreDetector(signal, lag=55, threshold=1, influence=0.3)
 #detector = PageHinkleyDetector(delta=0.001, lambd=15, alpha=0.99)
 #detector = DDMDetector(lambd=20)
 #detector = CusumDetector(delta=0.005, lambd=20)
 #detector = AdwinDetector(delta = 0.01)
 #detector = EntropyDetector(threshold=1)
-OnlineSimulator(detector, signal).run()
+simulator = OnlineSimulator(detector, signal)
+simulator.run()
+stops = simulator.get_detected_changes()
+print(np.array(stops)- int(2/3 * len(signal)))
 
 #adwin =  AdwinDetector(delta = 0.01)
 #data_stream = [1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.7]

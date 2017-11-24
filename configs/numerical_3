@@ -1,0 +1,4 @@
+attr = 'attr_1';value=20;domain = [1,20,35,36]; from = -800; to = -500; probability = 0.90
+attr = 'attr_1';value=35;domain = [1,2,3,4]; from = -500; to = -300; probability = 0.85
+attr = 'attr_1';value=36;domain = [1,2,3,4]; from = -300; to = 0; probability = 0.95
+attr = 'attr_2';value=1;domain = [1,2,3,4]; probability = 1.0

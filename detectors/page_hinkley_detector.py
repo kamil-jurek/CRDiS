@@ -1,4 +1,6 @@
 import numpy as np
+import scipy as sp
+from scipy import signal
 from detector import ChangeDetector
 
 class PageHinkleyDetector(ChangeDetector):
@@ -10,22 +12,21 @@ class PageHinkleyDetector(ChangeDetector):
         self.alpha = alpha
         self.x_mean_ = 0
         self.sum_ = 0
-        self.sum_min = 0
-        self.num = 0
+        self.n = 0
         self.rules_triggered = False
 
     def update(self, new_signal_value):
         super(PageHinkleyDetector, self).update(new_signal_value)
-        self.num += 1
-        x = new_signal_value
-        #self.x_mean_ = (x + self.x_mean_ * (self.num - 1)) / self.num
-        self.x_mean_ = self.x_mean_ + (x - self.x_mean_) / self.num
+        self.signal = sp.signal.medfilt(self.signal,5).tolist()
+        self.n += 1
+        x = np.mean(new_signal_value)
+        self.x_mean_ = self.x_mean_ + (x - self.x_mean_) / self.n
         self.sum_ = self.sum_ * self.alpha + x - self.x_mean_ - self.delta
 
     def check_stopping_rules(self, new_signal_value):
         self.rules_triggered = False
         if self.sum_ > self.lambd or self.sum_ < -self.lambd:
             self.rules_triggered = True
-            self.num = 0
+            self.n = 0
             self.x_mean_ = 0
             self.sum_ = 0
