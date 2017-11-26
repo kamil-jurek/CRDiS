@@ -26,7 +26,6 @@ elif seqLen <= 5000:
 elif seqLen <= 50000:
     step = 1000
 
-
 j = 0
 colors = {}
 pLegend = []

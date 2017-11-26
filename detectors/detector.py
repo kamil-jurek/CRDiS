@@ -98,32 +98,25 @@ class OnlineSimulator(object):
             np.nanmin(signal)*.5,
             np.nanmax(signal)*1.5)
         ax.set_xlim(0, len(signal))
-        #fig.canvas.draw()
-        #print("Xticks:", np.arange(int(-0.5*len(signal)), int(0.5*len(signal))))
         xl = ax.get_xticks()
         ticks = xl - int(2/3 * len(signal))
-        xl = ax.get_xticks()
-        print(xl)
-        print(ticks)
-        #ax.xticks(ticks, ticks)
-        #ax.set_xticks(ticks)
+
         ax.set_xticklabels(ticks)
 
         # Plot a horizontal line where the stop_point is indicated
         for s in self.stops:
-            print("Change in:", s)
             ax.vlines(x=s, ymin=0, ymax=ax.get_ylim()[1],
                   colors='r', linestyles='dotted')
 
-        # Plot each residual
+        # Plot each
         for ii, (res_name, res_values) in enumerate(parameters_history.items()):
             ax = axes[ii+1]
             ax.plot(res_values, 'g.', alpha=0.7)
             ax.set_title("Parameter #{}: {}".format(ii+1, res_name))
 
-            ax.set_ylim(
-                np.nanmin(res_values)*0.5,
-                np.nanmax(res_values)*1.5)
+            # ax.set_ylim(
+            #     np.nanmin(res_values)*0.5,
+            #     np.nanmax(res_values)*1.5)
             for s in self.stops:
                 ax.vlines(x=s, ymin=0, ymax=ax.get_ylim()[1],
                       colors='r', linestyles='dotted')

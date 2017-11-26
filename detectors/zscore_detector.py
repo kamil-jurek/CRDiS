@@ -1,6 +1,7 @@
 import numpy as np
 import scipy as sp
 from scipy import signal
+import matplotlib.pyplot as plt
 
 from collections import deque
 from detector import ChangeDetector
@@ -22,17 +23,15 @@ class ZScoreDetector(ChangeDetector):
     def update(self, new_signal_value):
         super(ZScoreDetector, self).update(new_signal_value)
 
-        self.signal = sp.signal.medfilt(self.signal,5).tolist()
+        #self.signal = sp.signal.medfilt(self.signal,5).tolist()
         x = new_signal_value
         self.window.append(x)
         x = np.mean(x)
+        
         # Calculate global statistics using welford's method
         oldm = self.g_mean_
         newm = oldm + (x - oldm) / (self.k + 1)
-        #newm = np.mean(self.signal)
-        #print("newm:",newm)
         s = self.s_ + (x - newm) * (x - oldm)
-        #s = np.std(self.signal)
 
         g_mean_ = newm  # Global mean
         g_std = np.sqrt(s / (self.k+1))  # Global std
@@ -43,12 +42,11 @@ class ZScoreDetector(ChangeDetector):
 
         std_diff = (g_std - w_std) / g_std
         SE = g_std / np.sqrt(self.window_size)
-        #print("gmean:", g_mean_)
         mean_diff = (g_mean_ - w_mean) / g_mean_
 
         self.z_score_ = (w_mean - g_mean_) / SE
         #self.z_score_ = (w_mean - g_std) / SE
-        #print("zscore:", self.z_score_)
+
         self.g_mean_ = g_mean_
         self.g_std_ = g_std
         self.s_ = s
