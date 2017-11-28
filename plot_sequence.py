@@ -52,7 +52,7 @@ if args.attribute:
 
     #plt.plot(signal)
     plt.legend((pLegend), list(colors.keys()), bbox_to_anchor=(1, 1.0))
-    plt.savefig("plots/plot_" + seqName.rsplit('/')[1] + '.png')
+    plt.savefig("plots/plot_" + seqName.rsplit('/')[1][:-4]+'_'+ args.attribute + '.png')
     plt.show()
 
 else:

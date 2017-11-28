@@ -29,12 +29,6 @@ class ChangeDetector(object):
 
         return self.get_parameters()
 
-    def __repr__(self):
-        return "Change Detector(triggered={}, residuals={})".format(
-            self.rules_triggered,
-            self.parameters_
-            )
-
 class OnlineSimulator(object):
     def __init__(self, change_detector, signal):
         self.signal = signal
@@ -74,7 +68,7 @@ class OnlineSimulator(object):
 
         return detector.rules_triggered
 
-    def display_results(self, signal_name='Signal', **kwargs):
+    def display_results(self, signal_name='Sequence', **kwargs):
         signal = self.signal
         detector = self.change_detector
         parameters_history = self.parameters_history
