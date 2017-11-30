@@ -8,6 +8,9 @@ from detector import OnlineSimulator
 from zscore_detector import ZScoreDetector
 from math import gcd
 
+def myround(x, base=10):
+    return int(base * round(float(x)/base))
+
 #Numerical data
 #df = pd.read_csv('sequences/sequence_2017_11_22-19.55.44.csv')
 df = pd.read_csv('sequences/sequence_2017_11_28-18.07.57.csv')
@@ -33,10 +36,12 @@ print(np.array(stops))
 subseqs = []
 indexes = []
 gcd_ = stops[0]
-first = round(stops[0], -1)
+
+roundTo = 100
+first = myround(stops[0], roundTo)
 for i in np.arange(0, len(stops)-1):
-    s = round(stops[i], -1)
-    e = round(stops[i+1], -1)
+    s = myround(stops[i], roundTo)
+    e = myround(stops[i+1], roundTo)
 
     indexes.append(s-first)
     if i == len(stops)-2:
