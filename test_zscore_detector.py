@@ -14,6 +14,7 @@ def myround(x, base=10):
 #Numerical data
 #df = pd.read_csv('sequences/sequence_2017_11_22-19.55.44.csv')
 df = pd.read_csv('sequences/sequence_2017_11_28-18.07.57.csv')
+#df = pd.read_csv('sequences/sequence_2017_12_01-22.11.54.csv')
 sequence = np.array(df['attr_1'])
 
 # Symbolic data
@@ -37,7 +38,7 @@ subseqs = []
 indexes = []
 gcd_ = stops[0]
 
-roundTo = 100
+roundTo = 10
 first = myround(stops[0], roundTo)
 for i in np.arange(0, len(stops)-1):
     s = myround(stops[i], roundTo)
@@ -51,7 +52,6 @@ for i in np.arange(0, len(stops)-1):
     print(s, e)
     subseq = sequence[s:e]
 
-
     m = round(np.mean(subseq))
     seq = [m for i in np.arange(s-first, e-first)]
     subseqs.append(seq)
@@ -59,6 +59,7 @@ for i in np.arange(0, len(stops)-1):
 
 print("gcd:", gcd_)
 indexes = np.array(indexes) / gcd_
+print("indexes:", indexes)
 
 shortSeq = []
 for s in subseqs:
@@ -70,7 +71,6 @@ with open('shortSeq.txt', 'w') as f:
             f.write(str(int(elem)) + ' -1 ')
     f.write('-2\n')
 
-print(indexes)
 print(shortSeq)
 
 
