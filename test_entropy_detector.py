@@ -18,7 +18,7 @@ signal = np.array(df['attr_1'])
 # signal = en.encode(signal)
 #signal = sp.signal.medfilt(signal,21)
 
-detector = EntropyDetector(threshold=100)
+detector = EntropyDetector(threshold=6)
 simulator = OnlineSimulator(detector, signal)
 simulator.run()
 

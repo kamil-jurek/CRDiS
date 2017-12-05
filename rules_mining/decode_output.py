@@ -18,7 +18,10 @@ with open('output.txt', 'r') as f:
                 head = splitted[0]
                 tail = splitted[1]
                 if tail:
-                    print(lhs, '==>',tail)
+                    #print(lhs, '==>',tail)
+                    rule = lhs + '==>' +tail
+                    if rule not in rules:
+                        rules.append(rule)
         # else:
         #    print(lhs, '========>',rhs)
         # if lhs in rhs:

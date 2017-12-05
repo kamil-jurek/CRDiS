@@ -57,6 +57,7 @@ for i in np.arange(0, len(stops)-1):
     subseqs.append(seq)
     plt.plot(np.arange(s, e), seq, '.')
 
+gcd_ = 50
 print("gcd:", gcd_)
 indexes = np.array(indexes) / gcd_
 print("indexes:", indexes)
@@ -68,8 +69,9 @@ for s in subseqs:
 with open('shortSeq.txt', 'w') as f:
     for seq in shortSeq:
         for  elem in seq:
-            f.write(str(int(elem)) + ' -1 ')
-    f.write('-2\n')
+            f.write(str(int(elem)) + ', ')
+            #f.write(str(int(elem)) + ' -1 ')
+    #f.write('-2\n')
 
 print(shortSeq)
 
