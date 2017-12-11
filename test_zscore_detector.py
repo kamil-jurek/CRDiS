@@ -57,7 +57,7 @@ for i in np.arange(0, len(stops)-1):
     subseqs.append(seq)
     plt.plot(np.arange(s, e), seq, '.')
 
-gcd_ = 50
+#gcd_ = 50
 print("gcd:", gcd_)
 indexes = np.array(indexes) / gcd_
 print("indexes:", indexes)
