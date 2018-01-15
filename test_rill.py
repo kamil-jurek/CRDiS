@@ -7,9 +7,9 @@ from rill import RILL
 from detector import OnlineSimulator
 
 #Numerical data
-#df = pd.read_csv('sequences/sequence_2017_11_24-20.16.00.csv')
-#signal = np.array(df['attr_1'])
-signal = [2, 2, 2, 2, 3, 3, 3, 2, 2, 2, 2, 3, 4, 4, 4, 4, 4, 5, 5, 5, 1, 5, 5]
+df = pd.read_csv('sequences/sequence_2017_11_24-20.16.00.csv')
+signal = np.array(df['attr_1'])
+#signal = [2, 2, 2, 2, 3, 3, 3, 2, 2, 2, 2, 3, 4, 4, 4, 4, 4, 5, 5, 5, 1, 5, 5]
 
 # Symbolic data
 # df = pd.read_csv('sequences/sequence_2017_11_22-19.35.27.csv')

@@ -6,9 +6,9 @@ import matplotlib.pyplot as plt
 from collections import deque
 from detector import ChangeDetector
 
-class ZScoreDetector(ChangeDetector):
+class ZScoreDetectorRules(ChangeDetector):
     def __init__(self, window_size = 100, threshold=0.05):
-        super( ZScoreDetector, self ).__init__()
+        super( ZScoreDetectorRules, self ).__init__()
         self.threshold = threshold
         #self.signal = []
         self.window_size = window_size
@@ -20,8 +20,11 @@ class ZScoreDetector(ChangeDetector):
         self.window_mean_ = 0.0
         self.g_std_ = 0.0
 
+        self.rules = []
+        self.stops = []
+
     def update(self, new_signal_value):
-        super(ZScoreDetector, self).update(new_signal_value)
+        super(ZScoreDetectorRules, self).update(new_signal_value)
 
         #self.signal = sp.signal.medfilt(self.signal,5).tolist()
         x = new_signal_value
@@ -65,7 +68,16 @@ class ZScoreDetector(ChangeDetector):
         self.rules_triggered = False
         if np.absolute(self.z_score_) > self.threshold:
             self.rules_triggered = True
-            self.reset(new_signal_value)
 
-        if self.signal_size % 1000 == 0:
-            print(self.signal_size)
+            prev = 0 if len(self.stops) == 0 else self.stops[-1][1]
+            self.stops.append((prev, self.signal_size, int(round(self.g_mean_))))
+            #print(self.stops)
+
+            vals = [stop[2] for stop in self.stops[:-1]]
+            for i in range(1, len(self.stops)-1):
+                rhs = vals[i:]
+                lhs = vals[:i]
+                rule = (rhs, lhs)
+                print(lhs, "==>", rhs)
+
+            self.reset(new_signal_value)
