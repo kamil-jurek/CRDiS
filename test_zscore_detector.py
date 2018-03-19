@@ -13,9 +13,9 @@ def myround(x, base=10):
 
 #Numerical data
 #df = pd.read_csv('sequences/sequence_2017_11_22-19.55.44.csv')
-#df = pd.read_csv('sequences/sequence_2017_11_28-18.07.57.csv')
+df = pd.read_csv('sequences/sequence_2017_11_28-18.07.57.csv')
 #df = pd.read_csv('sequences/sequence_2017_12_01-22.11.54.csv')
-df = pd.read_csv('sequences/sequence_2018_01_15-19.44.57.csv')
+#df = pd.read_csv('sequences/sequence_2018_01_15-19.44.57.csv')
 sequence = np.array(df['attr_1'])
 
 # Symbolic data
@@ -34,7 +34,6 @@ simulator.run()
 # stops = simulator.get_detected_changes()
 # print(np.array(stops)- int(2/3 * len(sequence)))
 # print(np.array(stops))
-#
 # subseqs = []
 # indexes = []
 # gcd_ = stops[0]

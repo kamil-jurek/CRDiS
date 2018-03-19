@@ -41,6 +41,17 @@ class AdwinDetector(ChangeDetector):
         self.rules_triggered = False
         if self.checkDrift():
             self.rules_triggered = True
+            self.bucketList = AdWinList(self.MAXBUCKETS)
+            self.mintTime=0.0;
+            self.mintClock=self.MINTCLOCK;
+            self.mdblError=0.0;
+            self.mdblWidth=0.0;
+            self.lastBucketRow=0;
+            self.sum_ = 0.0;
+            self.W_ = 0.0;
+            self.var = 0.0;
+            self.bucketNumber=0;
+            self.est_ = 0
 
     def printInfo(self):
         it = self.bucketList.tail

@@ -11,7 +11,8 @@ from adwin_detector import AdwinDetector
 
 
 #Numerical data
-df = pd.read_csv('sequences/sequence_2017_11_24-20.16.00.csv')
+#df = pd.read_csv('sequences/sequence_2017_11_24-20.16.00.csv')
+df = pd.read_csv('sequences/sequence_2017_11_28-18.07.57.csv')
 signal = np.array(df['attr_1'])
 
 # Symbolic data
@@ -20,7 +21,7 @@ signal = np.array(df['attr_1'])
 # signal = en.encode(signal)
 
 #Filtered data
-signal = sp.signal.medfilt(signal,21)
+#signal = sp.signal.medfilt(signal,21)
 
 detector = AdwinDetector(delta = 0.01)
 simulator = OnlineSimulator(detector, signal)

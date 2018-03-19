@@ -13,12 +13,13 @@ def runningMean(x, N):
     return np.convolve(x, np.ones((N,))/N)[(N-1):]
 
 #Numerical data
-df = pd.read_csv('sequences/sequence_2017_11_24-20.16.00.csv')
+#df = pd.read_csv('sequences/sequence_2017_11_24-20.16.00.csv')
+df = pd.read_csv('sequences/sequence_2017_11_28-18.07.57.csv')
 signal = np.array(df['attr_1'])
 #b, a = sp.signal.butter(3, 0.5)
 #signal = sp.signal.filtfilt(b, a, signal, padlen=150)
 #########
-filtered = sp.signal.medfilt(signal,21)
+#filtered = sp.signal.medfilt(signal,21)
 #########
 #signal = pd.rolling_mean(signal,5).tolist()
 #########
@@ -31,7 +32,7 @@ filtered = sp.signal.medfilt(signal,21)
 #win = sp.signal.hann(51)
 #filtered = sp.signal.convolve(signal, win, mode='full') / sum(win)
 
-plt.plot(signal, 'b.')
+#plt.plot(signal, 'b.')
 #plt.plot(filtered, 'r.')
 
 # Symbolic data
@@ -40,7 +41,7 @@ plt.plot(signal, 'b.')
 # signal = en.encode(signal)
 
 
-detector = PageHinkleyDetector(delta=0.001, lambd=100, alpha=0.99)
+detector = PageHinkleyDetector(delta=0.001, lambd=20, alpha=0.99)
 simulator = OnlineSimulator(detector, signal)
 simulator.run()
 

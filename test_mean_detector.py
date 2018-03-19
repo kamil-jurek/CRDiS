@@ -5,7 +5,7 @@ import pandas as pd
 import encoders as en
 from detector import ChangeDetector
 from detector import OnlineSimulator
-from cusum_detector import CusumDetector
+from mean_detector import MeanDetector
 
 
 #Numerical data
@@ -19,7 +19,7 @@ signal = np.array(df['attr_1'])
 #signal = en.encode(signal)
 #signal = sp.signal.medfilt(signal,21)
 
-detector = CusumDetector(delta=0.005, lambd=20)
+detector = MeanDetector(threshold=0.5)
 simulator = OnlineSimulator(detector, signal)
 simulator.run()
 

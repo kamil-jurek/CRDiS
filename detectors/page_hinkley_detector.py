@@ -23,9 +23,9 @@ class PageHinkleyDetector(ChangeDetector):
         self.sig.append(new_signal_value)
         self.signa.append(new_signal_value)
         self.n += 1
-        if self.n % 10 == 0:
-            self.sig = sp.signal.medfilt(self.sig,5).tolist()
-            self.signa = sp.signal.medfilt(self.signa,5).tolist()
+        #if self.n % 10 == 0:
+        #    self.sig = sp.signal.medfilt(self.sig,5).tolist()
+        #    self.signa = sp.signal.medfilt(self.signa,5).tolist()
 
         x = np.mean(new_signal_value)
         self.x_mean_ = self.x_mean_ + (x - self.x_mean_) / self.n
@@ -34,7 +34,8 @@ class PageHinkleyDetector(ChangeDetector):
 
     def check_stopping_rules(self, new_signal_value):
         self.rules_triggered = False
-        if self.n % 5 == 0 and np.abs(self.sum_) > self.lambd:
+        #if self.n % 5 == 0 and np.abs(self.sum_) > self.lambd:
+        if np.abs(self.sum_) > self.lambd:
             self.rules_triggered = True
             plt.plot(self.sig)
             self.n = 0

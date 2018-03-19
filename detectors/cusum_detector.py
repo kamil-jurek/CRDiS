@@ -10,7 +10,7 @@ class CusumDetector(ChangeDetector):
         self.mean_ = 0
         self.sum_ = 0
         self.n = 0
-        self.p_x_ = 0
+        #self.p_x_ = 0
 
     def update(self, new_signal_value):
         super(CusumDetector, self).update(new_signal_value)

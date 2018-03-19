@@ -71,13 +71,21 @@ class ZScoreDetectorRules(ChangeDetector):
 
             prev = 0 if len(self.stops) == 0 else self.stops[-1][1]
             self.stops.append((prev, self.signal_size, int(round(self.g_mean_))))
+
             #print(self.stops)
 
             vals = [stop[2] for stop in self.stops[:-1]]
+            vals_len = [stop[1] -stop[0] for stop in self.stops[:-1]]
             for i in range(1, len(self.stops)-1):
                 rhs = vals[i:]
+                rhsL = vals_len[i:]
                 lhs = vals[:i]
+                lhsL = vals_len[:i]
                 rule = (rhs, lhs)
-                print(lhs, "==>", rhs)
+                print(lhs, "====>", rhs)
+                #print(lhsL, "==>", rhsL)
+
+                print([str(lhsL[i]) + " * " + str(lhs[i]) for i in range(len(lhs))], "==>",
+                      [str(rhsL[i]) + " * " + str(rhs[i]) for i in range(len(rhs))])
 
             self.reset(new_signal_value)
