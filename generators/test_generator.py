@@ -1,7 +1,5 @@
-import sequence_generator as sg
+from generators import sequence_generator as sg
 import matplotlib.pyplot as plt
-import numpy
-import math
 
 domain1 = ['a', 'b','z']
 domain2 = ['c', 'd']

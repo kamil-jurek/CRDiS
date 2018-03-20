@@ -10,18 +10,16 @@ class CusumDetector(ChangeDetector):
         self.mean_ = 0
         self.sum_ = 0
         self.n = 0
-        #self.p_x_ = 0
 
-    def update(self, new_signal_value):
-        super(CusumDetector, self).update(new_signal_value)
-        x = np.mean(new_signal_value)
+    def update(self, new_value):
+        super(CusumDetector, self).update(new_value)
+        x = new_value
         self.n += 1
         self.mean_ = self.mean_ + (x - self.mean_) / self.n;
         self.sum_ = self.sum_ + x - self.mean_ - self.delta;
 
-    def check_stopping_rules(self, new_signal_value):
+    def check_stopping_rules(self, new_value):
         self.rules_triggered = False
-        #print("sum:", np.sum(self.sum_))
         if np.abs(np.sum(self.sum_)) > self.lambd:
             self.rules_triggered = True
             self.n = 0

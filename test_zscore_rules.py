@@ -9,17 +9,13 @@ from zscore_rules import ZScoreDetectorRules
 from math import gcd
 
 #Numerical data
-#df = pd.read_csv('sequences/sequence_2017_11_22-19.55.44.csv')
 df = pd.read_csv('sequences/sequence_2017_11_28-18.07.57.csv')
-#df = pd.read_csv('sequences/sequence_2017_12_01-22.11.54.csv')
-#df = pd.read_csv('sequences/sequence_2018_01_15-19.44.57.csv')
 sequence = np.array(df['attr_1'])
 
 # Symbolic data
 # df = pd.read_csv('sequences/sequence_2017_11_22-19.35.27.csv')
 # sequence = np.array(df['day_of_week'])
 # sequence = en.encode(sequence)
-#sequence = sp.signal.medfilt(sequence,21)
 
 win_size = int(len(sequence)*(1/100))
 print("win size:", win_size)

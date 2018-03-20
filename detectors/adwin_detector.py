@@ -1,4 +1,4 @@
-import numpy
+import numpy as np
 import math
 from adwin_win_list import AdWinList
 from detector import ChangeDetector
@@ -29,15 +29,14 @@ class AdwinDetector(ChangeDetector):
         else:
             return 0;
 
-    def update(self, new_signal_value):
-        super(AdwinDetector, self).update(new_signal_value)
-        self.insertElement(new_signal_value)
+    def update(self, new_value):
+        super(AdwinDetector, self).update(new_value)
+        x = np.mean(new_value)
+        self.insertElement(x)
         self.compressBuckets()
         self.est_ = self.getEstimation()
 
-        #return self.checkDrift()
-
-    def check_stopping_rules(self, new_signal_value):
+    def check_stopping_rules(self, new_value):
         self.rules_triggered = False
         if self.checkDrift():
             self.rules_triggered = True
@@ -52,23 +51,6 @@ class AdwinDetector(ChangeDetector):
             self.var = 0.0;
             self.bucketNumber=0;
             self.est_ = 0
-
-    def printInfo(self):
-        it = self.bucketList.tail
-        if it is None:
-            print("It None")
-
-        i = self.lastBucketRow
-
-        while True:
-            for k in range(it.size-1, -1, -1):
-                print(str(i)+" ["+str(it.sum[k])+" de "+str(self.bucketSize(i))+"],")
-
-            print()
-            it = it.prev
-            i -= 1
-            if it is None:
-                break;
 
     def length(self):
         return self.W_

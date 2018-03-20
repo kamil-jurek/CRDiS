@@ -70,7 +70,7 @@ class ZScoreDetectorRules(ChangeDetector):
             self.rules_triggered = True
 
             prev = 0 if len(self.stops) == 0 else self.stops[-1][1]
-            self.stops.append((prev, self.signal_size, int(round(self.g_mean_))))
+            self.stops.append((prev, self.k, int(round(self.g_mean_))))
 
             #print(self.stops)
 

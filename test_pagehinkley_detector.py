@@ -1,4 +1,3 @@
-import matplotlib.pyplot as plt
 import numpy as np
 import sys; sys.path.append('./detectors/')
 import pandas as pd
@@ -9,41 +8,19 @@ from detector import ChangeDetector
 from detector import OnlineSimulator
 from page_hinkley_detector import PageHinkleyDetector
 
-def runningMean(x, N):
-    return np.convolve(x, np.ones((N,))/N)[(N-1):]
-
 #Numerical data
-#df = pd.read_csv('sequences/sequence_2017_11_24-20.16.00.csv')
 df = pd.read_csv('sequences/sequence_2017_11_28-18.07.57.csv')
-signal = np.array(df['attr_1'])
-#b, a = sp.signal.butter(3, 0.5)
-#signal = sp.signal.filtfilt(b, a, signal, padlen=150)
-#########
-#filtered = sp.signal.medfilt(signal,21)
-#########
-#signal = pd.rolling_mean(signal,5).tolist()
-#########
-# n = 15  # the larger n is, the smoother curve will be
-# b = [1.0 / n] * n
-# a = 1
-# signal = sp.signal.lfilter(b,a,signal)
-# signal = sp.signal.hilbert(signal)
-#signal = runningMean(signal, 25)
-#win = sp.signal.hann(51)
-#filtered = sp.signal.convolve(signal, win, mode='full') / sum(win)
-
-#plt.plot(signal, 'b.')
-#plt.plot(filtered, 'r.')
+seq = np.array(df['attr_1'])
 
 # Symbolic data
 # df = pd.read_csv('sequences/sequence_2017_11_22-19.35.27.csv')
-# signal = np.array(df['day_of_week'])
-# signal = en.encode(signal)
-
+# seq = np.array(df['day_of_week'])
+# seq = en.encode(seq)
+# seq = [np.abs(np.mean(e)) for e in seq]
 
 detector = PageHinkleyDetector(delta=0.001, lambd=20, alpha=0.99)
-simulator = OnlineSimulator(detector, signal)
+simulator = OnlineSimulator(detector, seq)
 simulator.run()
 
-stops = simulator.get_detected_changes()
-print(np.array(stops)- int(2/3 * len(signal)))
+detected_change_points = simulator.get_detected_changes()
+print(np.array(detected_change_points)- int(2/3 * len(seq)))
