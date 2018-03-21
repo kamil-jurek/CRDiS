@@ -4,7 +4,7 @@ from collections import defaultdict
 
 class ChangeDetector(object):
     def __init__(self):
-        self.rules_triggered = False
+        self.is_change_detected = False
         self.sequence_size = 0
         self.sequence = []
 
@@ -12,7 +12,7 @@ class ChangeDetector(object):
         self.sequence.append(new_value)
         self.sequence_size += 1
 
-    def check_stopping_rules(self, new_value):
+    def check_change(self, new_value):
         pass
 
     def get_parameters(self):
@@ -25,7 +25,7 @@ class ChangeDetector(object):
 
     def step(self, new_value):
         self.update(new_value)
-        self.check_stopping_rules(new_value)
+        self.check_change(new_value)
 
         return self.get_parameters()
 
@@ -51,7 +51,7 @@ class OnlineSimulator(object):
             for k, v in res.items():
                 parameters_history[k].append(v)
 
-            if detector.rules_triggered is True:
+            if detector.is_change_detected is True:
                 self.detected_change_points.append(i)
 
         def dict_to_arrays(ddict):
@@ -66,7 +66,7 @@ class OnlineSimulator(object):
         if plot is True:
             self.display_results(**kwargs)
 
-        return detector.rules_triggered
+        return detector.is_change_detected
 
     def display_results(self, sequence_name='Sequence', **kwargs):
         sequence = self.sequence

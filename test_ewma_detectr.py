@@ -6,26 +6,19 @@ import scipy as sp
 from scipy import signal
 from detector import ChangeDetector
 from detector import OnlineSimulator
-from page_hinkley_detector import PageHinkleyDetector
-from sklearn import preprocessing
+from ewma_detector import EWMADetector
 
 #Numerical data
 df = pd.read_csv('sequences/sequence_2017_11_28-18.07.57.csv')
-seq = np.array(df['attr_1'])
+seq = np.array(df['attr_1']) / 10
 
 # Symbolic data
-df = pd.read_csv('sequences/sequence_2017_11_22-19.35.27.csv')
-seq = np.array(df['day_of_week'])
-label = ['Fri', 'Mon', 'Sat', 'Sun', 'Thu', 'Tue', 'Wed']
-le = preprocessing.LabelEncoder()
-le.fit(label)
-seq = le.transform(seq) +1
-# [print(i) for i in y]
-
+# df = pd.read_csv('sequences/sequence_2017_11_22-19.35.27.csv')
+# seq = np.array(df['day_of_week'])
 # seq = en.encode(seq)
 # seq = [np.abs(np.mean(e)) for e in seq]
 
-detector = PageHinkleyDetector(delta=0.001, lambd=25, alpha=0.99)
+detector = EWMADetector(lambd=0.00005)
 simulator = OnlineSimulator(detector, seq)
 simulator.run()
 

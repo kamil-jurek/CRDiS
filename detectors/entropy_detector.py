@@ -84,7 +84,7 @@ class EntropyDetector(ChangeDetector):
 
         #if self.entropy_ > self.threshold:
         # if self.kl_ > 0.5:
-        #    self.rules_triggered = True
+        #    self.is_change_detected = True
         #    self.sigSize = 0
         #    self.sig = []
         #    self.freqList = {}

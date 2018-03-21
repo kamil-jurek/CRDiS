@@ -12,7 +12,7 @@ class DDMDetector(ChangeDetector):
         self.p_min = math.inf
         self.ps_min = math.inf
         self.s_min_ = math.inf
-        self.rules_triggered = False
+        self.is_change_detected = False
         self.mean_ = 0
         self.sum_ = 0
         self.lambd = lambd
@@ -21,7 +21,7 @@ class DDMDetector(ChangeDetector):
 
     def update(self, new_signal_value):
         super(DDMDetector, self).update(new_signal_value)
-        if self.rules_triggered:
+        if self.is_change_detected:
             self.prob_of_false = 1
             self.sig_size = 1
             self.std_ = 0
@@ -53,12 +53,12 @@ class DDMDetector(ChangeDetector):
             self.ps_min = self.prob_of_false + self.std_;
 
 
-    def check_stopping_rules(self, new_signal_value):
+    def check_change(self, new_signal_value):
         x = new_signal_value
-        self.rules_triggered = False
+        self.is_change_detected = False
         #print("p+s=",self.prob_of_false + self.std_)
         if self.prob_of_false + self.std_ > self.p_min + 2 * self.s_min_:
-            self.rules_triggered = True
+            self.is_change_detected = True
             if len(self.warning_zone) > 0:
                 print(self.warning_zone)
         if self.prob_of_false + self.std_ > self.p_min + 2.5 * self.s_min_:

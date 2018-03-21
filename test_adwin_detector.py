@@ -4,7 +4,7 @@ import pandas as pd
 import encoders as en
 
 from detector import OnlineSimulator
-from adwin_detector import AdwinDetector
+from adwin2_detector import AdwinDetector
 
 
 #Numerical data
