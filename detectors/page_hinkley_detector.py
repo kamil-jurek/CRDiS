@@ -25,6 +25,9 @@ class PageHinkleyDetector(ChangeDetector):
         self.is_change_detected = False
         if np.abs(self.sum_) > self.lambd:
             self.is_change_detected = True
-            self.n = 0
-            self.mean_ = 0
-            self.sum_ = 0
+            self.reset()
+
+    def reset(self):
+        self.n = 0
+        self.mean_ = 0
+        self.sum_ = 0
