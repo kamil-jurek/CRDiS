@@ -5,7 +5,7 @@ import numpy
 import ast
 import time
 
-past_states = 1.5
+past_states = 1.0
 future_states = 1.5
 
 parser = argparse.ArgumentParser(description='Sequence Generator.')
@@ -59,6 +59,7 @@ for config in grouped_config_list:
     config_values = config['value']
     domain = ast.literal_eval(config_values[0]['domain'])
     init_value = domain[0]
+    print(init_value)
 
     if args.random:
         seq = [numpy.random.choice(domain) for k in range(0, last_state)]

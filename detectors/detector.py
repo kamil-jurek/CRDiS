@@ -62,7 +62,7 @@ class OnlineSimulator(object):
                     print(parameters_history)
 
                 if detector.is_change_detected is True:
-                    change_point = ChangePoint(detector.previous_value, detector.current_value, i)
+                    change_point = ChangePoint(detector.previous_value, detector.current_value, i, self.sequences_names[j])
                     self.detected_change_points[j].append(change_point)
                     print(self.sequences_names[j], "changed from:", change_point.from_, "to:", change_point.to_, "at: ", change_point.at_)
 
@@ -153,7 +153,8 @@ class OnlineSimulator(object):
         plt.show()
 
 class ChangePoint(object):
-    def __init__(self, from_, to_, at_):
+    def __init__(self, from_, to_, at_, attr_name):
         self.from_ = from_
         self.to_ = to_
         self.at_ = at_
+        self.attr_name = attr_name
