@@ -1,5 +1,7 @@
 import numpy as np
-import sys; sys.path.append('./detectors/')
+import sys
+sys.path.append('./detectors/')
+sys.path.insert(0, './rules_mining/')
 import pandas as pd
 import math
 import encoders as en
@@ -9,7 +11,7 @@ from detector import ChangeDetector
 from sklearn.metrics import accuracy_score
 from detector import OnlineSimulator
 from page_hinkley_detector import PageHinkleyDetector
-
+from apriori import *
 
 def round_to_hundreds(x):
     return int(round(x / 100.0)) * 100
@@ -41,26 +43,54 @@ simulator.run(plot=False)
 print(simulator.get_detected_changes())
 detected_change_points = np.array(simulator.get_detected_changes())
 
-sequences = [[] for i in range(len(detected_change_points))]
-for k, attr_p in enumerate(detected_change_points):
-    attr_name = attr_p[0].attr_name
-    for i, p in enumerate(attr_p):
-        #print(p.from_)
-        #print(p.to_)
+# offset = 500
+# filtered_change_points = [[] for i in range(len(detected_change_points))]
+# for cps1 in detected_change_points:
+#     for cps2 in detected_change_points:
+#         for cp1 in cps1:
+#             for cp2 in cps2:
+#                 if cps1 != cps2 and abs(round_to_hundreds(cp1.at_) - round_to_hundreds(cp2.at_)) <= offset:
+#                     filtered_change_points.append()
+#                     print(cp1)
+#                     print(cp2)
+#                     print()
 
-        prev = round_to_hundreds(attr_p[i-1].at_) if i > 0 else 0
-        #print("fr:", prev)
-        #print("to:", round_to_hundreds(p.at_))
 
-        for j in range(prev, round_to_hundreds(p.at_), 100):
-            elem = attr_name + ":" + str(p.from_)
-            #print(elem)
-            sequences[k].append(elem)
-        #print(attr_name)
+def generateSeq(change_points):
+    sequences = [[] for i in range(len(detected_change_points))]
+    for k, attr_p in enumerate(detected_change_points):
+        attr_name = attr_p[0].attr_name
+        for i, p in enumerate(attr_p):
+            prev = round_to_hundreds(attr_p[i-1].at_) if i > 0 else 0
+
+            if i < len(attr_p)-1:
+                for j in range(prev, round_to_hundreds(p.at_), 100):
+                    elem = attr_name + ":" + str(p.from_)
+                    sequences[k].append(elem)
+    return sequences
+
+sequences = generateSeq(detected_change_points)
+
+observed = 'attr_4'
+observed_index = 1
+target = 'attr_4:' + str(detected_change_points[observed_index][0].to_)
+print(target)
+
 
 for seq in sequences:
-    seq.append("attr_4:5")
+    seq.append(target)
     print(seq)
+
+dataSet = sequences
+L, suppData = aprioriAlgo(dataSet, minSupport=0.1)
+rules, rulesDict = generateRules(L,suppData, target, minConf=0.0)
+
+# for r in rules:
+#     print(r)
+
+for k, r in rulesDict.items():
+    r.sort(key=lambda t: len(t.lhs), reverse=True)
+    print(k, r[0])
 
 # actual_change_points = np.array([600, 800, 1000, 1300, 1500, 1800])
 # detected_change_points = np.array(simulator.get_detected_changes())

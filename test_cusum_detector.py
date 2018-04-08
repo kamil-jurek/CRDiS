@@ -18,8 +18,9 @@ seq = np.array(df['attr_1'])
 # seq = [np.abs(np.mean(e)) for e in seq]
 
 detector = CusumDetector(delta=0.005, lambd=25)
-simulator = OnlineSimulator(detector, seq)
+simulator = OnlineSimulator([detector], [seq], ['attr_1'])
 simulator.run()
 
 detected_change_points = simulator.get_detected_changes()
 print(np.array(detected_change_points)- int(2/3 * len(seq)))
+

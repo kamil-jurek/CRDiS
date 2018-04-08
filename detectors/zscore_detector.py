@@ -2,6 +2,7 @@ import numpy as np
 import scipy as sp
 from scipy import signal
 import matplotlib.pyplot as plt
+from statistics import mode
 
 from collections import deque
 from detector import ChangeDetector
@@ -18,12 +19,14 @@ class ZScoreDetector(ChangeDetector):
         self.z_score_ = np.nan
         self.window_mean_ = 0.0
         self.g_std_ = 0.0
+        self.subseq = []
 
     def update(self, new_value):
         super(ZScoreDetector, self).update(new_value)
 
         x = new_value
         self.window.append(x)
+        self.subseq.append(new_value)
 
         # Calculate global statistics using welford's method
         old_mean = self.g_mean_
@@ -56,9 +59,12 @@ class ZScoreDetector(ChangeDetector):
         self.window_mean_ = 0
         self.g_std_ = 0
         self.window.clear()
+        self.subseq = []
 
-    def check_stopping_rules(self, new_value):
-        self.rules_triggered = False
+    def check_change(self, new_value):
+        self.is_change_detected = False
         if np.absolute(self.z_score_) > self.threshold:
-            self.rules_triggered = True
+            self.is_change_detected = True
+            self.previous_value = mode(self.subseq)
+            self.current_value = mode(self.subseq[-9:])
             self.reset()

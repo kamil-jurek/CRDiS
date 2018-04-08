@@ -33,10 +33,8 @@ class ChangeDetector(object):
 
 class OnlineSimulator(object):
     def __init__(self, change_detectors, sequences, seqs_names):
-        #self.sequence = sequence
         self.sequences = sequences
         self.sequences_names = seqs_names
-        #self.change_detector = change_detector
         self.change_detectors = change_detectors
         self.sequence_size = len(sequences[0])
         self.detected_change_points = [[] for i in range(len(self.sequences))]
@@ -46,25 +44,35 @@ class OnlineSimulator(object):
         return self.detected_change_points
 
     def run(self, plot=True, **kwargs):
-        parameters_history = []
-        p = defaultdict(list)
+        parameters_history = [defaultdict(list) for i in range(len(self.sequences))]
+
         for i in range(0, self.sequence_size):
             for j, seq in enumerate(self.sequences):
                 detector = self.change_detectors[j]
+
                 value = seq[i]
                 res = detector.step(value)
 
                 for k, v in res.items():
-                    p[k].append(v)
-
-                if i == self.sequence_size-1:
-                    parameters_history.append(p)
-                    print(parameters_history)
+                    #print(k, v)
+                    parameters_history[j][k].append(v)
 
                 if detector.is_change_detected is True:
                     change_point = ChangePoint(detector.previous_value, detector.current_value, i, self.sequences_names[j])
                     self.detected_change_points[j].append(change_point)
                     print(self.sequences_names[j], "changed from:", change_point.from_, "to:", change_point.to_, "at: ", change_point.at_)
+
+                if i == self.sequence_size - 1:
+                    change_point = ChangePoint(detector.current_value, -1, i, self.sequences_names[j])
+                    self.detected_change_points[j].append(change_point)
+                    print(self.sequences_names[j], "changed from:", change_point.from_, "to:", change_point.to_, "at: ",
+                          change_point.at_)
+
+                # if i == 0:
+                #     change_point = ChangePoint(-1, detector.current_value, i, self.sequences_names[j])
+                #     self.detected_change_points[j].append(change_point)
+                #     print(self.sequences_names[j], "changed from:", change_point.from_, "to:", change_point.to_, "at: ",
+                #           change_point.at_)
 
         def dict_to_arrays(ddict):
             new_dict = {}
@@ -75,29 +83,6 @@ class OnlineSimulator(object):
         for i in range(0, len(self.sequences)):
             parameters_history[i] = dict_to_arrays(parameters_history[i])
             self.parameters_history[i] = parameters_history[i]
-
-        #sequence = self.sequence
-        #detector = self.change_detector
-
-        # parameters_history = defaultdict(list)
-        #
-        # for i, value in enumerate(sequence):
-        #     res = detector.step(value)
-        #
-        #     for k, v in res.items():
-        #         parameters_history[k].append(v)
-        #
-        #     if detector.is_change_detected is True:
-        #         self.detected_change_points.append(i)
-        #
-        # def dict_to_arrays(ddict):
-        #     new_dict = {}
-        #     for k, v in ddict.items():
-        #         new_dict[k] = np.array(v)
-        #     return new_dict
-        #
-        # parameters_history = dict_to_arrays(parameters_history)
-        # self.parameters_history = parameters_history
 
         if plot is True:
             self.display_results(**kwargs)
@@ -131,7 +116,7 @@ class OnlineSimulator(object):
                 np.nanmax(sequence)*1.5)
             ax.set_xlim(0, len(sequence))
             xl = ax.get_xticks()
-            ticks = xl - int(2/3 * len(sequence))
+            ticks = xl #- int(2/3 * len(sequence))
 
             ax.set_xticklabels(ticks)
 
@@ -158,3 +143,6 @@ class ChangePoint(object):
         self.to_ = to_
         self.at_ = at_
         self.attr_name = attr_name
+
+    def __repr__(self):
+        return("(" + self.attr_name + " from:" + str(self.from_) + " to:" + str(self.to_) + " at: " + str(self.at_) + ")")

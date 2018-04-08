@@ -1,4 +1,14 @@
 import numpy as np
+from collections import defaultdict
+
+class Rule(object):
+    def __init__(self, lhs, rhs, conf):
+        self.lhs = lhs
+        self.rhs = rhs
+        self.conf = conf
+
+    def __repr__(self):
+        return(str(self.lhs) + " ==> " + str(self.rhs) + "\tconf:" + str(self.conf))
 
 def createC1(dataSet):
     C1 = []
@@ -32,7 +42,7 @@ def scanD(D, Ck, minSupport):
     supportData = {}
     for key in ssCnt:
         support = ssCnt[key]/numItems
-        print(key, "\tsupp:", support)
+        #print(key, "\tsupp:", support)
         if support >= minSupport:
             retList.append(key)
         supportData[key] = support
@@ -51,7 +61,7 @@ def aprioriGen(Lk, k): #creates candidates list
                     retList.append(Lk[i] + t)
     return retList
 
-def apriori(dataSet, minSupport = 0.5):
+def aprioriAlgo(dataSet, minSupport = 0.5):
     C1 = createC1(dataSet)
     D = dataSet
     L1, supportData = scanD(D, C1, minSupport)
@@ -65,8 +75,9 @@ def apriori(dataSet, minSupport = 0.5):
         k += 1
     return L, supportData
 
-def generateRules(L, supportData, minConf=0.7):
+def generateRules(L, supportData, target, minConf=0.7):
     rulesList = []
+    rulesDict = defaultdict(list)
     for i in range(1, len(L)):
         for freqSeq in L[i]:
             for j in range(1, len(freqSeq)):
@@ -74,12 +85,19 @@ def generateRules(L, supportData, minConf=0.7):
                 rhs = freqSeq[j:]
                 conf = supportData[freqSeq] / supportData[rhs]  # calc confidence
                 #print(('attr_4:5',))
-                if conf >= minConf and rhs == ('attr_4:5',):
-                    rule = (rhs, lhs, conf)
-                    rulesList.append(rule)
-                    print(lhs, "-->", rhs, "\tconf:", conf)
+                if conf >= minConf and rhs == (target,):
+                    rule = Rule(lhs, rhs, conf)
+                    attrName = getAttrName(lhs)
 
-    return rulesList
+                    rulesDict[attrName].append(rule)
+                    rulesList.append(rule)
+                    #print(rule)
+
+
+    return (rulesList, rulesDict)
+
+def getAttrName(lhs):
+    return (lhs[0].split(':')[0])
 
 # dataSet = [[1, 1, 3, 4],
 #             [2, 3, 5, 1, 1, 3],
@@ -89,8 +107,17 @@ def generateRules(L, supportData, minConf=0.7):
 #             ['a', 'b', 'c'],
 #             [2, 5],
 #             ['a', 'b', 'c']]
-dataSet = [['attr_1:2', 'attr_1:2', 'attr_1:2', 'attr_1:3', 'attr_1:3', 'attr_1:3', 'attr_1:3', 'attr_1:3', 'attr_4:5'],
-           ['attr_2:4', 'attr_2:4', 'attr_2:4', 'attr_2:4', 'attr_2:4', 'attr_2:5', 'attr_2:5', 'attr_2:5', 'attr_4:5'],
-           ['attr_3:1', 'attr_3:1', 'attr_3:1', 'attr_3:1', 'attr_3:1', 'attr_3:1', 'attr_3:1', 'attr_3:4', 'attr_4:5']]
-L, suppData = apriori(dataSet, minSupport=0.1)
-rules= generateRules(L,suppData, minConf=0.0)
+# dataSet = [['attr_1:2', 'attr_1:2', 'attr_1:2', 'attr_1:3', 'attr_1:3', 'attr_1:3', 'attr_1:3', 'attr_1:3', 'target'],
+#            ['attr_2:4', 'attr_2:4', 'attr_2:4', 'attr_2:4', 'attr_2:4', 'attr_2:5', 'attr_2:5', 'attr_2:5', 'target'],
+#            ['attr_2:1', 'attr_2:4', 'attr_2:4', 'attr_2:4', 'attr_2:4', 'attr_2:5', 'attr_2:5', 'attr_2:5', 'target'],
+#            ['attr_3:1', 'attr_3:1', 'attr_3:1', 'attr_3:1', 'attr_3:1', 'attr_3:1', 'attr_3:1', 'attr_3:4', 'target'],
+#            ['attr_1:1', 'attr_1:2', 'attr_1:2', 'attr_1:3', 'attr_1:3', 'attr_1:3', 'attr_1:3', 'attr_1:3', 'target']]
+# L, suppData = apriori(dataSet, minSupport=0.1)
+# rules, rulesDict= generateRules(L,suppData, minConf=0.0)
+#
+# # for r in rules:
+# #     print(r)
+#
+# for k, r in rulesDict.items():
+#     r.sort(key=lambda t: len(t.lhs), reverse=True)
+#     print(k, r[0])
