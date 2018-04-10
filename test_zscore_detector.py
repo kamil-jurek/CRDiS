@@ -16,6 +16,7 @@ def round_to_hundreds(x):
 df = pd.read_csv('sequences/sequence_2018_03_25-17.24.22.csv')
 seq1 = np.array(df['attr_1'])
 seq2 = np.array(df['attr_2'])
+seq4 = np.array(df['attr_4'])
 
 # Symbolic data
 # df = pd.read_csv('sequences/sequence_2017_11_22-19.35.27.csv')
@@ -26,12 +27,13 @@ win_size = int(len(seq1)*(1/100))
 print("win size:", win_size)
 
 detector1 = ZScoreDetector(window_size = win_size, threshold=3)
-detector2 = ZScoreDetector(window_size = win_size, threshold=3)
+detector2 = ZScoreDetector(window_size = win_size, threshold=3.5)
+detector4 = ZScoreDetector(window_size = win_size, threshold=3)
 
-simulator = OnlineSimulator([detector1, detector2],
-                            [seq1, seq2],
-                            ["attr_1", "attr_2"])
-simulator.run(plot=True)
+simulator = OnlineSimulator([detector1, detector2, detector4],
+                            [seq1, seq2, seq4],
+                            ["attr_1", "attr_2", "attr_4"])
+simulator.run(plot=False)
 
 #print(simulator.get_detected_changes())
 detected_change_points = np.array(simulator.get_detected_changes())
@@ -50,6 +52,9 @@ def generateSeq(change_points):
 
 sequences = generateSeq(detected_change_points)
 
-for seq in sequences:
-    seq.append("attr_4:5")
-    print(seq)
+# for seq in sequences:
+#     seq.append("attr_4:5")
+#     print(seq)
+
+for r in simulator.get_rules():
+    print(r, "==> target")
