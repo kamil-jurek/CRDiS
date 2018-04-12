@@ -38,23 +38,5 @@ simulator.run(plot=False)
 #print(simulator.get_detected_changes())
 detected_change_points = np.array(simulator.get_detected_changes())
 
-# def generateSeq(change_points):
-#     sequences = [[] for i in range(len(detected_change_points))]
-#     for k, attr_p in enumerate(detected_change_points):
-#         attr_name = attr_p[0].attr_name
-#         for i, p in enumerate(attr_p):
-#             prev = round_to_hundreds(attr_p[i-1].at_) if i > 0 else 0
-#
-#             for j in range(prev, round_to_hundreds(p.at_), 100):
-#                 elem = attr_name + ":" + str(p.)
-#                 sequences[k].append(elem)
-#     return sequences
-#
-# sequences = generateSeq(detected_change_points)
-
-# for seq in sequences:
-#     seq.append("attr_4:5")
-#     print(seq)
-
-for r in simulator.get_rules():
-    print(r)
+for cps in detected_change_points:
+    print(cps)

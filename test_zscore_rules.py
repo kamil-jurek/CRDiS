@@ -41,8 +41,8 @@ sequences = [[] for i in range(len(detected_change_points))]
 for k, attr_p in enumerate(detected_change_points):
     attr_name = attr_p[0].attr_name
     for i, p in enumerate(attr_p):
-        #print(p.from_)
-        #print(p.to_)
+        #print(p.prev_value)
+        #print(p.curr_value)
 
         prev = round_to_hundreds(attr_p[i-1].at_) if i > 0 else 0
         #print("fr:", prev)

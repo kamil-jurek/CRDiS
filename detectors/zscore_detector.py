@@ -66,5 +66,5 @@ class ZScoreDetector(ChangeDetector):
         if np.absolute(self.z_score_) > self.threshold:
             self.is_change_detected = True
             self.previous_value = mode(self.subseq)
-            self.current_value = mode(self.subseq[-9:])
+            self.current_value = mode(self.subseq[-1:])
             self.reset()
