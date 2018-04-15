@@ -1,6 +1,7 @@
 from sklearn.preprocessing import LabelEncoder
 from sklearn.preprocessing import OneHotEncoder
 import category_encoders as ce
+import numpy as np
 
 def encode(data):
     #encoder = ce.BinaryEncoder( ) #obiecujacy
