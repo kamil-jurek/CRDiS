@@ -4,10 +4,7 @@
     <list default="true" id="09a30ae4-c88f-4efc-850c-1b76611c1409" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change beforePath="$PROJECT_DIR$/detectors/detector.py" afterPath="$PROJECT_DIR$/detectors/detector.py" />
-      <change beforePath="$PROJECT_DIR$/generators/seqgen.py" afterPath="$PROJECT_DIR$/generators/seqgen.py" />
-      <change beforePath="$PROJECT_DIR$/plots/plot_seque.png" afterPath="$PROJECT_DIR$/plots/plot_seque.png" />
-      <change beforePath="$PROJECT_DIR$/rules_mining/apriori.py" afterPath="$PROJECT_DIR$/rules_mining/apriori.py" />
-      <change beforePath="$PROJECT_DIR$/test_pagehinkley_detector.py" afterPath="$PROJECT_DIR$/test_pagehinkley_detector.py" />
+      <change beforePath="$PROJECT_DIR$/test_rules_detecting.py" afterPath="$PROJECT_DIR$/test_rules_detecting.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -28,61 +25,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="numerical_6" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/configs/numerical_6">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="85">
-              <caret line="5" column="23" lean-forward="false" selection-start-line="5" selection-start-column="23" selection-end-line="5" selection-end-column="23" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="seqgen.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/generators/seqgen.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-74">
-              <caret line="66" column="54" lean-forward="false" selection-start-line="66" selection-start-column="44" selection-end-line="66" selection-end-column="54" />
+            <state relative-caret-position="1037">
+              <caret line="66" column="56" lean-forward="false" selection-start-line="66" selection-start-column="56" selection-end-line="66" selection-end-column="56" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="plot_sequence.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/generators/plot_sequence.py">
+      <file leaf-file-name="test_rules_detecting.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/test_rules_detecting.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="70">
-              <caret line="46" column="0" lean-forward="true" selection-start-line="46" selection-start-column="0" selection-end-line="46" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="sequence_generator.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/generators/sequence_generator.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="697">
-              <caret line="45" column="18" lean-forward="false" selection-start-line="45" selection-start-column="18" selection-end-line="45" selection-end-column="18" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="apriori.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/rules_mining/apriori.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="290">
-              <caret line="75" column="17" lean-forward="false" selection-start-line="75" selection-start-column="17" selection-end-line="75" selection-end-column="17" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="page_hinkley_detector.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/detectors/page_hinkley_detector.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="284">
-              <caret line="30" column="53" lean-forward="false" selection-start-line="30" selection-start-column="53" selection-end-line="30" selection-end-column="53" />
+            <state relative-caret-position="306">
+              <caret line="63" column="39" lean-forward="true" selection-start-line="63" selection-start-column="39" selection-end-line="63" selection-end-column="39" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -90,32 +47,14 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="test_pagehinkley_detector.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/test_pagehinkley_detector.py">
+      <file leaf-file-name="detector.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/detectors/detector.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="352">
-              <caret line="61" column="8" lean-forward="false" selection-start-line="61" selection-start-column="8" selection-end-line="61" selection-end-column="8" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="sequence_2018_03_25-17.24.22.csv" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/sequences/sequence_2018_03_25-17.24.22.csv">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="27" lean-forward="true" selection-start-line="0" selection-start-column="27" selection-end-line="0" selection-end-column="27" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="base.py" pinned="false" current-in-tab="false">
-        <entry file="file:///usr/local/lib/python3.5/dist-packages/pandas/core/indexes/base.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="182">
-              <caret line="2441" column="0" lean-forward="false" selection-start-line="2441" selection-start-column="0" selection-end-line="2441" selection-end-column="0" />
-              <folding />
+            <state relative-caret-position="-799">
+              <caret line="27" column="30" lean-forward="true" selection-start-line="27" selection-start-column="30" selection-end-line="27" selection-end-column="30" />
+              <folding>
+                <element signature="e#7641#9397#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -134,10 +73,19 @@
       <find>self.L_t</find>
       <find>self.m_s</find>
       <find>rules_triggered</find>
-      <find>print</find>
       <find>past_states</find>
       <find>doma</find>
       <find>calcConf</find>
+      <find>self.subseq = []</find>
+      <find>apriori</find>
+      <find>self.subseq</find>
+      <find>apa</find>
+      <find>.rules</find>
+      <find>print</find>
+      <find>prev_prev_change_point_target</find>
+      <find>prev_change_point_target</find>
+      <find>change_point_list</find>
+      <find>prev_value_len_</find>
     </findStrings>
     <replaceStrings>
       <replace>self.p_min_</replace>
@@ -154,17 +102,13 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/detectors/adwin_detector.py" />
-        <option value="$PROJECT_DIR$/detectors/zscore_detector.py" />
         <option value="$PROJECT_DIR$/zscore.py" />
-        <option value="$PROJECT_DIR$/test_zscore_detector.py" />
         <option value="$PROJECT_DIR$/test_zscore.py" />
         <option value="$PROJECT_DIR$/generators/sequence_generator.py" />
         <option value="$PROJECT_DIR$/generators/plot_sequence.py" />
         <option value="$PROJECT_DIR$/detectors/mean_detector.py" />
         <option value="$PROJECT_DIR$/test_mean_detector.py" />
-        <option value="$PROJECT_DIR$/test_zscore_rules.py" />
         <option value="$PROJECT_DIR$/detectors/zscore_rules.py" />
-        <option value="$PROJECT_DIR$/test_cusum_detector.py" />
         <option value="$PROJECT_DIR$/detectors/cusum_detector.py" />
         <option value="$PROJECT_DIR$/detectors/ddm_detector.py" />
         <option value="$PROJECT_DIR$/test_ddm_detector.py" />
@@ -175,12 +119,18 @@
         <option value="$PROJECT_DIR$/test_ewma_detectr.py" />
         <option value="$PROJECT_DIR$/other/elternative_encoding.py" />
         <option value="$PROJECT_DIR$/configs/numerical_1" />
-        <option value="$PROJECT_DIR$/detectors/page_hinkley_detector.py" />
-        <option value="$PROJECT_DIR$/detectors/detector.py" />
-        <option value="$PROJECT_DIR$/configs/numerical_6" />
         <option value="$PROJECT_DIR$/generators/seqgen.py" />
-        <option value="$PROJECT_DIR$/test_pagehinkley_detector.py" />
+        <option value="$PROJECT_DIR$/test_zscore_rules.py" />
         <option value="$PROJECT_DIR$/rules_mining/apriori.py" />
+        <option value="$PROJECT_DIR$/test_pagehinkley_detector.py" />
+        <option value="$PROJECT_DIR$/rules_mining/trees.py" />
+        <option value="$PROJECT_DIR$/test_cusum_detector.py" />
+        <option value="$PROJECT_DIR$/detectors/page_hinkley_detector.py" />
+        <option value="$PROJECT_DIR$/test_zscore_detector.py" />
+        <option value="$PROJECT_DIR$/detectors/zscore_detector.py" />
+        <option value="$PROJECT_DIR$/configs/numerical_6" />
+        <option value="$PROJECT_DIR$/test_rules_detecting.py" />
+        <option value="$PROJECT_DIR$/detectors/detector.py" />
       </list>
     </option>
   </component>
@@ -219,32 +169,12 @@
             <path>
               <item name="SequenceGenerator" type="b2602c69:ProjectViewProjectNode" />
               <item name="SequenceGenerator" type="462c0819:PsiDirectoryNode" />
-              <item name="configs" type="462c0819:PsiDirectoryNode" />
+              <item name=".ipynb_checkpoints" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="SequenceGenerator" type="b2602c69:ProjectViewProjectNode" />
               <item name="SequenceGenerator" type="462c0819:PsiDirectoryNode" />
               <item name="detectors" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="SequenceGenerator" type="b2602c69:ProjectViewProjectNode" />
-              <item name="SequenceGenerator" type="462c0819:PsiDirectoryNode" />
-              <item name="generators" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="SequenceGenerator" type="b2602c69:ProjectViewProjectNode" />
-              <item name="SequenceGenerator" type="462c0819:PsiDirectoryNode" />
-              <item name="plots" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="SequenceGenerator" type="b2602c69:ProjectViewProjectNode" />
-              <item name="SequenceGenerator" type="462c0819:PsiDirectoryNode" />
-              <item name="rules_mining" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="SequenceGenerator" type="b2602c69:ProjectViewProjectNode" />
-              <item name="SequenceGenerator" type="462c0819:PsiDirectoryNode" />
-              <item name="sequences" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -276,7 +206,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.apriori">
+  <component name="RunManager" selected="Python.test_rules_detecting">
     <configuration name="apriori" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -290,60 +220,6 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="SequenceGenerator" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/rules_mining/apriori.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-    </configuration>
-    <configuration name="page_hinkley_detector" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/detectors" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="SequenceGenerator" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/detectors/page_hinkley_detector.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-    </configuration>
-    <configuration name="test_adwin_detector" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="SequenceGenerator" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test_adwin_detector.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-    </configuration>
-    <configuration name="test_ewma_detectr" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="SequenceGenerator" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test_ewma_detectr.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -367,20 +243,74 @@
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
     </configuration>
+    <configuration name="test_rules_detecting" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="SequenceGenerator" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test_rules_detecting.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+    </configuration>
+    <configuration name="test_zscore_detector" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="SequenceGenerator" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test_zscore_detector.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+    </configuration>
+    <configuration name="trees" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/rules_mining" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="SequenceGenerator" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/rules_mining/trees.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+    </configuration>
     <list size="5">
       <item index="0" class="java.lang.String" itemvalue="Python.test_pagehinkley_detector" />
-      <item index="1" class="java.lang.String" itemvalue="Python.test_adwin_detector" />
-      <item index="2" class="java.lang.String" itemvalue="Python.test_ewma_detectr" />
-      <item index="3" class="java.lang.String" itemvalue="Python.page_hinkley_detector" />
-      <item index="4" class="java.lang.String" itemvalue="Python.apriori" />
+      <item index="1" class="java.lang.String" itemvalue="Python.test_zscore_detector" />
+      <item index="2" class="java.lang.String" itemvalue="Python.apriori" />
+      <item index="3" class="java.lang.String" itemvalue="Python.trees" />
+      <item index="4" class="java.lang.String" itemvalue="Python.test_rules_detecting" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Python.apriori" />
-        <item index="1" class="java.lang.String" itemvalue="Python.test_pagehinkley_detector" />
-        <item index="2" class="java.lang.String" itemvalue="Python.page_hinkley_detector" />
-        <item index="3" class="java.lang.String" itemvalue="Python.test_ewma_detectr" />
-        <item index="4" class="java.lang.String" itemvalue="Python.test_adwin_detector" />
+        <item index="0" class="java.lang.String" itemvalue="Python.test_rules_detecting" />
+        <item index="1" class="java.lang.String" itemvalue="Python.test_zscore_detector" />
+        <item index="2" class="java.lang.String" itemvalue="Python.trees" />
+        <item index="3" class="java.lang.String" itemvalue="Python.test_pagehinkley_detector" />
+        <item index="4" class="java.lang.String" itemvalue="Python.apriori" />
       </list>
     </recent_temporary>
   </component>
@@ -402,6 +332,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-1" y="25" width="1922" height="951" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18177083" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -430,7 +361,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/test_pagehinkley_detector.py</url>
-          <line>20</line>
+          <line>22</line>
           <option name="timeStamp" value="2" />
         </line-breakpoint>
       </breakpoints>
@@ -439,57 +370,10 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/plots/plot_seque.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sequences/sequence_2018_03_20-21.20.38.csv">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1377">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/detectors/mean_detector.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="24" column="39" lean-forward="true" selection-start-line="24" selection-start-column="39" selection-end-line="24" selection-end-column="39" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test_mean_detector.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="17" column="0" lean-forward="true" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/detectors/stack_zscore_detector.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/rules_mining/shortSeq.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/rules_mining/decode_output.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test_cusum_detector.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="18" column="0" lean-forward="true" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
         </state>
       </provider>
     </entry>
@@ -546,13 +430,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="238">
           <caret line="15" column="0" lean-forward="false" selection-start-line="15" selection-start-column="2" selection-end-line="18" selection-end-column="41" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/detectors/cusum_detector.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="22" column="35" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="26" selection-end-column="0" />
         </state>
       </provider>
     </entry>
@@ -665,7 +542,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -673,7 +549,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -681,7 +556,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -689,7 +563,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-481">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -697,31 +570,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="306">
           <caret line="18" column="0" lean-forward="false" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/detectors/zscore_rules.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="284">
-          <caret line="83" column="33" lean-forward="false" selection-start-line="83" selection-start-column="15" selection-end-line="83" selection-end-column="33" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test_zscore_rules.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="391">
-          <caret line="25" column="0" lean-forward="false" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/detectors/detector.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="352">
-          <caret line="64" column="121" lean-forward="false" selection-start-line="64" selection-start-column="121" selection-end-line="64" selection-end-column="121" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -729,17 +577,93 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/generators/sequence_generator.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="697">
+          <caret line="45" column="18" lean-forward="false" selection-start-line="45" selection-start-column="18" selection-end-line="45" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/generators/plot_sequence.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="731">
+          <caret line="46" column="0" lean-forward="false" selection-start-line="46" selection-start-column="0" selection-end-line="46" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/local/lib/python3.5/dist-packages/pandas/core/indexes/base.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="40596">
+          <caret line="2441" column="0" lean-forward="false" selection-start-line="2441" selection-start-column="0" selection-end-line="2441" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sequences/sequence_2018_03_25-17.24.22.csv">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="27" lean-forward="false" selection-start-line="0" selection-start-column="27" selection-end-line="0" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/detectors/zscore_rules.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="308">
+          <caret line="83" column="33" lean-forward="false" selection-start-line="83" selection-start-column="15" selection-end-line="83" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/detectors/cusum_detector.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="357">
+          <caret line="22" column="12" lean-forward="false" selection-start-line="22" selection-start-column="12" selection-end-line="22" selection-end-column="42" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rules_mining/apriori.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="154">
+          <caret line="109" column="12" lean-forward="false" selection-start-line="109" selection-start-column="12" selection-end-line="113" selection-end-column="120" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rules_mining/trees.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="420">
+          <caret line="48" column="45" lean-forward="false" selection-start-line="48" selection-start-column="45" selection-end-line="48" selection-end-column="45" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test_cusum_detector.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="425">
+          <caret line="26" column="0" lean-forward="true" selection-start-line="26" selection-start-column="0" selection-end-line="26" selection-end-column="0" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/detectors/page_hinkley_detector.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="284">
-          <caret line="30" column="53" lean-forward="false" selection-start-line="30" selection-start-column="53" selection-end-line="30" selection-end-column="53" />
+        <state relative-caret-position="256">
+          <caret line="30" column="51" lean-forward="false" selection-start-line="30" selection-start-column="51" selection-end-line="30" selection-end-column="52" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test_pagehinkley_detector.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" column="19" lean-forward="true" selection-start-line="4" selection-start-column="19" selection-end-line="4" selection-end-column="19" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test_zscore_detector.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="427">
+          <caret line="58" column="0" lean-forward="false" selection-start-line="58" selection-start-column="0" selection-end-line="59" selection-end-column="12" />
         </state>
       </provider>
     </entry>
@@ -751,67 +675,66 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/generators/sequence_generator.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="697">
-          <caret line="45" column="18" lean-forward="false" selection-start-line="45" selection-start-column="18" selection-end-line="45" selection-end-column="18" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/generators/seqgen.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-74">
-          <caret line="66" column="54" lean-forward="false" selection-start-line="66" selection-start-column="44" selection-end-line="66" selection-end-column="54" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/generators/plot_sequence.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="70">
-          <caret line="46" column="0" lean-forward="true" selection-start-line="46" selection-start-column="0" selection-end-line="46" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file:///usr/local/lib/python3.5/dist-packages/pandas/core/indexes/base.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="182">
-          <caret line="2441" column="0" lean-forward="false" selection-start-line="2441" selection-start-column="0" selection-end-line="2441" selection-end-column="0" />
+        <state relative-caret-position="1037">
+          <caret line="66" column="56" lean-forward="false" selection-start-line="66" selection-start-column="56" selection-end-line="66" selection-end-column="56" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/configs/numerical_6">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" column="23" lean-forward="false" selection-start-line="5" selection-start-column="23" selection-end-line="5" selection-end-column="23" />
-          <folding />
+        <state relative-caret-position="51">
+          <caret line="3" column="68" lean-forward="false" selection-start-line="3" selection-start-column="68" selection-end-line="3" selection-end-column="68" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/sequences/sequence_2018_03_25-17.24.22.csv">
+    <entry file="file://$PROJECT_DIR$/sequences/sequence_2018_04_13-22.33.30.csv">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
-          <caret line="0" column="27" lean-forward="true" selection-start-line="0" selection-start-column="27" selection-end-line="0" selection-end-column="27" />
-          <folding />
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/test_pagehinkley_detector.py">
+    <entry file="file://$PROJECT_DIR$/test_zscore_rules.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="352">
-          <caret line="61" column="8" lean-forward="false" selection-start-line="61" selection-start-column="8" selection-end-line="61" selection-end-column="8" />
-          <folding />
+        <state relative-caret-position="187">
+          <caret line="13" column="0" lean-forward="false" selection-start-line="13" selection-start-column="0" selection-end-line="58" selection-end-column="14" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/rules_mining/apriori.py">
+    <entry file="file://$PROJECT_DIR$/detectors/stack_zscore_detector.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="290">
-          <caret line="75" column="17" lean-forward="false" selection-start-line="75" selection-start-column="17" selection-end-line="75" selection-end-column="17" />
-          <folding />
+        <state relative-caret-position="-141">
+          <caret line="30" column="13" lean-forward="false" selection-start-line="30" selection-start-column="8" selection-end-line="30" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/detectors/zscore_detector.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1037">
+          <caret line="68" column="52" lean-forward="false" selection-start-line="68" selection-start-column="52" selection-end-line="68" selection-end-column="52" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test_rules_detecting.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="63" column="39" lean-forward="true" selection-start-line="63" selection-start-column="39" selection-end-line="63" selection-end-column="39" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/detectors/detector.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-799">
+          <caret line="27" column="30" lean-forward="true" selection-start-line="27" selection-start-column="30" selection-end-line="27" selection-end-column="30" />
+          <folding>
+            <element signature="e#7641#9397#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>

@@ -21,7 +21,7 @@ seq1 = np.array(df['attr_1'])
 seq2 = np.array(df['attr_2'])
 seq3 = np.array(df['attr_3'])
 seq4 = np.array(df['attr_4'])
-for i in range(2):
+for i in range(4):
     # rand = [random.randint(1,6) for i in range(random.randint(0,3)+50)]
     # seq1_rand = np.concatenate((seq1, rand))
     # seq1 = np.concatenate((seq1_rand, seq1))
@@ -50,6 +50,7 @@ print("seq len:", len(seq1))
 # sequence = en.encode(sequence)
 
 win_size = int(len(seq1)*(1/100))
+win_size = 15
 print("win size:", win_size)
 
 detector1 = ZScoreDetector(window_size = win_size, threshold=5)
@@ -60,7 +61,7 @@ detector4 = ZScoreDetector(window_size = win_size, threshold=3)
 simulator = OnlineSimulator([detector1, detector2, detector4],
                             [seq1, seq2, seq4],
                             ["attr_1", "attr_2", "attr_4"])
-simulator.run(plot=False)
+simulator.run(plot=False, detect_rules=True)
 
 #print(simulator.get_detected_changes())
 detected_change_points = np.array(simulator.get_detected_changes())
@@ -69,6 +70,8 @@ detected_change_points = np.array(simulator.get_detected_changes())
 #     print(cps)
 
 print()
-for r in simulator.get_rules():
-    print(r)
-
+print("------------------------------------------------------------------------")
+for rules_sets in simulator.get_rules():
+    for rule in rules_sets:
+        print(rule)
+    print("------------------------------------------------------------------------")

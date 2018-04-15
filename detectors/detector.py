@@ -48,7 +48,7 @@ class OnlineSimulator(object):
     def get_rules(self):
         return self.rules_sets
 
-    def run(self, plot=True, **kwargs):
+    def run(self, plot=True, detect_rules=True, **kwargs):
         parameters_history = [defaultdict(list) for i in range(len(self.sequences))]
 
         for i in range(0, self.sequence_size):
@@ -85,10 +85,11 @@ class OnlineSimulator(object):
                 #           change_point.at_)
 
 
-                #last seq - target
-                if j == len(self.sequences) - 1:
-                    if detector.is_change_detected is True and len(self.detected_change_points[j]) > 1:
-                        self.search_rules(i)
+                if detect_rules:
+                    #last seq - target
+                    if j == len(self.sequences) - 1:
+                        if detector.is_change_detected is True and len(self.detected_change_points[j]) > 1:
+                            self.search_rules(i)
 
 
         def dict_to_arrays(ddict):
@@ -125,69 +126,33 @@ class OnlineSimulator(object):
                 lhs.append(lhs_elem)
 
             else :
-                if points_in_window[0].prev_value_len < window_end:
-                for point in points_in_window:
-                    lhs_elem = LHS_element(round_to_hundreds(point.prev_value_len_),
+                first_point = points_in_window[0]
+                skip_first_point = False
+                if first_point.at_ - first_point.prev_value_len < window_begin:
+                    #print("before window case")
+                    lhs_elem = LHS_element(round_to_hundreds(first_point.at_ - window_begin),
+                                           first_point.prev_value,
+                                           first_point.attr_name)
+                    lhs.append(lhs_elem)
+                    skip_first_point = True
+
+                for point in points_in_window[1:] if skip_first_point else points_in_window:
+                    #print("inside window case")
+                    lhs_elem = LHS_element(round_to_hundreds(point.prev_value_len),
                                            point.prev_value,
                                            point.attr_name)
                     lhs.append(lhs_elem)
 
-                if points_in_window[-1].at_ < window_end:
-                    lhs_elem = LHS_element(round_to_hundreds(window_end - points_in_window[-1].at_),
-                                           points_in_window[-1].curr_value,
-                                           points_in_window[-1].attr_name)
+                last_point = points_in_window[-1]
+                if last_point.at_ < window_end:
+                    #print("after window case")
+                    lhs_elem = LHS_element(round_to_hundreds(window_end - last_point.at_),
+                                           last_point.curr_value,
+                                           last_point.attr_name)
                     lhs.append(lhs_elem)
 
 
-            # for n, change_point in enumerate(change_point_list):
-            #     if round_to_hundreds(change_point.at_) > window_begin:
-            #         if round_to_hundreds(change_point.at_) < window_end:
-            #             lhs_elem = LHS_element(round_to_hundreds(change_point.prev_value_len_),
-            #                                    change_point.prev_value,
-            #                                    self.sequences_names[m])
-            #             lhs.append(lhs_elem)
-                        #print(lhs_elem)
-
-                    #
-                    # else:
-                    #     if not is_last_lhs:
-                    #         is_last_lhs = True
-                    #         last_lhs_elem_len = window_end - change_point.at_
-                    #         last_lhs_elem = LHS_element(round_to_hundreds(last_lhs_elem_len),
-                    #                                     change_point_list[n-1].curr_value,
-                    #                                     self.sequences_names[m])
-                    #         lhs.append(last_lhs_elem)
-
-                    #         #print("current i:",current_index)
-                    #         #print("change_point.prev_value_len_:", change_point.prev_value_len_)
-                    #         last_lhs_elem_len = prev_change_point_index - change_point_list[n-1].at_
-                    #         print("last lhs elem len:", last_lhs_elem_len)
-                    #         if last_lhs_elem_len > 0:
-                    #             last_lhs_elem = LHS_element(round_to_hundreds(last_lhs_elem_len),
-                    #                                         change_point_list[n-1].curr_value,
-                    #                                         self.sequences_names[m])
-                    #             lhs.append(last_lhs_elem)
-                    #             #print(last_lhs_elem)
-                    # last change_point
-                    # print(len(change_point_list) - 2)
-                    # if n == len(change_point_list) - 2:
-                    #     last_lhs_elem_len = current_index - change_point_list[n - 2].at_
-                    #     print("last lhs elem len:", last_lhs_elem_len)
-                    #     if last_lhs_elem_len > 0:
-                    #         last_lhs_elem = LHS_element(round_to_hundreds(last_lhs_elem_len),
-                    #                                     change_point_list[n - 2].curr_value,
-                    #                                     self.sequences_names[m])
-                    #         lhs.append(last_lhs_elem)
-                    #         print(last_lhs_elem)
-
-            # no change points in window
-            # if len(lhs) == 0:
-            #     lhs_elem = LHS_element(round_to_hundreds(window_end - window_begin),
-            #                            change_point.curr_value,
-            #                            self.sequences_names[m])
-            #     lhs.append(lhs_elem)
-
-            rhs_elem = LHS_element(round_to_hundreds(self.detected_change_points[self.target_index][-1].prev_value_len_),
+            rhs_elem = LHS_element(round_to_hundreds(self.detected_change_points[self.target_index][-1].prev_value_len),
                                    self.detected_change_points[self.target_index][-1].prev_value,
                                    self.detected_change_points[self.target_index][-1].attr_name)
             rule = Rule(lhs, rhs_elem)
@@ -205,20 +170,11 @@ class OnlineSimulator(object):
                 print("new rule")
                 rule.set_last_occurence(current_index)
                 rule.increment_occurrences()
+                self.generalize_rule(m, rule)
+
+
                 self.rules_sets[m].add(rule)
                 print(rule)
-
-            # if rule in self.rules_sets[m]:
-            #     print("rule already in set")
-            #     rule.set_last_occurence(current_index)
-            #     rule.increment_occurrences()
-            # else:
-            #     print("new rule")
-            #     rule.set_last_occurence(current_index)
-            #     rule.increment_occurrences()
-            #
-            # self.rules_sets[m].add(rule)
-
 
     def display_results(self, sequence_name='Sequence', **kwargs):
         for i in range(0, len(self.sequences)):
@@ -268,6 +224,16 @@ class OnlineSimulator(object):
 
         plt.show()
 
+    def generalize_rule(self, seq_index, new_rule):
+        print("generalization try")
+        for rule in self.rules_sets[seq_index]:
+            if rule.rhs == new_rule.rhs:
+                for i in range(len(rule.lhs), 0):
+                    if rule.lhs[i] == new_rule.lhs[i]:
+                        print("lhs_elems are the same", rule.lhs[i], new_rule.lhs[i])
+                    else:
+                        print()
+
     def get_change_points_in_window(self, seq_index, window_begin, window_end):
         points_in_window = []
         points_before_window = []
@@ -287,11 +253,11 @@ class ChangePoint(object):
         self.prev_value = from_
         self.curr_value = to_
         self.at_ = at_
-        self.prev_value_len_ = prev_value_len_
+        self.prev_value_len = prev_value_len_
         self.attr_name = attr_name_
 
     def __repr__(self):
-        return("(" + self.attr_name + " changed from:" + str(self.prev_value) + "(len= " + str(self.prev_value_len_) + ") to:" + str(self.curr_value) + " at: " + str(self.at_) + ")")
+        return("(" + self.attr_name + " changed from:" + str(self.prev_value) + "(len= " + str(self.prev_value_len) + ") to:" + str(self.curr_value) + " at: " + str(self.at_) + ")")
 
 class LHS_element(object):
     def __init__(self, len_, value_, attr_name_):
@@ -324,7 +290,7 @@ class Rule(object):
 
 
     def __repr__(self):
-        return(str(self.lhs) + " ==> " + str(self.rhs) + " nrOcc:" + str(self.number_of_occurrences) + " lastOcc:" + str(self.last_occurrence))
+        return(str(self.lhs) + " ==> " + str(self.rhs) + " | nr_of_occurences:" + str(self.number_of_occurrences) + " last_occurence:" + str(self.last_occurrence))
         #  + "nr:" + str(self.number_of_occurrences) + " lastOcc:" + str(self.last_occurrence)
 
     def __eq__(self, other):
