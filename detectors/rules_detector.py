@@ -94,14 +94,16 @@ class RulesDetector(object):
         print()
         print("generalization try")
         for rule in self.simulator.rules_sets[seq_index]:
-            #print("ruls", rule)
-            #print(rule.rhs)
-            #print(new_rule.rhs)
-            if rule.rhs == new_rule.rhs:
-                #print("same rhs")
+            print("rule:     ", rule)
+            print("new rule: ", new_rule)
+            print(rule.rhs)
+            print(new_rule.rhs)
+            if (rule.rhs.attr_name_ == new_rule.rhs.attr_name_ and
+                rule.rhs.value == new_rule.rhs.value):
+                print("same rhs")
                 for i in range(len(rule.lhs), 0):
                     if rule.lhs[i] == new_rule.lhs[i]:
-                        print("lhs_elems are the same", rule.lhs[i], new_rule.lhs[i])
+                        print("lhs_elem are the same", rule.lhs[i], new_rule.lhs[i])
                     else:
                         print()
 

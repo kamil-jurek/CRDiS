@@ -21,7 +21,7 @@ seq2 = np.array(df['attr_2'])
 seq3 = np.array(df['attr_3'])
 seq4 = np.array(df['attr_4'])
 
-for i in range(0):
+for i in range(4):
     seq1 = np.concatenate((seq1, seq1))
     seq2 = np.concatenate((seq2, seq2))
     seq3 = np.concatenate((seq3, seq3))
@@ -92,16 +92,18 @@ for seq in sequences:
     print(seq)
 
 dataSet = sequences
-L, suppData = aprioriAlgo(dataSet, minSupport=0.1)
+L, suppData = aprioriAlgo(dataSet, minSupport=0.0)
 rules, rulesDict = generateRules(L,suppData, target, minConf=0.0)
 
 # for r in rules:
 #     print(r)
 print("-----------------------------------------------------------------------------------------------------------")
-for k, r in rulesDict.items():
-    r.sort(key=lambda t: len(t.lhs), reverse=True)
-    print(k, r[0])
+for k, ar in rulesDict.items():
+    ar.sort(key=lambda t: len(t.lhs), reverse=True)
+    for r in ar:
+        print(r)
 print("-----------------------------------------------------------------------------------------------------------")
+
 # actual_change_points = np.array([600, 800, 1000, 1300, 1500, 1800])
 # detected_change_points = np.array(simulator.get_detected_changes())
 # delta = np.abs(actual_change_points - detected_change_points)

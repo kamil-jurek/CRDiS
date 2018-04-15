@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import numpy
 import ast
 import time
+import random
 
 past_states = 1.0
 future_states = 1.5
@@ -50,42 +51,46 @@ for config in config_list:
 #     print
 
 curr_state = int(max([abs(int(float(config_list[i]['from']))) for i in range(len(config_list)) if 'from' in config_list[i]])*past_states)
-last_state = int(curr_state*future_states)
-seqs = []
+last_state = int(curr_state+300)
+seqs = [[] for i in range(len(grouped_config_list))]
 k = len(grouped_config_list)
 f, axarr = plt.subplots(k)
 j = 0
-for config in grouped_config_list:
-    config_values = config['value']
-    domain = ast.literal_eval(config_values[0]['domain'])
-    init_value = domain[0]
-    print(init_value)
+for x in range(3):
+    rand_len = random.randint(1, 3) * 100
+    for config_ind, config in enumerate(grouped_config_list):
+        config_values = config['value']
+        domain = ast.literal_eval(config_values[0]['domain'])
+        init_value = domain[0]
+        print(init_value)
 
-    if args.random:
-        seq = [numpy.random.choice(domain) for k in range(0, last_state)]
-    else:
-        seq = [init_value for k in range(0, last_state)]
+        if args.random:
+            seq = [numpy.random.choice(domain) for k in range(0, last_state)]
+        else:
+            seq = [init_value for k in range(0, last_state)]
 
-    operator = 'eq'
-    for z in range(0,len(config_values)):
-        value = ast.literal_eval(config_values[z]['value'])
-        probability = float(config_values[z]['probability'])
-        fr = curr_state - curr_state
-        to = curr_state - last_state
-        if 'from' in config_values[z]:
-            fr = abs(int(float(config_values[z]['from'])))
-            if config_values[z]['to'] != '0':
-                to = abs(int(float(config_values[z]['to'])))
-            else:
-                to = 0
+        operator = 'eq'
+        for z in range(0,len(config_values)):
+            value = ast.literal_eval(config_values[z]['value'])
+            probability = float(config_values[z]['probability'])
+            fr = curr_state - curr_state
+            to = curr_state - last_state
+            if 'from' in config_values[z]:
+                fr = abs(int(float(config_values[z]['from'])))
+                if config_values[z]['to'] != '0':
+                    to = abs(int(float(config_values[z]['to'])))
+                else:
+                    to = 0
 
-        seq = sg.generateSequence(seq, domain, value, operator, probability, curr_state-fr, curr_state-to)
+            seq = sg.generateSequence(seq, domain, value, operator, probability, curr_state-fr, curr_state-to)
 
-        if(args.plot):
-            sg.plotSequence(axarr[j], seq, domain, config['attr_name'], curr_state)
-    j += 1
-    seqs.append(seq)
-
+            if(args.plot):
+                sg.plotSequence(axarr[j], seq, domain, config['attr_name'], curr_state)
+        j += 1
+        rand_seq = [numpy.random.choice([0,1]) for i in range(rand_len)]
+        seqs[config_ind] = numpy.concatenate((seqs[config_ind], seq))
+        seqs[config_ind] = numpy.concatenate((seqs[config_ind], rand_seq))
+    #seqs = np.concatenate((seqs, )
 if args.plot:
     plt.show()
     timestr = time.strftime("%Y_%m_%d-%H.%M.%S")

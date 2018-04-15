@@ -84,7 +84,7 @@ def generateRules(L, supportData, target, minConf=0.7):
                 lhs = freqSeq[:j]
                 rhs = freqSeq[j:]
                 conf = supportData[freqSeq] / supportData[rhs]  # calc confidence
-                #print(('attr_4:5',))
+                print(conf)
                 if conf >= minConf and rhs == (target,):
                     rule = Rule(lhs, rhs, conf)
                     attrName = getAttrName(lhs)
