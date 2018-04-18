@@ -19,3 +19,20 @@ class LHS_element(object):
 
     def __hash__(self):
         return hash(self.__repr__())
+
+    def generalize(self, other):
+        generalized_lhs_elem = LHS_element(None, None, None)
+        contains = 0
+        if (self.attr_name_ == other.attr_name_ and
+            self.value == other.value):
+            generalized_lhs_elem.attr_name_ = self.attr_name_
+            generalized_lhs_elem.value = self.value
+
+            if self.len >= other.len:
+                generalized_lhs_elem.len = other.len
+                contains = 1
+            else:
+                generalized_lhs_elem.len = self.len
+                contains = 2
+
+        return (contains, generalized_lhs_elem)

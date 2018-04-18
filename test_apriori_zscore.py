@@ -21,7 +21,7 @@ seq2 = np.array(df['attr_2'])
 seq3 = np.array(df['attr_3'])
 seq4 = np.array(df['attr_4'])
 
-for i in range(4):
+for i in range(1):
     seq1 = np.concatenate((seq1, seq1))
     seq2 = np.concatenate((seq2, seq2))
     seq3 = np.concatenate((seq3, seq3))

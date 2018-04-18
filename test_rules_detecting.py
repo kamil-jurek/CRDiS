@@ -21,7 +21,7 @@ seq2 = np.array(df['attr_2'])
 seq3 = np.array(df['attr_3'])
 seq4 = np.array(df['attr_4'])
 
-for i in range(0):
+for i in range(2):
     seq1 = np.concatenate((seq1, seq1))
     seq2 = np.concatenate((seq2, seq2))
     seq3 = np.concatenate((seq3, seq3))
@@ -34,7 +34,7 @@ print("win size:", win_size)
 detector1 = ZScoreDetector(window_size = win_size, threshold=3)
 detector2 = ZScoreDetector(window_size = win_size, threshold=3)
 detector3 = ZScoreDetector(window_size = win_size, threshold=4)
-detector4 = ZScoreDetector(window_size = win_size, threshold=4)
+detector4 = ZScoreDetector(window_size = win_size, threshold=3)
 
 rules_detector = RulesDetector(target_seq_index=3)
 
@@ -50,8 +50,8 @@ detected_change_points = np.array(simulator.get_detected_changes())
 
 print()
 print("---------------------------------------------------------------------------------------")
-for rules_sets in simulator.get_rules():
+for rules_set in simulator.get_rules():
     #rules_sets.sort(key=lambda t: t.number_of_occurrences, reverse=True)
-    for rule in rules_sets:
+    for rule in sorted(rules_set, key=lambda x: x.number_of_occurrences, reverse=True):
         print(rule)
     print("----------------------------------------------------------------------------------------")

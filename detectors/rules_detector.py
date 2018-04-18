@@ -85,7 +85,10 @@ class RulesDetector(object):
                     if is_new_rule:
                         rule.set_last_occurence(current_index)
                         rule.increment_occurrences()
-                        self.generalize_rule(m, rule)
+                        gen_rule = self.generalize_rule(m, rule)
+                        if gen_rule != None:
+                            gen_rule.set_last_occurence(current_index)
+                            self.simulator.rules_sets[m].add(gen_rule)
 
                         self.simulator.rules_sets[m].add(rule)
                         print("New rule:", rule)
@@ -96,16 +99,103 @@ class RulesDetector(object):
         for rule in self.simulator.rules_sets[seq_index]:
             print("rule:     ", rule)
             print("new rule: ", new_rule)
-            print(rule.rhs)
-            print(new_rule.rhs)
-            if (rule.rhs.attr_name_ == new_rule.rhs.attr_name_ and
-                rule.rhs.value == new_rule.rhs.value):
-                print("same rhs")
-                for i in range(len(rule.lhs), 0):
-                    if rule.lhs[i] == new_rule.lhs[i]:
-                        print("lhs_elem are the same", rule.lhs[i], new_rule.lhs[i])
+            gen_rule = Rule([], None)
+
+            contains, generalized_rhs = rule.rhs.generalize(new_rule.rhs)
+            if contains > 0:
+                gen_rule.rhs = generalized_rhs
+                for i in range(1, min(len(rule.lhs)+1, len(new_rule.lhs)+1)):
+                    lhs_contains, generalized_lhs = rule.lhs[-i].generalize(new_rule.lhs[-i])
+                    if lhs_contains > 0: # lhs can be generazlized
+                        gen_rule.lhs.insert(0, generalized_lhs)
                     else:
-                        print()
+                        break
+
+            if len(gen_rule.lhs) > 0 and gen_rule.rhs != None:
+                print("gen_rule:", gen_rule)
+                gen_rule.number_of_occurrences = rule.number_of_occurrences + new_rule.number_of_occurrences
+                return gen_rule
+            else:
+                return None
+
+            # if (rule.rhs.attr_name_ == new_rule.rhs.attr_name_ and
+            #     rule.rhs.value == new_rule.rhs.value):
+            #     gen_rule = Rule([], None)
+            #     print("same rhs")
+            #     if new_rule.rhs.len < rule.rhs.len: # new_rule is shorter / less specific, is part of rule
+            #         print("new rule rhs shorter than rule")
+            #         gen_rule.rhs = new_rule.rhs
+            #         ##
+            #         for i in range(1, max(len(rule.lhs) + 1, len(new_rule.lhs) + 1)):
+            #             if i <= len(rule.lhs) and i <= len(new_rule.lhs):
+            #                 if (rule.lhs[-i].attr_name_ == new_rule.lhs[-i].attr_name_ and
+            #                         rule.lhs[-i].value == new_rule.lhs[-i].value):
+            #                     print("lhs_elem are the same, i:", -i, rule.lhs[-i], new_rule.lhs[-i])
+            #                     if new_rule.lhs[-i].len == rule.lhs[-i].len:
+            #                         gen_rule.lhs.insert(0, new_rule.lhs[-i])
+            #
+            #                     elif new_rule.lhs[-i].len > rule.lhs[-i].len:  # new rule lhs_elem is longer, rule is part of it
+            #                         gen_rule.lhs.insert(0, new_rule.lhs[-i])
+            #                         rule.increment_occurrences()
+            #                         break
+            #                     else:
+            #                         gen_rule.lhs.insert(0, new_rule.lhs[-i])  # new_rule lhs_elem is shorter, is part of rule
+            #                         gen_rule.number_of_occurrences = rule.number_of_occurrences
+            #                         break
+            #
+            #                 else:
+            #                     print("lhs_elem are different, i:", -i, rule.lhs[-i], new_rule.lhs[-i])
+            #                     if i == 1:
+            #                         print("first lhs different not possible to generalize")
+            #                     else:
+            #                         print("")
+            #                     break
+            #             else:
+            #                 print("i is greater")
+            #                 if i > len(rule.lhs):
+            #                     print("for rule     -- new_rule is longer, adding it, and increasining rule occ")
+            #                     gen_rule.lhs.insert(0, new_rule.lhs[-i])
+            #                     rule.increment_occurrences()
+            #
+            #                 if i > len(new_rule.lhs):
+            #                     print("for new rule -- rule is longer")
+            #                     gen_rule.lhs.insert(0, rule.lhs[-i])
+            #         ##
+            #         gen_rule.number_of_occurrences = rule.number_of_occurrences
+            #
+            #     elif new_rule.rhs.len > rule.rhs.len: # new_rule is longer / more specific, rule is part of it
+            #         print("new rule rhs longer than rule")
+            #         gen_rule.rhs = new_rule.rhs
+            #         rule.increment_occurrences()
+            #
+            #     else:
+            #         print("new rule rhs same size") #no need to change
+            #         gen_rule.rhs = new_rule.rhs
+            #         #self.generalize_lhs(rule, new_rule)
+
+
+
+
+    def generalize_lhs(self, rule, new_rule):
+        print("rule:     ", rule)
+        print("new rule: ", new_rule)
+        for i in range(1, max(len(rule.lhs)+1, len(new_rule.lhs)+1)):
+            print("i:", i)
+            if i <= len(rule.lhs) and i <= len(new_rule.lhs):
+                if rule.lhs[-i] == new_rule.lhs[-i]:
+                    print("lhs_elem are the same, i:", -i, rule.lhs[-i], new_rule.lhs[-i])
+
+                else:
+                    print("lhs_elem are different, i:", -i, rule.lhs[-i], new_rule.lhs[-i])
+                    break
+            else:
+                print("i is greater")
+                if i > len(rule.lhs):
+                    print("for rule     -- new_rule is longer, adding it, and increasining rule occ")
+                    rule.increment_occurrences()
+
+                if i > len(new_rule.lhs):
+                    print("for new rule -- rule is longer")
 
     def get_change_points_in_window(self, seq_index, window_begin, window_end):
         points_in_window = []
