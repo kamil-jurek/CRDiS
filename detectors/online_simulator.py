@@ -17,6 +17,7 @@ class OnlineSimulator(object):
         self.rules_sets = [set() for i in range(len(self.sequences))]
         self.parameters_history = [defaultdict(list) for i in range(len(self.sequences))]
         self.rules_detector = rules_detector
+        self.combined_rules = set()
 
     def get_detected_changes(self):
         return self.detected_change_points

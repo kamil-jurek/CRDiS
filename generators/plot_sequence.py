@@ -5,11 +5,11 @@ import argparse
 
 parser = argparse.ArgumentParser(description='Plotting sequence')
 parser.add_argument('-i','--input', help='Sequence input file name',required=True)
-parser.add_argument('-s','--start', help='Start', default=100, required=False)
+parser.add_argument('-s','--start', help='Start', default=800, required=False)
 parser.add_argument('-a','--attribute', help='Single attribute name', default='', required=False)
 args = parser.parse_args()
 
-curr_state = int(args.start) *1.5
+curr_state = int(args.start) *1.0
 
 seqName = args.input
 df = pd.read_csv(seqName)
@@ -45,6 +45,7 @@ if args.attribute:
         else:
             plt.barh(ind, 1, left=i, color=colors[seq[i]])
 
+
     plt.xlabel('State index')
     plt.ylabel(str(args.attribute))
     plt.yticks([], [args.attribute])
@@ -70,6 +71,7 @@ else:
                 pLegend.append(p)
             else:
                 axarr[j].barh(ind, 1, left=i, color=colors[seq[i]])
+            #print(column, i)
 
         axarr[j].set_xlabel('State index')
         axarr[j].set_ylabel(str(column))

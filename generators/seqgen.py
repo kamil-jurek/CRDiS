@@ -8,6 +8,7 @@ import random
 
 past_states = 1.0
 future_states = 1.5
+add_random = False
 
 parser = argparse.ArgumentParser(description='Sequence Generator.')
 parser.add_argument('-i','--input', help='Config input file name',required=True)
@@ -56,7 +57,7 @@ seqs = [[] for i in range(len(grouped_config_list))]
 k = len(grouped_config_list)
 f, axarr = plt.subplots(k)
 j = 0
-for x in range(3):
+for x in range(1):
     rand_len = random.randint(1, 3) * 100
     for config_ind, config in enumerate(grouped_config_list):
         config_values = config['value']
@@ -87,14 +88,18 @@ for x in range(3):
             if(args.plot):
                 sg.plotSequence(axarr[j], seq, domain, config['attr_name'], curr_state)
         j += 1
-        rand_seq = [numpy.random.choice([0,1]) for i in range(rand_len)]
-        seqs[config_ind] = numpy.concatenate((seqs[config_ind], seq))
-        seqs[config_ind] = numpy.concatenate((seqs[config_ind], rand_seq))
+        if add_random:
+            rand_seq = [numpy.random.choice([0,1,2,3,4], p = [0.92,0.2,0.2,0.2,]) for i in range(rand_len)]
+            seqs[config_ind] = numpy.concatenate((seqs[config_ind], seq))
+            seqs[config_ind] = numpy.concatenate((seqs[config_ind], rand_seq))
+        else:
+            seqs[config_ind] = seq
+
     #seqs = np.concatenate((seqs, )
 if args.plot:
     plt.show()
     timestr = time.strftime("%Y_%m_%d-%H.%M.%S")
-    plt.savefig("plots/plot_" + timestr + '.png')
+    plt.savefig("../plots/plot_" + timestr + '.png')
 
 if args.save:
     sg.saveToCsv(grouped_config_list, seqs)

@@ -1,49 +1,44 @@
+import numpy as np
+import pandas as pd
+from sklearn.cross_validation import train_test_split
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.metrics import accuracy_score
 from sklearn import tree
 
-dt = tree.DecisionTreeClassifier(criterion='entropy')
+balance_data = pd.read_csv('https://archive.ics.uci.edu/ml/machine-learning-databases/balance-scale/balance-scale.data',
+                           sep= ',', header= None)
 
-# [e1,e2,e3,e4,e5,e6,e7,e8,r9]
-X = [['attr_1:2', 'attr_1:2', 'attr_1:2', 'attr_1:3', 'attr_1:3', 'attr_1:3', 'attr_1:3', 'attr_1:3', 'target'],
-     ['attr_2:4', 'attr_2:4', 'attr_2:4', 'attr_2:4', 'attr_2:4', 'attr_2:5', 'attr_2:5', 'attr_2:5', 'target'],
-     ['attr_2:1', 'attr_2:4', 'attr_2:4', 'attr_2:4', 'attr_2:4', 'attr_2:5', 'attr_2:5', 'attr_2:5', 'target'],
-     ['attr_3:1', 'attr_3:1', 'attr_3:1', 'attr_3:1', 'attr_3:1', 'attr_3:1', 'attr_3:1', 'attr_3:4', 'target'],
-     ['attr_1:1', 'attr_1:2', 'attr_1:2', 'attr_1:3', 'attr_1:3', 'attr_1:3', 'attr_1:3', 'attr_1:3', 'target']]
 
-Y = ['man', 'woman', 'woman', 'man', 'woman']
+print("Dataset Lenght:: ", len(balance_data))
+print("Dataset Shape:: ", balance_data.shape)
+print(balance_data.head())
 
-clf = dt.fit(X, Y)
-prediction = clf.predict([['attr_1:2', 'attr_1:2', 'attr_1:2', 'attr_1:3', 'attr_1:3', 'attr_1:3', 'attr_1:3', 'attr_1:3', 'target']])
-print(prediction)
+X = balance_data.values[:, 1:5]
+Y = balance_data.values[:,0]
 
-dotfile = open("dt.dot", 'w')
-tree.export_graphviz(dt, out_file=dotfile, feature_names=[e1,e2,e3,e4,e5,e6,e7,e8,r9])
-dotfile.close()
+X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.3, random_state=100)
 
-from sklearn.tree import _tree
-def tree_to_code(tree, feature_names):
-    tree_ = tree.tree_
-    feature_name = [
-        feature_names[i] if i != _tree.TREE_UNDEFINED else "undefined!"
-        for i in tree_.feature
-    ]
-    print
-    "def tree({}):".format(", ".join(feature_names))
+clf_gini = DecisionTreeClassifier(criterion="gini", random_state = 100, max_depth=3, min_samples_leaf=5)
+clf_gini.fit(X_train, y_train)
 
-    def recurse(node, depth):
-        indent = "  " * depth
-        if tree_.feature[node] != _tree.TREE_UNDEFINED:
-            name = feature_name[node]
-            threshold = tree_.threshold[node]
-            print
-            "{}if {} <= {}:".format(indent, name, threshold)
-            recurse(tree_.children_left[node], depth + 1)
-            print
-            "{}else:  # if {} > {}".format(indent, name, threshold)
-            recurse(tree_.children_right[node], depth + 1)
-        else:
-            print
-            "{}return {}".format(indent, tree_.value[node])
+DecisionTreeClassifier(class_weight=None, criterion='gini', max_depth=3,
+                       max_features=None, max_leaf_nodes=None, min_samples_leaf=5,
+                       min_samples_split=2, min_weight_fraction_leaf=0.0,
+                       presort=False, random_state=100, splitter='best')
 
-    recurse(0, 1)
 
-tree_to_code(dt,[e1,e2,e3,e4,e5,e6,e7,e8,r9])
+clf_entropy = DecisionTreeClassifier(criterion="entropy", random_state = 100, max_depth=3, min_samples_leaf=5)
+clf_entropy.fit(X_train, y_train)
+DecisionTreeClassifier(class_weight=None, criterion='entropy', max_depth=3,
+                       max_features=None, max_leaf_nodes=None, min_samples_leaf=5,
+                       min_samples_split=2, min_weight_fraction_leaf=0.0,
+                       presort=False, random_state=100, splitter='best')
+
+print(clf_gini.predict([[4, 4, 3, 3]]))
+print(clf_entropy.predict([[4, 4, 3, 3]]))
+
+y_pred_gini = clf_gini.predict(X_test)
+y_pred_entropy = clf_entropy.predict(X_test)
+
+print("Gini accuracy is ", accuracy_score(y_test,y_pred_gini)*100)
+print("Entropy accuracy is ", accuracy_score(y_test,y_pred_entropy)*100)

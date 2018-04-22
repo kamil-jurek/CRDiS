@@ -21,7 +21,7 @@ class RulesDetector(object):
             window_begin = round_to_hundreds(prev_prev_change_point_target.at_) if prev_prev_change_point_target != None else 0
             window_end = round_to_hundreds(prev_change_point_target.at_)
 
-
+            combined_rule = []
             for m, change_point_list in enumerate(self.simulator.detected_change_points):  # abandoning last seq, as it is target for now
                 if m == self.target_seq_index:
                     continue
@@ -80,6 +80,7 @@ class RulesDetector(object):
                             is_new_rule = False
                             r.set_last_occurence(current_index)
                             r.increment_occurrences()
+                            combined_rule.append(rule)
                             print("Rule already in set:", r)
 
                     if is_new_rule:
@@ -91,7 +92,12 @@ class RulesDetector(object):
                             self.simulator.rules_sets[m].add(gen_rule)
 
                         self.simulator.rules_sets[m].add(rule)
+                        combined_rule.append(rule)
                         print("New rule:", rule)
+
+            if len(combined_rule) > 0:
+                print("Adding to combined rules")
+                self.simulator.combined_rules.add(tuple(combined_rule))
 
     def generalize_rule(self, seq_index, new_rule):
         print()
