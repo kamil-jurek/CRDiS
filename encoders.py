@@ -3,6 +3,8 @@ from sklearn.preprocessing import OneHotEncoder
 import category_encoders as ce
 import numpy as np
 
+label_encoder = None
+
 def encode(data):
     #encoder = ce.BinaryEncoder( ) #obiecujacy
     encoder = ce.HelmertEncoder( ) #obiecujacy
@@ -23,6 +25,12 @@ def encode(data):
 def encode_int(data):
     values = np.array(data)
     label_encoder = LabelEncoder()
-    integer_encoded = label_encoder.fit_transform(values)+1
+    label_encoder = label_encoder.fit(values)
+    integer_encoded = label_encoder.transform(values)+1
 
     return integer_encoded
+
+def invese_encode_int(data):
+    integer_decoded = label_encoder.inverse_transform([0, 0, 1, 2])
+
+    return integer_decoded

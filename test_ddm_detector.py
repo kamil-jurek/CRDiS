@@ -6,7 +6,7 @@ import encoders as en
 import scipy as sp
 from scipy import signal
 from detector import ChangeDetector
-from detector import OnlineSimulator
+from online_simulator import OnlineSimulator
 from ddm2_detector import DDMDetector
 
 
@@ -20,8 +20,11 @@ seq = np.array(df['attr_1'])
 # seq = en.encode(signal)
 
 detector = DDMDetector(lambd=25)
-simulator = OnlineSimulator(detector, seq)
-simulator.run()
 
-detected_change_points = simulator.get_detected_changes()
-print(np.array(detected_change_points)- int(2/3 * len(seq)))
+simulator = OnlineSimulator(None,
+                            [detector],
+                            [seq],
+                            ['attr_1'])
+simulator.run(plot=True, detect_rules=False)
+
+

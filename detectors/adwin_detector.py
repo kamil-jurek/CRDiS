@@ -1,94 +1,226 @@
 import numpy as np
 import math
-from adwin_win_list import AdWinList
 from detector import ChangeDetector
+from statistics import mode
+
 
 class AdwinDetector(ChangeDetector):
     def __init__(self, delta = 0.01):
         super( AdwinDetector, self ).__init__()
-        self.MINTCLOCK = 1.0
-        self.MINLENGTHWINDOW = 5
         self.DELTA = delta
-        self.MAXBUCKETS = 5
-        self.bucketList = AdWinList(self.MAXBUCKETS)
-        self.mintTime=0.0;
-        self.mintClock=self.MINTCLOCK;
-        self.mdblError=0.0;
-        self.mdblWidth=0.0;
-        self.lastBucketRow=0;
-        self.sum_ = 0.0;
-        self.W_ = 0.0;
-        self.var = 0.0;
-        self.bucketNumber=0;
-        self.est_ = 0
-        self.rules_triggered = False
-
-    def getEstimation(self):
-        if self.W_ > 0:
-            return self.sum_ / float(self.W_);
-        else:
-            return 0;
+        self.adwin = ADWIN(self.DELTA)
+        self.is_change_detected = False
+        self.drift_status = False
+        self.subseq = []
 
     def update(self, new_value):
         super(AdwinDetector, self).update(new_value)
-        x = np.mean(new_value)
-        self.insertElement(x)
-        self.compressBuckets()
-        self.est_ = self.getEstimation()
+        self.drift_status = self.adwin.set_input(new_value)
+        self.subseq.append(new_value)
 
-    def check_stopping_rules(self, new_value):
-        self.rules_triggered = False
-        if self.checkDrift():
-            self.rules_triggered = True
-            self.bucketList = AdWinList(self.MAXBUCKETS)
-            self.mintTime=0.0;
-            self.mintClock=self.MINTCLOCK;
-            self.mdblError=0.0;
-            self.mdblWidth=0.0;
-            self.lastBucketRow=0;
-            self.sum_ = 0.0;
-            self.W_ = 0.0;
-            self.var = 0.0;
-            self.bucketNumber=0;
-            self.est_ = 0
+    def check_change(self, new_value):
+        self.is_change_detected = False
+        if self.drift_status:
+            self.is_change_detected = True
+            self.previous_value = mode(self.subseq)
+            self.current_value = mode(self.subseq[-int(len(self.subseq)/10):])
+            self.adwin = ADWIN(self.DELTA)
+            self.subseq = []
 
-    def length(self):
-        return self.W_
+class ListItem:
 
-    def insertElement(self, value):
-        self.W_ +=1
-        self.bucketList.head.addBack(float(value), 0.0)
-        self.bucketNumber += 1
+    def __init__(self, next_node=None, previous_node=None):
 
-        if self.W_ > 1:
-            self.var += (self.W_-1) * (value-self.sum_/(self.W_-1)) * (value-self.sum_/(self.W_-1))/self.W_
+        self.bucket_size_row = 0
+        self.MAXBUCKETS = 5
 
-        self.sum_ += value
+        self.bucket_total = []
+        self.bucket_variance = []
+        for i in range(0, self.MAXBUCKETS + 1):
+            self.bucket_total.append(0)
+            self.bucket_variance.append(0)
 
-    def compressBuckets(self):
+        self.next = next_node
+        self.previous = previous_node
+        if next_node is not None:
+            next_node.previous = self
+        if previous_node is not None:
+            previous_node.next = self
+
+        self.clear()
+
+    def clear(self):
+        self.bucket_size_row = 0
+        for k in range(0, self.MAXBUCKETS + 1):
+            self.clear_bucket(k)
+
+    def clear_bucket(self, k):
+        self.set_total(0, k)
+        self.set_variance(0, k)
+
+    def insert_bucket(self, value, variance):
+        k = self.bucket_size_row
+        self.bucket_size_row += 1
+        self.set_total(value, k)
+        self.set_variance(variance, k)
+
+    def remove_bucket(self):
+        self.compress_buckets_row(1)
+
+    def compress_buckets_row(self, number_items_deleted):
+        for k in range(number_items_deleted, self.MAXBUCKETS + 1):
+            self.bucket_total[k - number_items_deleted] = self.bucket_total[k]
+            self.bucket_variance[k - number_items_deleted] = self.bucket_variance[k]
+        for k in range(1, number_items_deleted + 1):
+            self.clear_bucket(self.MAXBUCKETS - k + 1)
+        self.bucket_size_row -= number_items_deleted
+
+    def set_previous(self, previous_node):
+        self.previous = previous_node
+
+    def set_next(self, next_node):
+        self.next = next_node
+
+    def get_total(self, k):
+        return self.bucket_total[k]
+
+    def set_total(self, value, k):
+        self.bucket_total[k] = value
+
+    def get_variance(self, k):
+        return self.bucket_variance[k]
+
+    def set_variance(self, value, k):
+        self.bucket_variance[k] = value
+
+
+class List:
+
+    def __init__(self):
+        self.count = None
+        self.head = None
+        self.tail = None
+
+        self.clear()
+        self.add_to_head()
+
+    def is_empty(self):
+        return self.count == 0
+
+    def clear(self):
+        self.head = None
+        self.tail = None
+        self.count = 0
+
+    def add_to_head(self):
+        self.head = ListItem(self.head, None)
+        if self.tail is None:
+            self.tail = self.head
+        self.count += 1
+
+    def remove_from_head(self):
+        self.head = self.head.next
+        if self.head is not None:
+            self.head.set_previous(None)
+        else:
+            self.tail = None
+        self.count -= 1
+
+    def add_to_tail(self):
+        self.tail = ListItem(None, self.tail)
+        if self.head is None:
+            self.head = self.tail
+        self.count += 1
+
+    def remove_from_tail(self):
+        self.tail = self.tail.previous
+        if self.tail is None:
+            self.head = None
+        else:
+            self.tail.set_next(None)
+        self.count -= 1
+
+class ADWIN:
+
+    def __init__(self, delta):
+
+        self.DELTA = delta
+
+        self.mint_minim_longitud_window = 10
+        self.mint_time = 0
+        self.mint_clock = 32
+
+        self.last_bucket_row = 0
+
+        self.bucket_number = 0
+        self.detect = 0
+        self.detect_twice = 0
+        self.mint_min_win_length = 5
+
+        self.MAXBUCKETS = 5
+        self.TOTAL = 0
+        self.VARIANCE = 0
+        self.WIDTH = 0
+
+        self.list_row_buckets = List()
+
+    def insert_element(self, value):
+        self.WIDTH += 1
+        self.insert_element_bucket(0, value, self.list_row_buckets.head)
+        inc_variance = 0
+        if self.WIDTH > 1:
+            inc_variance = (self.WIDTH - 1) * (value - self.TOTAL / (self.WIDTH - 1)) * (value - self.TOTAL / (self.WIDTH - 1)) / self.WIDTH
+        self.VARIANCE += inc_variance
+
+        self.TOTAL += value
+        self.compress_buckets()
+
+    def insert_element_bucket(self, variance, value, node):
+        node.insert_bucket(value, variance)
+        self.bucket_number += 1
+
+    @staticmethod
+    def bucket_size(row):
+        return int(pow(2, row))
+
+    def delete_element(self):
+        node = self.list_row_buckets.tail
+        n1 = self.bucket_size(self.last_bucket_row)
+        self.WIDTH -= n1
+        self.TOTAL -= node.get_total(0)
+        u1 = node.get_total(0) / n1
+        inc_variance = node.get_variance(0) + n1 * self.WIDTH * (u1 - self.TOTAL / self.WIDTH) * (u1 - self.TOTAL / self.WIDTH) / (n1 + self.WIDTH)
+        self.VARIANCE -= inc_variance
+        if self.VARIANCE < 0:
+            self.VARIANCE = 0
+
+        node.remove_bucket()
+        self.bucket_number -= 1
+        if node.bucket_size_row == 0:
+            self.list_row_buckets.remove_from_tail()
+            self.last_bucket_row -= 1
+        return n1
+
+    def compress_buckets(self):
+        cursor = self.list_row_buckets.head
         i = 0
-        cont = 0
-
-        cursor = self.bucketList.head
-        nextNode = None
-
         while True:
-            k = cursor.size
-            if k == self.MAXBUCKETS+1:
-                nextNode = cursor.next
-                if nextNode is None:
-                    self.bucketList.addToTail()
-                    nextNode = cursor.next
-                    self.lastBucketRow += 1
-                n1 = self.bucketSize(i)
-                n2 = self.bucketSize(i)
-                u1 = cursor.sum[0]/n1
-                u2 = cursor.sum[1]/n2
-                incVariance = n1*n2*(u1-u2)*(u1-u2)/(n1+n2)
-                nextNode.addBack(cursor.sum[0]+cursor.sum[1], cursor.variance[0]+cursor.variance[1]+incVariance)
-                self.bucketNumber -= 1
-                cursor.dropFront(2)
-                if nextNode.size <= self.MAXBUCKETS:
+            k = cursor.bucket_size_row
+            if k == self.MAXBUCKETS + 1:
+                next_node = cursor.next
+                if next_node is None:
+                    self.list_row_buckets.add_to_tail()
+                    next_node = cursor.next
+                    self.last_bucket_row += 1
+                n1 = self.bucket_size(i)
+                n2 = self.bucket_size(i)
+                u1 = cursor.get_total(0) / n1
+                u2 = cursor.get_total(1) / n2
+                inc_variance = n1 * n2 * (u1 - u2) * (u1 - u2) / (n1 + n2)
+                next_node.insert_bucket(cursor.get_total(0) + cursor.get_total(1), cursor.get_variance(0) + cursor.get_variance(1) + inc_variance)
+                self.bucket_number += 1
+                cursor.compress_buckets_row(2)
+                if next_node.bucket_size_row <= self.MAXBUCKETS:
                     break
             else:
                 break
@@ -97,80 +229,61 @@ class AdwinDetector(ChangeDetector):
             if cursor is None:
                 break
 
-    def checkDrift(self):
-        change = False
-        quit = False
-        it = None
+    def set_input(self, pr):
+        bln_change = False
+        self.mint_time += 1
+        self.insert_element(pr)
 
-        self.mintTime += 1
+        if self.mint_time % self.mint_clock == 0 and self.WIDTH > self.mint_minim_longitud_window:
+            bln_reduce_width = True
+            while bln_reduce_width:
+                bln_reduce_width = False
+                bln_exit = False
+                n0 = 0
+                n1 = self.WIDTH
+                u0 = 0
+                u1 = self.TOTAL
 
-        if self.mintTime % self.mintClock == 0 and self.W_ > self.MINLENGTHWINDOW:
-            blnTalla = True
-
-            while blnTalla:
-                blnTalla = False
-                quit = False
-                n0 = 0.0
-                n1 = float(self.W_)
-                u0 = 0.0
-                u1 = float(self.sum_)
-                it = self.bucketList.tail
-                i = self.lastBucketRow
-
+                cursor = self.list_row_buckets.tail
+                i = self.last_bucket_row
                 while True:
-                    for k in range(it.size):
-                        if i == 0 and k == it.size-1:
-                            quit = True
+
+                    for k in range(0, cursor.bucket_size_row):
+
+                        n0 += self.bucket_size(i)
+                        n1 -= self.bucket_size(i)
+                        u0 += cursor.get_total(k)
+                        u1 -= cursor.get_total(k)
+
+                        if i == 0 and k == cursor.bucket_size_row - 1:
+                            bln_exit = True
                             break
-                        n0 += self.bucketSize(i)
-                        n1 -= self.bucketSize(i)
-                        u0 += it.sum[k]
-                        u1 -= it.sum[k]
-                        mintMinWinLength = 5
-                        if n0 >= mintMinWinLength and n1 >= mintMinWinLength and self.cutExpression(n0, n1, u0, u1):
-                            blnTalla = True
-                            change = True
-                            if self.W_ > 0:
-                                self.deleteElement()
-                                quit = True
+
+                        if n1 > self.mint_min_win_length + 1 and n0 > self.mint_min_win_length + 1 and self.bln_cut_expression(n0, n1, u0, u1):
+                            self.detect = self.mint_time
+
+                            if self.detect == 0:
+                                self.detect = self.mint_time
+                            elif self.detect_twice == 0:
+                                self.detect_twice = self.mint_time
+                            bln_reduce_width = True
+                            bln_change = True
+                            if self.WIDTH > 0:
+                                n0 -= self.delete_element()
+                                bln_exit = True
                                 break
-                    it = it.prev
+                    cursor = cursor.previous
                     i -= 1
-                    if quit or it is None:
+                    if not (not bln_exit and cursor is not None):
                         break
-        return change;
 
-    def deleteElement(self):
-        node = self.bucketList.tail
-        n1 = self.bucketSize(self.lastBucketRow)
-        self.W_ -= n1
-        self.sum_ -= node.sum[0]
-        u1 = node.sum[0]/n1
-        incVariance = float(node.variance[0]+n1*self.W_*(u1-self.sum_/self.W_)*(u1-self.sum_/self.W_))/(float(n1+self.W_))
-        self.var -= incVariance
-        node.dropFront()
-        self.bucketNumber -= 1
-        if node.size == 0:
-            self.bucketList.removeFromTail()
-            self.lastBucketRow -= 1
+        return bln_change
 
-    def cutExpression(self, N0, N1, u0, u1):
-        n0 = float(N0)
-        n1 = float(N1)
-        n = float(self.W_)
-        diff = float(u0/n0) - float(u1/n1)
-
-        v = self.var/self.W_
-        dd = math.log(2.0*math.log(n)/self.DELTA)
-
-        mintMinWinLength = 5
-        m = (float(1/((n0-mintMinWinLength+1))))+(float(1/((n1-mintMinWinLength+1))))
-        eps = math.sqrt(2*m*v*dd)+float(2/3*dd*m)
-
-        if math.fabs(diff) > eps:
-            return True
-        else:
-            return False
-
-    def bucketSize(self, Row):
-        return int(math.pow(2,Row));
+    def bln_cut_expression(self, n0, n1, u0, u1):
+        diff = math.fabs((u0 / n0) - (u1 / n1))
+        n = self.WIDTH
+        m = (1 / (n0 - self.mint_min_win_length + 1)) + (1 / (n1 - self.mint_min_win_length + 1))
+        dd = math.log(2 * math.log(n) / self.DELTA)
+        v = self.VARIANCE / self.WIDTH
+        e = math.sqrt(2 * m * v * dd) + 2 / 3 * dd * m
+        return diff > e

@@ -19,15 +19,21 @@ class OnlineSimulator(object):
         self.rules_detector = rules_detector
         self.combined_rules = set()
 
+        if rules_detector != None:
+            self.rules_detector.set_online_simulator(self)
+
     def get_detected_changes(self):
         return self.detected_change_points
 
-    def get_rules(self):
+    def get_rules_sets(self):
         result = []
         for i, rs in enumerate(self.rules_sets):
             if i != self.rules_detector.target_seq_index:
                 result.append(rs)
         return result
+
+    def get_combined_rules(self):
+        return self.combined_rules
 
     def run(self, plot=True, detect_rules=True, **kwargs):
         parameters_history = [defaultdict(list) for i in range(len(self.sequences))]

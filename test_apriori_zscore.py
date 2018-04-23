@@ -44,6 +44,7 @@ simulator = OnlineSimulator(rules_detector,
                             [detector1, detector2, detector3, detector4],
                             [seq1, seq2, seq3, seq4],
                             ["attr_1", "attr_2", "attr_3", "attr_4"])
+
 simulator.run(plot=False, detect_rules=False)
 
 print("-----------------------------------------------------------------------------------------------------------")
