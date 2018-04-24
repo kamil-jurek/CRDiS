@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import argparse
+from collections import OrderedDict
 
 parser = argparse.ArgumentParser(description='Plotting sequence')
 parser.add_argument('-i','--input', help='Sequence input file name',required=True)
@@ -27,7 +28,7 @@ elif seqLen <= 50000:
     step = 1000
 
 j = 0
-colors = {}
+colors = OrderedDict()
 pLegend = []
 
 
@@ -52,6 +53,7 @@ if args.attribute:
     plt.xticks(np.arange(0, len(seq)+1, step), np.arange(-curr_state, len(seq)-curr_state+1, step))
 
     #plt.plot(signal)
+    print(colors.keys())
     plt.legend((pLegend), list(colors.keys()), bbox_to_anchor=(1, 1.0))
     plt.savefig("../plots/plot_" + seqName.rsplit('/')[1][:-4]+'_'+ args.attribute + '.png')
     plt.show()
@@ -81,7 +83,7 @@ else:
         axarr[j].set_xticks(np.arange(0, len(seq)+1, step))
 
         j += 1
-    #plt.plot(signal)
+        
     axarr[0].legend((pLegend), list(colors.keys()), bbox_to_anchor=(1, 1.0))
     plt.savefig("../plots/plot_" + seqName.rsplit('/')[1][:-4] + '.png')
     plt.show()

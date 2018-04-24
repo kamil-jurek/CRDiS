@@ -36,8 +36,13 @@ def plotSequence(axarr, seq, domain, attrName, curr_state):
     axarr.set_yticks([])
     axarr.set_yticklabels(['Attr_1'])
 
-    axarr.set_xticklabels(numpy.arange(-curr_state, len(seq)-curr_state+1, 100),minor=False)
-    axarr.set_xticks(numpy.arange(0, len(seq)+1, 100),minor=False)
+    step = determine_step(seq)
+
+    axarr.set_xticks(numpy.arange(0, len(seq) + 1, step), minor=False)
+    #print(numpy.arange(0, len(seq) + 1, step))
+    axarr.set_xticklabels(numpy.arange(-curr_state, len(seq)-curr_state+1, step),minor=False)
+    #print(numpy.arange(-curr_state, len(seq)-curr_state+1, step))
+
     axarr.legend((p), (domain))
 
 
@@ -49,3 +54,17 @@ def saveToCsv(listOfConfigs, sequences):
         writer.writerow([config['attr_name'] for config in listOfConfigs])
         for i in range(len(sequences[0])):
             writer.writerow([seq[i] for seq in sequences])
+
+def determine_step(seq):
+    step = 10
+    seqLen = len(seq)
+    if seqLen <= 50:
+        step = 1
+    elif seqLen <= 500:
+        step = 10
+    elif seqLen <= 5000:
+        step = 100
+    elif seqLen <= 50000:
+        step = 1000
+
+    return step

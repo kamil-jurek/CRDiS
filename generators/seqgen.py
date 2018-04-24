@@ -7,8 +7,9 @@ import time
 import random
 
 past_states = 1.0
-future_states = 1.5
-add_random = False
+future_states = 50
+add_random = True
+nr_of_repetitions = 4
 
 parser = argparse.ArgumentParser(description='Sequence Generator.')
 parser.add_argument('-i','--input', help='Config input file name',required=True)
@@ -43,22 +44,17 @@ for config in config_list:
         attr_dict = [d for d in grouped_config_list if d['attr_name'] == key][0]
         attr_dict['value'].append(config)
 
-# for conf in grouped_config_list:
-#     for key, value in conf.items():
-#         print key,": ", value if key == 'attr_name' else ' '
-#         if key != 'attr_name':
-#             for v in value:
-#                 print "\t", v
-#     print
-
 curr_state = int(max([abs(int(float(config_list[i]['from']))) for i in range(len(config_list)) if 'from' in config_list[i]])*past_states)
-last_state = int(curr_state+300)
+last_state = curr_state + int(max([int(float(config_list[i]['to'])) for i in range(len(config_list)) if 'to' in config_list[i]]))
+print("curr", curr_state)
+print("last", last_state)
+#int(curr_state+future_states)
 seqs = [[] for i in range(len(grouped_config_list))]
 k = len(grouped_config_list)
 f, axarr = plt.subplots(k)
 j = 0
-for x in range(1):
-    rand_len = random.randint(1, 3) * 100
+for x in range(nr_of_repetitions):
+    rand_len = random.randint(1, 3) * 10
     for config_ind, config in enumerate(grouped_config_list):
         config_values = config['value']
         domain = ast.literal_eval(config_values[0]['domain'])
@@ -77,19 +73,22 @@ for x in range(1):
             fr = curr_state - curr_state
             to = curr_state - last_state
             if 'from' in config_values[z]:
-                fr = abs(int(float(config_values[z]['from'])))
+                fr = int(float(config_values[z]['from']))
                 if config_values[z]['to'] != '0':
-                    to = abs(int(float(config_values[z]['to'])))
+                    to = int(float(config_values[z]['to']))
                 else:
                     to = 0
-
-            seq = sg.generateSequence(seq, domain, value, operator, probability, curr_state-fr, curr_state-to)
+            seq = sg.generateSequence(seq, domain, value, operator, probability, curr_state+fr, curr_state+to)
 
             if(args.plot):
                 sg.plotSequence(axarr[j], seq, domain, config['attr_name'], curr_state)
         j += 1
         if add_random:
-            rand_seq = [numpy.random.choice([0,1,2,3,4], p = [0.92,0.2,0.2,0.2,]) for i in range(rand_len)]
+            rand_elem = random.randint(0, len(domain)-1)
+            print("adding:",domain[rand_elem], " for", rand_len, "states")
+            probs = numpy.array([0.9 if i == rand_elem else (1.0-0.9)/(len(domain)-1) for i in range(len(domain))])
+            probs /= probs.sum()
+            rand_seq = [numpy.random.choice(domain, p = probs) for i in range(rand_len)]
             seqs[config_ind] = numpy.concatenate((seqs[config_ind], seq))
             seqs[config_ind] = numpy.concatenate((seqs[config_ind], rand_seq))
         else:
@@ -97,9 +96,10 @@ for x in range(1):
 
     #seqs = np.concatenate((seqs, )
 if args.plot:
-    plt.show()
     timestr = time.strftime("%Y_%m_%d-%H.%M.%S")
     plt.savefig("../plots/plot_" + timestr + '.png')
+    plt.show()
+
 
 if args.save:
     sg.saveToCsv(grouped_config_list, seqs)
