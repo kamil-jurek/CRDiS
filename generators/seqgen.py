@@ -9,7 +9,7 @@ import random
 past_states = 1.0
 future_states = 50
 add_random = True
-nr_of_repetitions = 4
+nr_of_repetitions = 10
 
 parser = argparse.ArgumentParser(description='Sequence Generator.')
 parser.add_argument('-i','--input', help='Config input file name',required=True)
@@ -54,7 +54,7 @@ k = len(grouped_config_list)
 f, axarr = plt.subplots(k)
 j = 0
 for x in range(nr_of_repetitions):
-    rand_len = random.randint(1, 3) * 10
+    rand_len = random.randint(1, 3) * 100
     for config_ind, config in enumerate(grouped_config_list):
         config_values = config['value']
         domain = ast.literal_eval(config_values[0]['domain'])
@@ -85,14 +85,14 @@ for x in range(nr_of_repetitions):
         j += 1
         if add_random:
             rand_elem = random.randint(0, len(domain)-1)
-            print("adding:",domain[rand_elem], " for", rand_len, "states")
+            print("adding:",domain[rand_elem], " for")
             probs = numpy.array([0.9 if i == rand_elem else (1.0-0.9)/(len(domain)-1) for i in range(len(domain))])
             probs /= probs.sum()
             rand_seq = [numpy.random.choice(domain, p = probs) for i in range(rand_len)]
             seqs[config_ind] = numpy.concatenate((seqs[config_ind], seq))
             seqs[config_ind] = numpy.concatenate((seqs[config_ind], rand_seq))
         else:
-            seqs[config_ind] = seq
+            seqs[config_ind] = numpy.concatenate((seqs[config_ind], seq))
 
     #seqs = np.concatenate((seqs, )
 if args.plot:

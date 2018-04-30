@@ -10,13 +10,13 @@ class Rule(object):
     def __repr__(self):
         return(str(self.lhs) + " ==> " + str(self.rhs) + "\tconf:" + str(self.conf))
 
-def createC1(dataSet):
-    C1 = []
-    for transaction in dataSet:
+def createC1(data_set):
+    candidate_seqs_1 = []
+    for transaction in data_set:
         for item in transaction:
-            if not [item] in C1:
-                C1.append([item])
-    return C1
+            if not [item] in candidate_seqs_1:
+                candidate_seqs_1.append([item])
+    return candidate_seqs_1
 
 def contains(small, big):
     for i in range(len(big)-len(small)+1):
@@ -27,17 +27,17 @@ def contains(small, big):
             return i, i+len(small)
     return False
 
-def scanD(D, Ck, minSupport):
+def scanD(data_set, candidates_k, minSupport):
     ssCnt = {}
-    for tid in D:
-        for can in Ck:
+    for tid in data_set:
+        for can in candidates_k:
             if contains(can, tid):
                 if not tuple(can) in ssCnt:
                     ssCnt[tuple(can)] = 1
                 else:
                     ssCnt[tuple(can)] += 1
 
-    numItems = float(len(D))
+    numItems = float(len(data_set))
     retList = []
     supportData = {}
     for key in ssCnt:

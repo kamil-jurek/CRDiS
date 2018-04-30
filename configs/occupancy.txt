@@ -1,0 +1,17 @@
+attr = 'light';value='OFF';domain = ['OFF','ON']; from = -1430; to = -970; probability = 0.90
+attr = 'light';value='ON';domain = ['OFF','ON']; from = -970; to = -630; probability = 0.85
+attr = 'light';value='OFF';domain = ['OFF','ON']; from = -630; to = -570; probability = 0.90
+attr = 'light';value='ON';domain = ['OFF','ON']; from = -570; to = -310; probability = 0.85
+attr = 'light';value='OFF';domain = ['OFF','ON']; from = -310; to = 0; probability = 0.85
+attr = 'temperature';value=18;domain = [18,20,22]; from = -1430; to = -1100; probability = 0.90
+attr = 'temperature';value=20;domain = [18,20,22]; from = -1100; to = -630; probability = 0.85
+attr = 'temperature';value=22;domain = [18,20,22]; from = -970; to = -630; probability = 0.85
+attr = 'temperature';value=20;domain = [18,20,22]; from = -630; to = -570; probability = 0.90
+attr = 'temperature';value=22;domain = [18,20,22]; from = -570; to = -310; probability = 0.85
+attr = 'temperature';value=20;domain = [18,20,22]; from = -310; to = -200; probability = 0.85
+attr = 'temperature';value=18;domain = [18,20,22]; from = -200; to = 0; probability = 0.85
+attr = 'occupancy';value=0;domain = [0,1]; from = -1440; to = -960; probability = 0.90
+attr = 'occupancy';value=1;domain = [0,1]; from = -960; to = -640; probability = 0.85
+attr = 'occupancy';value=0;domain = [0,1]; from = -640; to = -580; probability = 0.90
+attr = 'occupancy';value=1;domain = [0,1]; from = -580; to = -320; probability = 0.85
+attr = 'occupancy';value=0;domain = [0,1]; from = -320; to = 0; probability = 0.85

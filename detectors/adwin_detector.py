@@ -22,8 +22,8 @@ class AdwinDetector(ChangeDetector):
         self.is_change_detected = False
         if self.drift_status:
             self.is_change_detected = True
-            self.previous_value = mode(self.subseq)
-            self.current_value = mode(self.subseq[-int(len(self.subseq)/10):])
+            self.previous_value = max(set(self.subseq), key=self.subseq.count)  # mode(self.subseq)
+            self.current_value = max(set(self.subseq[-1:]), key=self.subseq[-1:].count)  # mode(self.subseq[-1:])
             self.adwin = ADWIN(self.DELTA)
             self.subseq = []
 

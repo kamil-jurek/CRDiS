@@ -8,10 +8,11 @@ def print_rules(rules_sets):
 
 def print_combined_rules(combined_rules):
     print("---------------------------------------------------------------------------------------")
-    for combined_rule in combined_rules:
+    for combined_rule in sorted(combined_rules, key=lambda x: x[0].number_of_occurrences, reverse=True):
         # print(combined_rule)
         for i, rule in enumerate(combined_rule):
             print(rule.lhs, "AND" if i < len(combined_rule)-1 else "")
         print(" ==>", )
         print(combined_rule[0].rhs)
+        print("number of occurenes:",combined_rule[0].number_of_occurrences)
         print()
