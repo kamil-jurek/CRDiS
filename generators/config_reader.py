@@ -1,4 +1,3 @@
-import SequenceGenerator as sg
 import matplotlib.pyplot as plt
 import numpy
 import math
@@ -29,14 +28,6 @@ for config in config_list:
     else:
         attr_dict = [d for d in grouped_config_list if d['attr_name'] == key][0]
         attr_dict['value'].append(config)
-
-for conf in grouped_config_list:
-    for key, value in conf.items():
-        print key,": ", value if key == 'attr_name' else ' '
-        if key != 'attr_name':
-            for v in value:
-                print "\t", v
-    print
 
 curr_state = max([abs(int(float(config_list[i]['from']))) for i in range(len(config_list)) if 'from' in config_list[i]])*2
 last_state = curr_state + curr_state/2
