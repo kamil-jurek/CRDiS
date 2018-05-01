@@ -17,7 +17,7 @@ class OnlineSimulator(object):
         self.rules_sets = [set() for i in range(len(self.sequences))]
         self.parameters_history = [defaultdict(list) for i in range(len(self.sequences))]
         self.rules_detector = rules_detector
-        self.combined_rules = set()
+        self.combined_rules = []
 
         if rules_detector != None:
             self.rules_detector.set_online_simulator(self)

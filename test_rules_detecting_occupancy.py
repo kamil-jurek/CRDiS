@@ -7,7 +7,11 @@ import encoders as en
 from utils import *
 from online_simulator import OnlineSimulator
 from zscore_detector import ZScoreDetector
+
 from rules_detector import RulesDetector
+#from rules_detector_2 import RulesDetector
+
+from adwin_detector import AdwinDetector
 
 def round_to_hundreds(x):
     return int(round(x / 100.0)) * 100
@@ -19,7 +23,7 @@ def round_to_hundreds(x):
 # seq2 = np.array(df['temperature'])
 # seq3 = np.array(df['occupancy'])
 
-df = pd.read_csv('sequences/sequence_2018_04_29-17.44.42.csv')
+df = pd.read_csv('sequences/sequence_2018_04_30-14.42.37.csv')
 seq1 = np.array(df['attr_1'])
 seq2 = np.array(df['attr_2'])
 seq3 = np.array(df['attr_3'])
@@ -32,23 +36,29 @@ for i in range(0):
     seq4 = np.concatenate((seq4, seq4))
 
 print("seq len:", len(seq1))
-win_size = 15
+win_size = 20
 print("win size:", win_size)
 
-detector1 = ZScoreDetector(window_size = win_size, threshold=4)
-detector2 = ZScoreDetector(window_size = win_size, threshold=3)
-detector3= ZScoreDetector(window_size = win_size, threshold=3.5)
-detector4= ZScoreDetector(window_size = win_size, threshold=3)
+detector1 = ZScoreDetector(window_size = win_size, threshold=4.5)
+detector2 = ZScoreDetector(window_size = win_size, threshold=4.5)
+detector3= ZScoreDetector(window_size = win_size, threshold=4.5)
+detector4= ZScoreDetector(window_size = win_size, threshold=4.5)
 
-rules_detector = RulesDetector(target_seq_index=3)
+# detector1 = AdwinDetector()
+# detector2 = AdwinDetector()
+# detector3 = AdwinDetector()
+# detector4 = AdwinDetector()
+
+rules_detector = RulesDetector(target_seq_index=3, round_to=100)
 
 simulator = OnlineSimulator(rules_detector,
-                            [detector1, detector2, detector3,detector4],
-                            [seq1, seq2, seq3,seq4],
-                            ["Light", "Temperature", "Occupancy","attr_4"])
+                            [detector1, detector2, detector3, detector4],
+                            [seq1, seq2, seq3, seq4],
+                            ["attr_1", "attr_2", "attr_3", "attr_4"])
 
-simulator.run(plot=True, detect_rules=True)
+simulator.run(plot=False, detect_rules=True)
 
-print_rules(simulator.get_rules_sets())
-print_combined_rules(simulator.get_combined_rules())
+print_detected_change_points(simulator.get_detected_changes())
+print_rules(simulator.get_rules_sets(), 0)
+print_combined_rules(simulator.get_combined_rules(), 1)
 

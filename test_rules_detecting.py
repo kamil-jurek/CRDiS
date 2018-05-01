@@ -23,7 +23,7 @@ def round_to_hundreds(x):
 # seq6 = np.array(df['NOx'][:1000].apply(np.round))
 
 
-df = pd.read_csv('ocupancy.csv')
+df = pd.read_csv('sequences/ocupancy.csv')
 #"nr","date","Temperature","Humidity","Light","CO2","HumidityRatio","Occupancy"
 seq1 = np.array(df['Temperature'].apply(np.round))
 seq2 = np.array(df['Humidity'].apply(np.round))

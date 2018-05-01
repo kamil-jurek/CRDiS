@@ -9,7 +9,7 @@ class Rule(object):
 
     def __repr__(self):
         generalized = " Generalized" if self.generalized else ""
-        return(str(self.lhs) + " ==> " + str(self.rhs) + " |\t\t nr_of_occurences:" + str(self.number_of_occurrences) + " last_occurence:" + str(self.last_occurrence) + generalized)
+        return(str(self.lhs) + " ==> " + str(self.rhs) + " | nr_of_occurences:" + str(self.number_of_occurrences) + " last_occurence:" + str(self.last_occurrence) + generalized)
         #  + "nr:" + str(self.number_of_occurrences) + " lastOcc:" + str(self.last_occurrence)
 
     def __eq__(self, other):

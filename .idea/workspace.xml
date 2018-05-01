@@ -7,16 +7,11 @@
     <list default="true" id="09a30ae4-c88f-4efc-850c-1b76611c1409" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change beforePath="$PROJECT_DIR$/configs/numerical_6" afterPath="$PROJECT_DIR$/configs/numerical_6" />
-      <change beforePath="$PROJECT_DIR$/detectors/adwin_detector.py" afterPath="$PROJECT_DIR$/detectors/adwin_detector.py" />
+      <change beforePath="$PROJECT_DIR$/detectors/online_simulator.py" afterPath="$PROJECT_DIR$/detectors/online_simulator.py" />
       <change beforePath="$PROJECT_DIR$/detectors/rule.py" afterPath="$PROJECT_DIR$/detectors/rule.py" />
       <change beforePath="$PROJECT_DIR$/detectors/rules_detector.py" afterPath="$PROJECT_DIR$/detectors/rules_detector.py" />
-      <change beforePath="$PROJECT_DIR$/detectors/zscore_detector.py" afterPath="$PROJECT_DIR$/detectors/zscore_detector.py" />
-      <change beforePath="$PROJECT_DIR$/generators/plot_sequence.py" afterPath="$PROJECT_DIR$/generators/plot_sequence.py" />
-      <change beforePath="$PROJECT_DIR$/generators/seqgen.py" afterPath="$PROJECT_DIR$/generators/seqgen.py" />
-      <change beforePath="$PROJECT_DIR$/generators/sequence_generator.py" afterPath="$PROJECT_DIR$/generators/sequence_generator.py" />
-      <change beforePath="$PROJECT_DIR$/plots/plot_seque.png" afterPath="$PROJECT_DIR$/plots/plot_seque.png" />
-      <change beforePath="$PROJECT_DIR$/rules_mining/apriori.py" afterPath="$PROJECT_DIR$/rules_mining/apriori.py" />
       <change beforePath="$PROJECT_DIR$/test_rules_detecting.py" afterPath="$PROJECT_DIR$/test_rules_detecting.py" />
+      <change beforePath="$PROJECT_DIR$/test_rules_detecting_occupancy.py" afterPath="$PROJECT_DIR$/test_rules_detecting_occupancy.py" />
       <change beforePath="$PROJECT_DIR$/utils.py" afterPath="$PROJECT_DIR$/utils.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -28,36 +23,24 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="test_rules_detecting.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/test_rules_detecting.py">
+      <file leaf-file-name="rule.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/detectors/rule.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="153">
-              <caret line="9" column="40" lean-forward="true" selection-start-line="9" selection-start-column="40" selection-end-line="9" selection-end-column="40" />
+            <state relative-caret-position="92">
+              <caret line="11" column="61" lean-forward="false" selection-start-line="11" selection-start-column="61" selection-end-line="11" selection-end-column="61" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="stack_zscore_detector.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/detectors/stack_zscore_detector.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
-                <element signature="e#2567#2632#0" expanded="false" />
-                <element signature="e#3019#3064#0" expanded="false" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="config_reader.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/generators/config_reader.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="374">
-              <caret line="62" column="16" lean-forward="false" selection-start-line="62" selection-start-column="16" selection-end-line="62" selection-end-column="16" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="seqgen.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/generators/seqgen.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="748">
-              <caret line="56" column="41" lean-forward="false" selection-start-line="56" selection-start-column="41" selection-end-line="56" selection-end-column="41" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -65,18 +48,18 @@
       <file leaf-file-name="sequence_generator.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/generators/sequence_generator.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="272">
+            <state relative-caret-position="901">
               <caret line="57" column="18" lean-forward="false" selection-start-line="57" selection-start-column="18" selection-end-line="57" selection-end-column="18" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="test_rules_detecting_occupancy.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="test_rules_detecting_occupancy.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/test_rules_detecting_occupancy.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-61">
-              <caret line="14" column="15" lean-forward="true" selection-start-line="14" selection-start-column="15" selection-end-line="14" selection-end-column="15" />
+            <state relative-caret-position="211">
+              <caret line="25" column="60" lean-forward="false" selection-start-line="25" selection-start-column="18" selection-end-line="25" selection-end-column="60" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -87,28 +70,8 @@
       <file leaf-file-name="utils.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/utils.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="170">
-              <caret line="10" column="66" lean-forward="false" selection-start-line="10" selection-start-column="66" selection-end-line="10" selection-end-column="66" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="rule.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/detectors/rule.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="187">
-              <caret line="11" column="64" lean-forward="false" selection-start-line="11" selection-start-column="64" selection-end-line="11" selection-end-column="64" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="sequence_2018_04_29-17.40.56.csv" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/sequences/sequence_2018_04_29-17.40.56.csv">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="422">
-              <caret line="8170" column="12" lean-forward="false" selection-start-line="8161" selection-start-column="9" selection-end-line="8170" selection-end-column="12" />
+            <state relative-caret-position="262">
+              <caret line="21" column="52" lean-forward="false" selection-start-line="21" selection-start-column="52" selection-end-line="21" selection-end-column="52" />
               <folding />
             </state>
           </provider>
@@ -117,8 +80,8 @@
       <file leaf-file-name="numerical_6" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/configs/numerical_6">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="102">
-              <caret line="6" column="65" lean-forward="false" selection-start-line="6" selection-start-column="65" selection-end-line="6" selection-end-column="65" />
+            <state relative-caret-position="119">
+              <caret line="7" column="67" lean-forward="false" selection-start-line="7" selection-start-column="67" selection-end-line="7" selection-end-column="67" />
               <folding />
             </state>
           </provider>
@@ -127,9 +90,35 @@
       <file leaf-file-name="rules_detector.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/detectors/rules_detector.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1098">
-              <caret line="78" column="37" lean-forward="true" selection-start-line="78" selection-start-column="37" selection-end-line="78" selection-end-column="37" />
-              <folding />
+            <state relative-caret-position="204">
+              <caret line="117" column="0" lean-forward="true" selection-start-line="117" selection-start-column="0" selection-end-line="117" selection-end-column="0" />
+              <folding>
+                <element signature="e#0#30#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="rules_detector_2.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/detectors/rules_detector_2.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-1197">
+              <caret line="98" column="0" lean-forward="true" selection-start-line="98" selection-start-column="0" selection-end-line="98" selection-end-column="0" />
+              <folding>
+                <element signature="e#0#30#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="online_simulator.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/detectors/online_simulator.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="323">
+              <caret line="19" column="32" lean-forward="false" selection-start-line="19" selection-start-column="32" selection-end-line="19" selection-end-column="32" />
+              <folding>
+                <element signature="e#0#18#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -138,9 +127,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>self.p_min</find>
-      <find>check</find>
-      <find>is_change_detected</find>
       <find>trigg</find>
       <find>self.prob_of_false</find>
       <find>self.L_t</find>
@@ -153,7 +139,6 @@
       <find>apriori</find>
       <find>apa</find>
       <find>.rules</find>
-      <find>print</find>
       <find>prev_prev_change_point_target</find>
       <find>prev_change_point_target</find>
       <find>change_point_list</find>
@@ -168,6 +153,10 @@
       <find>Date;Time;CO(GT);PT08.S1(CO);NMHC(GT);C6H6(GT);PT08.S2(NMHC);NOx(GT);PT08.S3(NOx);NO2(GT);PT08.S4(NO2);PT08.S5(O3);T;RH;AH;;</find>
       <find>;</find>
       <find>common_seqs_1</find>
+      <find>round_to_hundreds</find>
+      <find>round_to_</find>
+      <find>print</find>
+      <find>round_to</find>
     </findStrings>
     <replaceStrings>
       <replace>self.p_min_</replace>
@@ -178,6 +167,7 @@
       <replace>encode_int(</replace>
       <replace>,</replace>
       <replace>candidate_seqs_1</replace>
+      <replace>round_to</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -186,8 +176,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/zscore.py" />
-        <option value="$PROJECT_DIR$/test_zscore.py" />
         <option value="$PROJECT_DIR$/detectors/mean_detector.py" />
         <option value="$PROJECT_DIR$/test_mean_detector.py" />
         <option value="$PROJECT_DIR$/detectors/zscore_rules.py" />
@@ -213,7 +201,6 @@
         <option value="$PROJECT_DIR$/test_adwin_detector.py" />
         <option value="$PROJECT_DIR$/test_apriori_zscore.py" />
         <option value="$PROJECT_DIR$/test_cusum_detector.py" />
-        <option value="$PROJECT_DIR$/detectors/online_simulator.py" />
         <option value="$PROJECT_DIR$/test_ddm_detector.py" />
         <option value="$PROJECT_DIR$/test_pagehinkley_detector.py" />
         <option value="$PROJECT_DIR$/configs/numerical_short.txt" />
@@ -226,15 +213,18 @@
         <option value="$PROJECT_DIR$/activity" />
         <option value="$PROJECT_DIR$/rules_mining/apriori.py" />
         <option value="$PROJECT_DIR$/rules_mining/bide.py" />
-        <option value="$PROJECT_DIR$/test_rules_detecting.py" />
         <option value="$PROJECT_DIR$/configs/occupancy.txt" />
         <option value="$PROJECT_DIR$/test_rule_detector_occupancy.py" />
         <option value="$PROJECT_DIR$/generators/plot_sequence.py" />
-        <option value="$PROJECT_DIR$/utils.py" />
         <option value="$PROJECT_DIR$/generators/sequence_generator.py" />
-        <option value="$PROJECT_DIR$/detectors/rule.py" />
         <option value="$PROJECT_DIR$/generators/seqgen.py" />
+        <option value="$PROJECT_DIR$/test_rules_detecting.py" />
+        <option value="$PROJECT_DIR$/generators/config_reader.py" />
         <option value="$PROJECT_DIR$/configs/numerical_6" />
+        <option value="$PROJECT_DIR$/detectors/rules_detector_2.py" />
+        <option value="$PROJECT_DIR$/detectors/online_simulator.py" />
+        <option value="$PROJECT_DIR$/detectors/rule.py" />
+        <option value="$PROJECT_DIR$/utils.py" />
         <option value="$PROJECT_DIR$/detectors/rules_detector.py" />
         <option value="$PROJECT_DIR$/test_rules_detecting_occupancy.py" />
       </list>
@@ -286,11 +276,6 @@
               <item name="SequenceGenerator" type="462c0819:PsiDirectoryNode" />
               <item name="generators" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="SequenceGenerator" type="b2602c69:ProjectViewProjectNode" />
-              <item name="SequenceGenerator" type="462c0819:PsiDirectoryNode" />
-              <item name="sequences" type="462c0819:PsiDirectoryNode" />
-            </path>
           </expand>
           <select />
         </subPane>
@@ -308,6 +293,7 @@
       <recent name="$PROJECT_DIR$" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/sequences" />
       <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/generators" />
       <recent name="$PROJECT_DIR$/other" />
@@ -456,7 +442,7 @@
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18205667" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32978722" sideWeight="0.50209206" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32978722" sideWeight="0.49790794" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32978722" sideWeight="0.49790794" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -497,32 +483,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/test_apriori_zscore.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="680">
-          <caret line="44" column="24" lean-forward="false" selection-start-line="44" selection-start-column="24" selection-end-line="44" selection-end-column="24" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test_cusum_detector.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="5" column="21" lean-forward="false" selection-start-line="5" selection-start-column="21" selection-end-line="5" selection-end-column="21" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test_ddm_detector.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="364">
-          <caret line="26" column="36" lean-forward="false" selection-start-line="26" selection-start-column="36" selection-end-line="26" selection-end-column="36" />
-          <folding>
-            <element signature="e#0#31#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/test_entropy_detector.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -556,16 +516,6 @@
     <entry file="file://$PROJECT_DIR$/test_mean_detector.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#18#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/detectors/rill.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-204">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#0#18#0" expanded="false" />
@@ -655,14 +605,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/detectors/online_simulator.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-180">
-          <caret line="69" column="71" lean-forward="true" selection-start-line="69" selection-start-column="71" selection-end-line="69" selection-end-column="71" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/test_zscore_rules.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-153">
@@ -679,7 +621,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ords.csv">
+    <entry file="file://$PROJECT_DIR$/sequences/ords.csv">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="286">
           <caret line="1322" column="44" lean-forward="true" selection-start-line="1322" selection-start-column="44" selection-end-line="1322" selection-end-column="44" />
@@ -711,7 +653,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/electricity.csv">
+    <entry file="file://$PROJECT_DIR$/sequences/electricity.csv">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="153">
           <caret line="8705" column="55" lean-forward="false" selection-start-line="8697" selection-start-column="59" selection-end-line="9420" selection-end-column="67" />
@@ -729,7 +671,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/activity">
+    <entry file="file://$PROJECT_DIR$/sequences/activity">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="17">
           <caret line="1" column="31" lean-forward="false" selection-start-line="1" selection-start-column="31" selection-end-line="1" selection-end-column="31" />
@@ -737,7 +679,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/air.csv">
+    <entry file="file://$PROJECT_DIR$/sequences/air.csv">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -782,7 +724,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ocupancy.csv">
+    <entry file="file://$PROJECT_DIR$/sequences/ocupancy.csv">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="439">
           <caret line="2986" column="69" lean-forward="false" selection-start-line="2986" selection-start-column="69" selection-end-line="2986" selection-end-column="69" />
@@ -811,54 +753,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/utils.py">
+    <entry file="file://$PROJECT_DIR$/generators/config_reader.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="10" column="66" lean-forward="false" selection-start-line="10" selection-start-column="66" selection-end-line="10" selection-end-column="66" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/generators/sequence_generator.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="57" column="18" lean-forward="false" selection-start-line="57" selection-start-column="18" selection-end-line="57" selection-end-column="18" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/detectors/rule.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="11" column="64" lean-forward="false" selection-start-line="11" selection-start-column="64" selection-end-line="11" selection-end-column="64" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/generators/seqgen.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="748">
-          <caret line="56" column="41" lean-forward="false" selection-start-line="56" selection-start-column="41" selection-end-line="56" selection-end-column="41" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/detectors/rules_detector.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1098">
-          <caret line="78" column="37" lean-forward="true" selection-start-line="78" selection-start-column="37" selection-end-line="78" selection-end-column="37" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test_rules_detecting.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="9" column="40" lean-forward="true" selection-start-line="9" selection-start-column="40" selection-end-line="9" selection-end-column="40" />
+        <state relative-caret-position="408">
+          <caret line="57" column="0" lean-forward="true" selection-start-line="57" selection-start-column="0" selection-end-line="57" selection-end-column="0" />
           <folding>
-            <element signature="e#0#18#0" expanded="true" />
-            <element signature="e#2567#2632#0" expanded="false" />
-            <element signature="e#3019#3064#0" expanded="false" />
+            <element signature="e#0#31#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -871,29 +771,121 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/test_rules_detecting_occupancy.py">
+    <entry file="file://$PROJECT_DIR$/generators/seqgen.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-61">
-          <caret line="14" column="15" lean-forward="true" selection-start-line="14" selection-start-column="15" selection-end-line="14" selection-end-column="15" />
+        <state relative-caret-position="-272">
+          <caret line="56" column="41" lean-forward="false" selection-start-line="56" selection-start-column="41" selection-end-line="56" selection-end-column="41" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/detectors/rill.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-153">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/detectors/stack_zscore_detector.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/configs/numerical_6">
+    <entry file="file://$PROJECT_DIR$/sequences/sequence_2018_04_29-17.44.42.csv">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" column="65" lean-forward="false" selection-start-line="6" selection-start-column="65" selection-end-line="6" selection-end-column="65" />
+        <state relative-caret-position="0">
+          <caret line="0" column="27" lean-forward="true" selection-start-line="0" selection-start-column="27" selection-end-line="0" selection-end-column="27" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/generators/config_reader.py">
+    <entry file="file://$PROJECT_DIR$/generators/sequence_generator.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="62" column="16" lean-forward="false" selection-start-line="62" selection-start-column="16" selection-end-line="62" selection-end-column="16" />
+        <state relative-caret-position="901">
+          <caret line="57" column="18" lean-forward="false" selection-start-line="57" selection-start-column="18" selection-end-line="57" selection-end-column="18" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test_rules_detecting.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="18" column="49" lean-forward="true" selection-start-line="18" selection-start-column="49" selection-end-line="18" selection-end-column="49" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+            <element signature="e#2577#2642#0" expanded="false" />
+            <element signature="e#3029#3074#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/configs/numerical_6">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="7" column="67" lean-forward="false" selection-start-line="7" selection-start-column="67" selection-end-line="7" selection-end-column="67" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/detectors/online_simulator.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="19" column="32" lean-forward="false" selection-start-line="19" selection-start-column="32" selection-end-line="19" selection-end-column="32" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/detectors/rules_detector_2.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1197">
+          <caret line="98" column="0" lean-forward="true" selection-start-line="98" selection-start-column="0" selection-end-line="98" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#30#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/detectors/rule.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="92">
+          <caret line="11" column="61" lean-forward="false" selection-start-line="11" selection-start-column="61" selection-end-line="11" selection-end-column="61" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/utils.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="262">
+          <caret line="21" column="52" lean-forward="false" selection-start-line="21" selection-start-column="52" selection-end-line="21" selection-end-column="52" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/detectors/rules_detector.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="117" column="0" lean-forward="true" selection-start-line="117" selection-start-column="0" selection-end-line="117" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#30#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test_rules_detecting_occupancy.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="211">
+          <caret line="25" column="60" lean-forward="false" selection-start-line="25" selection-start-column="18" selection-end-line="25" selection-end-column="60" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
