@@ -5,14 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="09a30ae4-c88f-4efc-850c-1b76611c1409" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/configs/numerical_6" afterPath="$PROJECT_DIR$/configs/numerical_6" />
+      <change beforePath="$PROJECT_DIR$/detectors/rule.py" afterPath="$PROJECT_DIR$/detectors/rule.py" />
       <change beforePath="$PROJECT_DIR$/detectors/rules_detector.py" afterPath="$PROJECT_DIR$/detectors/rules_detector.py" />
-      <change beforePath="$PROJECT_DIR$/detectors/rules_detector_2.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/generators/plot_sequence.py" afterPath="$PROJECT_DIR$/generators/plot_sequence.py" />
-      <change beforePath="$PROJECT_DIR$/generators/seqgen.py" afterPath="$PROJECT_DIR$/generators/seqgen.py" />
-      <change beforePath="$PROJECT_DIR$/plots/plot_seque.png" afterPath="$PROJECT_DIR$/plots/plot_seque.png" />
-      <change beforePath="$PROJECT_DIR$/test_rules_detecting_occupancy.py" afterPath="$PROJECT_DIR$/test_rules_detecting_occupancy.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -23,18 +17,6 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="stack_zscore_detector.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/detectors/stack_zscore_detector.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding>
-                <element signature="e#0#18#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="plot_sequence.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/generators/plot_sequence.py">
           <provider selected="true" editor-type-id="text-editor">
@@ -68,7 +50,7 @@
       <file leaf-file-name="test_rules_detecting_occupancy.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/test_rules_detecting_occupancy.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="483">
+            <state relative-caret-position="721">
               <caret line="69" column="27" lean-forward="false" selection-start-line="69" selection-start-column="27" selection-end-line="69" selection-end-column="27" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
@@ -100,8 +82,8 @@
       <file leaf-file-name="utils.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/utils.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-10">
-              <caret line="5" column="91" lean-forward="true" selection-start-line="5" selection-start-column="91" selection-end-line="5" selection-end-column="91" />
+            <state relative-caret-position="211">
+              <caret line="18" column="80" lean-forward="false" selection-start-line="18" selection-start-column="65" selection-end-line="18" selection-end-column="80" />
               <folding />
             </state>
           </provider>
@@ -110,13 +92,22 @@
       <file leaf-file-name="rules_detector.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/detectors/rules_detector.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="455">
-              <caret line="207" column="23" lean-forward="false" selection-start-line="207" selection-start-column="23" selection-end-line="207" selection-end-column="23" />
+            <state relative-caret-position="289">
+              <caret line="29" column="12" lean-forward="false" selection-start-line="29" selection-start-column="12" selection-end-line="29" selection-end-column="12" />
               <folding>
                 <element signature="e#0#30#0" expanded="true" />
-                <element signature="e#5671#9723#0" expanded="false" />
-                <element signature="e#10973#11672#0" expanded="false" />
+                <element signature="e#11796#12495#0" expanded="false" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="rule.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/detectors/rule.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="221">
+              <caret line="13" column="66" lean-forward="false" selection-start-line="13" selection-start-column="66" selection-end-line="13" selection-end-column="66" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -124,7 +115,7 @@
       <file leaf-file-name="lhs_element.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/detectors/lhs_element.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="184">
+            <state relative-caret-position="235">
               <caret line="22" column="8" lean-forward="false" selection-start-line="22" selection-start-column="8" selection-end-line="22" selection-end-column="8" />
               <folding />
             </state>
@@ -135,8 +126,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>trigg</find>
-      <find>self.prob_of_false</find>
       <find>self.L_t</find>
       <find>self.m_s</find>
       <find>rules_triggered</find>
@@ -165,6 +154,8 @@
       <find>round_to_</find>
       <find>print</find>
       <find>round_to</find>
+      <find>generated_rules</find>
+      <find>m</find>
     </findStrings>
     <replaceStrings>
       <replace>self.p_min_</replace>
@@ -176,6 +167,7 @@
       <replace>,</replace>
       <replace>candidate_seqs_1</replace>
       <replace>round_to</replace>
+      <replace>seq_index</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -228,12 +220,12 @@
         <option value="$PROJECT_DIR$/generators/config_reader.py" />
         <option value="$PROJECT_DIR$/detectors/rules_detector_2.py" />
         <option value="$PROJECT_DIR$/detectors/online_simulator.py" />
-        <option value="$PROJECT_DIR$/detectors/rule.py" />
         <option value="$PROJECT_DIR$/utils.py" />
         <option value="$PROJECT_DIR$/generators/plot_sequence.py" />
         <option value="$PROJECT_DIR$/configs/numerical_6" />
         <option value="$PROJECT_DIR$/generators/seqgen.py" />
         <option value="$PROJECT_DIR$/test_rules_detecting_occupancy.py" />
+        <option value="$PROJECT_DIR$/detectors/rule.py" />
         <option value="$PROJECT_DIR$/detectors/rules_detector.py" />
       </list>
     </option>
@@ -455,7 +447,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-1" y="25" width="1908" height="946" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18205667" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -496,7 +487,7 @@
           <option name="timeStamp" value="5" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="7" />
+      <option name="time" value="8" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -789,14 +780,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/detectors/rule.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="92">
-          <caret line="11" column="61" lean-forward="false" selection-start-line="11" selection-start-column="61" selection-end-line="11" selection-end-column="61" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/plots/plot_sequence_2018_04_30-14.42.37.png">
       <provider selected="true" editor-type-id="images">
         <state />
@@ -844,24 +827,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/utils.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-10">
-          <caret line="5" column="91" lean-forward="true" selection-start-line="5" selection-start-column="91" selection-end-line="5" selection-end-column="91" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test_rules_detecting_occupancy.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="483">
-          <caret line="69" column="27" lean-forward="false" selection-start-line="69" selection-start-column="27" selection-end-line="69" selection-end-column="27" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/detectors/rules_detector_2.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="374">
@@ -878,22 +843,47 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/utils.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="211">
+          <caret line="18" column="80" lean-forward="false" selection-start-line="18" selection-start-column="65" selection-end-line="18" selection-end-column="80" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test_rules_detecting_occupancy.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="721">
+          <caret line="69" column="27" lean-forward="false" selection-start-line="69" selection-start-column="27" selection-end-line="69" selection-end-column="27" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/detectors/lhs_element.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="184">
+        <state relative-caret-position="235">
           <caret line="22" column="8" lean-forward="false" selection-start-line="22" selection-start-column="8" selection-end-line="22" selection-end-column="8" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/detectors/rule.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="13" column="66" lean-forward="false" selection-start-line="13" selection-start-column="66" selection-end-line="13" selection-end-column="66" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/detectors/rules_detector.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="455">
-          <caret line="207" column="23" lean-forward="false" selection-start-line="207" selection-start-column="23" selection-end-line="207" selection-end-column="23" />
+        <state relative-caret-position="289">
+          <caret line="29" column="12" lean-forward="false" selection-start-line="29" selection-start-column="12" selection-end-line="29" selection-end-column="12" />
           <folding>
             <element signature="e#0#30#0" expanded="true" />
-            <element signature="e#5671#9723#0" expanded="false" />
-            <element signature="e#10973#11672#0" expanded="false" />
+            <element signature="e#11796#12495#0" expanded="false" />
           </folding>
         </state>
       </provider>

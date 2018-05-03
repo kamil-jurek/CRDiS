@@ -5,11 +5,13 @@ class Rule(object):
         self.rhs = rhs
         self.number_of_occurrences = 0
         self.last_occurrence = -1
+        self.occurrences = []
         self.generalized = False
 
     def __repr__(self):
         generalized = " Generalized" if self.generalized else ""
-        return(str(self.lhs) + " ==> " + str(self.rhs) + " | nr_of_occurences:" + str(self.number_of_occurrences) + " last_occurence:" + str(self.last_occurrence) + generalized)
+        return(str(self.lhs) + " ==> " + str(self.rhs) + " | nr_of_occurences:" + str(self.number_of_occurrences) +
+               " last_occurence:" + str(self.last_occurrence) + " occurences:" + str(self.occurrences) + generalized)
         #  + "nr:" + str(self.number_of_occurrences) + " lastOcc:" + str(self.last_occurrence)
 
     def __eq__(self, other):

@@ -26,24 +26,24 @@ class RulesDetector(object):
                 window_begin = round_to(prev_prev_change_point_target.at_, self.round_to) if prev_prev_change_point_target != None else 0
             window_end = round_to(prev_change_point_target.at_, self.round_to)
 
-            self.generate_closed_rules(window_begin, window_end, current_index)
-            #self.generate_all_rules(window_begin, window_end, current_index)
+            #self.generate_closed_rules(window_begin, window_end, current_index)
+            self.generate_all_rules(window_begin, window_end, current_index)
 
     def generate_closed_rules(self, window_begin, window_end, current_index):
         combined_rule = []
-        for m, change_point_list in enumerate(self.simulator.detected_change_points):
-            if m == self.target_seq_index:
+        for seq_index, change_point_list in enumerate(self.simulator.detected_change_points):
+            if seq_index == self.target_seq_index:
                 continue
 
             lhs = []
-            points_before_window, points_in_window, points_after_window = self.get_change_points_in_window(m, window_begin, window_end)
+            points_before_window, points_in_window, points_after_window = self.get_change_points_in_window(seq_index, window_begin, window_end)
 
             # no change points in window
             if len(points_in_window) == 0:
                 if round_to(window_end - window_begin, self.round_to):
                     lhs_elem = LHS_element(round_to(window_end - window_begin, self.round_to),
                                            points_before_window[-1].curr_value if len(points_before_window) > 0 else -1,
-                                           self.simulator.sequences_names[m])
+                                           self.simulator.sequences_names[seq_index])
                     lhs.append(lhs_elem)
 
             else:
@@ -82,41 +82,44 @@ class RulesDetector(object):
 
             if len(lhs) > 0:
                 rule = Rule(lhs, rhs_elem)
+                rule.occurrences.append(current_index)
 
                 is_new_rule = True
-                for r in self.simulator.rules_sets[m]:
+                for r in self.simulator.rules_sets[seq_index]:
                     if r == rule:
                         is_new_rule = False
                         r.set_last_occurence(current_index)
                         r.increment_occurrences()
+                        r.occurrences.append(current_index)
                         combined_rule.append(rule)
-                        #print("Rule already in set:", r)
+                        print("Rule already in set:", r)
 
                 if is_new_rule:
                     rule.set_last_occurence(current_index)
                     rule.increment_occurrences()
-                    gen_rule = self.generalize_rule(m, rule)
+                    gen_rule = self.generalize_rule(seq_index, rule)
                     if gen_rule != None:
                         gen_rule.set_last_occurence(current_index)
-                        self.simulator.rules_sets[m].add(gen_rule)
+                    #     self.simulator.rules_sets[m].add(gen_rule)
 
-                    self.simulator.rules_sets[m].add(rule)
+                    self.simulator.rules_sets[seq_index].add(rule)
                     combined_rule.append(rule)
-                    #print("New rule:", rule)
+                    print("New rule:", rule)
 
         if len(combined_rule) > 0:
             print("Adding to combined rules")
             self.simulator.combined_rules.append(combined_rule)
 
     def generate_all_rules(self, window_begin, window_end, current_index):
-        generated_rules = set()
-        for m, change_point_list in enumerate(self.simulator.detected_change_points):
-            if m == self.target_seq_index:
+        generated_rules = [[] for i in range(len(self.simulator.detected_change_points))]
+        combined_rule = []
+        for seq_index, change_point_list in enumerate(self.simulator.detected_change_points):
+            if seq_index == self.target_seq_index:
                 continue
 
             lhss = []
             rhss = []
-            points_before_window, points_in_window, points_after_window = self.get_change_points_in_window(m, window_begin, window_end)
+            points_before_window, points_in_window, points_after_window = self.get_change_points_in_window(seq_index, window_begin, window_end)
 
             # no change points in window
             if len(points_in_window) == 0:
@@ -127,7 +130,7 @@ class RulesDetector(object):
                         lhs_elem = LHS_element(lhs_len,
                                                points_before_window[-1].curr_value if len(
                                                    points_before_window) > 0 else -1,
-                                               self.simulator.sequences_names[m])
+                                               self.simulator.sequences_names[seq_index])
                         lhss.append([lhs_elem])
             else:
                 last_point = points_in_window[-1]
@@ -165,25 +168,36 @@ class RulesDetector(object):
                 for rhs in rhss:
                     for lhs in lhss:
                         rule = Rule(lhs, rhs)
-                        generated_rules.add(rule)
+                        rule.occurrences.append(current_index)
 
                         is_new_rule = True
-                        for r in self.simulator.rules_sets[m]:
+                        for r in self.simulator.rules_sets[seq_index]:
                             if r == rule:
                                 is_new_rule = False
                                 r.set_last_occurence(current_index)
                                 r.increment_occurrences()
+                                r.occurrences.append(current_index)
                                 #print("Rule already in set:", r)
 
                         if is_new_rule:
                             rule.set_last_occurence(current_index)
                             rule.increment_occurrences()
-                            self.simulator.rules_sets[m].add(rule)
+                            self.simulator.rules_sets[seq_index].add(rule)
                             #print("New rule:", rule)
-        # print("==============================================")
-        # for gr in generated_rules:
-        #     print(gr)
-        # print("==============================================")
+
+                        generated_rules[seq_index].append(rule)
+
+        print("==============================================")
+        for seq_rules in generated_rules:
+            if seq_rules:
+                print(seq_rules)
+                combined_rule.append(seq_rules[-1])
+                for gr in seq_rules:
+                    print(gr)
+                print("==============================================")
+        if len(combined_rule) > 0:
+            print("Adding to combined rules")
+            self.simulator.combined_rules.append(combined_rule)
 
     def generalize_rule(self, seq_index, new_rule):
         for rule in self.simulator.rules_sets[seq_index]:
@@ -200,7 +214,8 @@ class RulesDetector(object):
                     else:
                         break
 
-            if len(gen_rule.lhs) > 0 and gen_rule.rhs != None:
+            if (len(gen_rule.lhs) > 0 and gen_rule.rhs != None and
+                gen_rule != new_rule and gen_rule != rule):
                 print("== GENERALZED RULE ==")
                 print("rule:     ", rule)
                 print("new rule: ", new_rule)
