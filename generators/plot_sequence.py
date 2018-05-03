@@ -73,7 +73,7 @@ else:
                 pLegend.append(p)
             else:
                 axarr[j].barh(ind, 1, left=i, color=colors[seq[i]])
-            print(column, i)
+        print("Plotting ", column)
 
         axarr[j].set_xlabel('State index')
         axarr[j].set_ylabel(str(column))
@@ -85,5 +85,5 @@ else:
         j += 1
 
     axarr[0].legend((pLegend), list(colors.keys()), bbox_to_anchor=(1, 1.0))
-    plt.savefig("../plots/plot_" + seqName.rsplit('/')[2][:-4] + '.png')
+    plt.savefig("../plots/plot_" + seqName.rsplit('/')[1][:-4] + '.png')
     plt.show()

@@ -8,15 +8,23 @@ import random
 
 past_states = 1.0
 future_states = 50
-add_random = True
-nr_of_repetitions = 10
+add_random = False
+nr_of_repetitions = 1
 
 parser = argparse.ArgumentParser(description='Sequence Generator.')
 parser.add_argument('-i','--input', help='Config input file name',required=True)
 parser.add_argument('-s','--save', action="store_true", help='Save generated sequence?', default=False, required=False)
 parser.add_argument('-p','--plot', action="store_true", help='Plot generated sequence?', default=False, required=False)
 parser.add_argument('-r','--random', action="store_true", help='Random initialization?', default=False, required=False)
+parser.add_argument('-n','--number_of_repetitions', help='Number of repetitions', default=1, required=True)
+parser.add_argument('-a','--add_random_subsequence', action="store_true", help='Add random subsequence?', default=False, required=False)
 args = parser.parse_args()
+
+if args.number_of_repetitions:
+    nr_of_repetitions = int(args.number_of_repetitions)
+
+if args.add_random_subsequence:
+    add_random = args.add_random_subsequence
 
 with open(args.input) as f:
     lines = f.readlines()
@@ -85,7 +93,7 @@ for x in range(nr_of_repetitions):
         j += 1
         if add_random:
             rand_elem = random.randint(0, len(domain)-1)
-            print("adding:",domain[rand_elem], " for")
+            print("adding:",domain[rand_elem], " for", rand_len)
             probs = numpy.array([0.9 if i == rand_elem else (1.0-0.9)/(len(domain)-1) for i in range(len(domain))])
             probs /= probs.sum()
             rand_seq = [numpy.random.choice(domain, p = probs) for i in range(rand_len)]

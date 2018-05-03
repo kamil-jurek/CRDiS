@@ -23,7 +23,8 @@ def round_to_hundreds(x):
 # seq2 = np.array(df['temperature'])
 # seq3 = np.array(df['occupancy'])
 
-df = pd.read_csv('sequences/sequence_2018_04_30-14.42.37.csv')
+#df = pd.read_csv('sequences/sequence_2018_04_30-14.42.37.csv')
+df = pd.read_csv('sequences/sequence_2018_05_03-16.54.37.csv')
 seq1 = np.array(df['attr_1'])
 seq2 = np.array(df['attr_2'])
 seq3 = np.array(df['attr_3'])
@@ -41,24 +42,29 @@ print("win size:", win_size)
 
 detector1 = ZScoreDetector(window_size = win_size, threshold=4.5)
 detector2 = ZScoreDetector(window_size = win_size, threshold=4.5)
-detector3= ZScoreDetector(window_size = win_size, threshold=4.5)
-detector4= ZScoreDetector(window_size = win_size, threshold=4.5)
+detector3 = ZScoreDetector(window_size = win_size, threshold=5.5)
+detector4 = ZScoreDetector(window_size = win_size, threshold=4)
 
 # detector1 = AdwinDetector()
 # detector2 = AdwinDetector()
 # detector3 = AdwinDetector()
 # detector4 = AdwinDetector()
 
-rules_detector = RulesDetector(target_seq_index=3, round_to=100)
+rules_detector = RulesDetector(target_seq_index=3, window_size=0 ,round_to=100)
 
 simulator = OnlineSimulator(rules_detector,
                             [detector1, detector2, detector3, detector4],
                             [seq1, seq2, seq3, seq4],
                             ["attr_1", "attr_2", "attr_3", "attr_4"])
 
-simulator.run(plot=False, detect_rules=True)
 
+import time
+start_time = time.time()
+
+simulator.run(plot=False, detect_rules=True)
 print_detected_change_points(simulator.get_detected_changes())
 print_rules(simulator.get_rules_sets(), 0)
 print_combined_rules(simulator.get_combined_rules(), 1)
 
+end_time = time.time()
+print(end_time - start_time)
