@@ -50,7 +50,10 @@ detector4 = ZScoreDetector(window_size = win_size, threshold=4)
 # detector3 = AdwinDetector()
 # detector4 = AdwinDetector()
 
-rules_detector = RulesDetector(target_seq_index=3, window_size=0 ,round_to=100)
+rules_detector = RulesDetector(target_seq_index=3, 
+                               window_size=0,
+                               round_to=100,
+                               type="all")
 
 simulator = OnlineSimulator(rules_detector,
                             [detector1, detector2, detector3, detector4],
@@ -64,7 +67,7 @@ start_time = time.time()
 simulator.run(plot=False, detect_rules=True)
 print_detected_change_points(simulator.get_detected_changes())
 print_rules(simulator.get_rules_sets(), 0)
-print_combined_rules(simulator.get_combined_rules(), 1)
+print_combined_rules(simulator.get_combined_rules(), 0)
 
 end_time = time.time()
 print(end_time - start_time)
