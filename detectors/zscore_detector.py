@@ -65,6 +65,6 @@ class ZScoreDetector(ChangeDetector):
         self.is_change_detected = False
         if np.absolute(self.z_score_) > self.threshold:
             self.is_change_detected = True
-            self.previous_value = max(set(self.subseq), key=self.subseq.count)#mode(self.subseq)
-            self.current_value = max(set(self.subseq[-1:]), key=self.subseq[-1:].count)#mode(self.subseq[-1:])
+            self.previous_value = max(set(self.subseq), key=self.subseq.count)
+            self.current_value = max(set(self.subseq[-1:]), key=self.subseq[-1:].count)
             self.reset()

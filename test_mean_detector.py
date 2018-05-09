@@ -3,7 +3,7 @@ import sys; sys.path.append('./detectors/')
 import pandas as pd
 import encoders as en
 from detector import ChangeDetector
-from detector import OnlineSimulator
+from online_simulator import OnlineSimulator
 from mean_detector import MeanDetector
 
 
@@ -17,8 +17,12 @@ seq = np.array(df['attr_1'])
 #seq = en.encode(signal)
 
 detector = MeanDetector(threshold=1)
-simulator = OnlineSimulator(detector, seq)
-simulator.run()
+
+simulator = OnlineSimulator(None,
+                            [detector],
+                            [seq],
+                            ['attr_1'])
+simulator.run(plot=True, detect_rules=False)
 
 detected_change_points = simulator.get_detected_changes()
-print(np.array(detected_change_points)- int(2/3 * len(seq)))
+print(np.array(detected_change_points))

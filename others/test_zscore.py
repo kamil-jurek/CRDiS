@@ -1,4 +1,4 @@
-from other import zscore as zs
+from others import zscore as zs
 import numpy as np
 import matplotlib.pyplot as plt
 

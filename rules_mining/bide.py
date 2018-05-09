@@ -2,11 +2,6 @@ from collections import defaultdict
 
 
 def freq_seq_enum(sequences, min_support):
-    '''Enumerates all frequent sequences.
-       :param sequences: A sequence of sequences.
-       :param min_support: The minimal support of a set to be included.
-       :rtype: A set of (frequent_sequence, support).
-    '''
     freq_seqs = set()
     _freq_seq(sequences, tuple(), 0, min_support, freq_seqs)
     return freq_seqs

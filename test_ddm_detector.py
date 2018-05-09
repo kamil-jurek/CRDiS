@@ -1,13 +1,13 @@
 import matplotlib.pyplot as plt
 import numpy as np
-import sys; sys.path.append('./detectors/')
+import sys; sys.path.append('./detectors/'); sys.path.append('./others/')
 import pandas as pd
 import encoders as en
 import scipy as sp
 from scipy import signal
 from detector import ChangeDetector
 from online_simulator import OnlineSimulator
-from ddm2_detector import DDMDetector
+from ddm_detector import DDMDetector
 
 
 #Numerical data

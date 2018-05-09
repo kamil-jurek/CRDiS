@@ -1,4 +1,3 @@
-
 class ChangePoint(object):
     def __init__(self, from_, to_, at_, prev_value_len_, attr_name_):
         self.prev_value = from_

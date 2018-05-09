@@ -1,6 +1,8 @@
+import numpy as np
+
 from detectors import detector
 from change_point import ChangePoint
-from lhs_element import LHS_element
+from rule_component import RuleComponent
 from rule import Rule
 from online_simulator import OnlineSimulator
 
@@ -44,7 +46,7 @@ class RulesDetector(object):
             # no change points in window
             if len(points_in_window) == 0:
                 if round_to(window_end - window_begin, self.round_to):
-                    lhs_elem = LHS_element(round_to(window_end - window_begin, self.round_to),
+                    lhs_elem = RuleComponent(round_to(window_end - window_begin, self.round_to),
                                            points_before_window[-1].curr_value if len(points_before_window) > 0 else -1,
                                            self.simulator.sequences_names[seq_index])
                     lhs.append(lhs_elem)
@@ -55,7 +57,7 @@ class RulesDetector(object):
                 if first_point.at_ - first_point.prev_value_len < window_begin:
                     # print("before window case")
                     if round_to(first_point.at_ - window_begin, self.round_to) > 0:
-                        lhs_elem = LHS_element(round_to(first_point.at_ - window_begin, self.round_to),
+                        lhs_elem = RuleComponent(round_to(first_point.at_ - window_begin, self.round_to),
                                                first_point.prev_value,
                                                first_point.attr_name)
                         lhs.append(lhs_elem)
@@ -64,7 +66,7 @@ class RulesDetector(object):
                 for point in points_in_window[1:] if skip_first_point else points_in_window:
                     # print("inside window case")
                     if round_to(point.prev_value_len, self.round_to) > 0:
-                        lhs_elem = LHS_element(round_to(point.prev_value_len, self.round_to),
+                        lhs_elem = RuleComponent(round_to(point.prev_value_len, self.round_to),
                                                point.prev_value,
                                                point.attr_name)
                         lhs.append(lhs_elem)
@@ -72,12 +74,12 @@ class RulesDetector(object):
                 last_point = points_in_window[-1]
                 if last_point.at_ < window_end:
                     # print("after window case")
-                    lhs_elem = LHS_element(round_to(window_end - last_point.at_, self.round_to),
+                    lhs_elem = RuleComponent(round_to(window_end - last_point.at_, self.round_to),
                                            last_point.curr_value,
                                            last_point.attr_name)
                     lhs.append(lhs_elem)
 
-            rhs_elem = LHS_element(
+            rhs_elem = RuleComponent(
                 round_to(self.simulator.detected_change_points[self.target_seq_index][-1].prev_value_len,
                          self.round_to),
                 self.simulator.detected_change_points[self.target_seq_index][-1].prev_value,
@@ -120,68 +122,62 @@ class RulesDetector(object):
             if seq_index == self.target_seq_index:
                 continue
 
-            lhss = []
-            rhss = []
+            generated_lhss = []
+            generated_rhss = []
             points_before_window, points_in_window, points_after_window = self.get_change_points_in_window(seq_index, window_begin, window_end)
 
             # no change points in window
-            if len(points_in_window) == 0:
-                # print("no change points in window")
-                if round_to(window_end - window_begin, self.round_to):
-                    lhs_elem_len = round_to(window_end - window_begin, self.round_to)
+            if not points_in_window:
+                lhs_elem_len = round_to(window_end - window_begin, self.round_to)
+                if lhs_elem_len > 0:
                     for lhs_len in range(self.round_to, lhs_elem_len, self.round_to):
-                        lhs_elem = LHS_element(lhs_len,
-                                               points_before_window[-1].curr_value if len(
-                                                   points_before_window) > 0 else -1,
-                                               self.simulator.sequences_names[seq_index])
-                        lhss.append([lhs_elem])
+                        lhs_elem = RuleComponent(lhs_len,
+                                                 points_before_window[-1].curr_value if len(points_before_window) > 0 else np.nan,
+                                                 self.simulator.sequences_names[seq_index])
+                        generated_lhss.append([lhs_elem])
             else:
                 last_point = points_in_window[-1]
-                if last_point.at_ < window_end:
-                    # print("after window case")
+                if last_point.at_ <= window_end:
                     lhs_elem_len = round_to(window_end - last_point.at_, self.round_to)
                     for lhs_len in range(self.round_to, lhs_elem_len + 1, self.round_to):
-                        lhs_elem = LHS_element(lhs_len,
+                        lhs_elem = RuleComponent(lhs_len,
                                                last_point.curr_value,
                                                last_point.attr_name)
-                        lhss.append([lhs_elem])
+                        generated_lhss.append([lhs_elem])
 
                 for point_index in range(1, len(points_in_window)):
-                    # print("inside window case")
-                    prefix = lhss[-1]
-                    # print("prefix:", prefix)
+                    prefix = generated_lhss[-1] if generated_lhss else []
                     point = points_in_window[-point_index]
-                    if round_to(point.prev_value_len, self.round_to) > 0:
-                        lhs_elem_len = round_to(point.prev_value_len, self.round_to)
+                    lhs_elem_len = round_to(point.prev_value_len, self.round_to)
+                    if lhs_elem_len > 0:
                         for lhs_len in range(self.round_to, lhs_elem_len + 1, self.round_to):
-                            lhs_elem = LHS_element(lhs_len,
-                                                   point.prev_value,
-                                                   point.attr_name)
-                            lhss.append([lhs_elem] + prefix)
+                            lhs_elem = RuleComponent(lhs_len,
+                                                     point.prev_value,
+                                                    point.attr_name)
+                            generated_lhss.append([lhs_elem] + prefix)
                 
                 first_point = points_in_window[0]
                 if round_to(first_point.at_ - first_point.prev_value_len, self.round_to) <= window_begin:
-                    # print("before window case")
-                    if round_to(first_point.at_ - window_begin, self.round_to) >= 0:
-                        lhs_elem_len = round_to(first_point.at_ - window_begin, self.round_to)
-                        prefix = lhss[-1]
+                    lhs_elem_len = round_to(first_point.at_ - window_begin, self.round_to)
+                    if lhs_elem_len >= 0:
+                        prefix = generated_lhss[-1] if generated_lhss else []
                         for lhs_len in range(self.round_to, lhs_elem_len + 1, self.round_to):
-                            lhs_elem = LHS_element(lhs_len,
-                                                   first_point.prev_value,
-                                                   first_point.attr_name)
-                            lhss.append([lhs_elem] + prefix)
+                            lhs_elem = RuleComponent(lhs_len,
+                                                     first_point.prev_value,
+                                                     first_point.attr_name)
+                            generated_lhss.append([lhs_elem] + prefix)
                                                 
             last_target_change_point = self.simulator.detected_change_points[self.target_seq_index][-1]
             rhs_elem_len = round_to(last_target_change_point.prev_value_len, self.round_to)
             for rhs_len in range(self.round_to, rhs_elem_len + 1, self.round_to):
-                rhs_elem = LHS_element(rhs_len,
-                                       last_target_change_point.prev_value,
-                                       last_target_change_point.attr_name)
-                rhss.append(rhs_elem)
+                rhs_elem = RuleComponent(rhs_len,
+                                         last_target_change_point.prev_value,
+                                         last_target_change_point.attr_name)
+                generated_rhss.append(rhs_elem)
 
-            if len(lhss) > 0:
-                for rhs in rhss:
-                    for lhs in lhss:
+            if generated_lhss:
+                for rhs in generated_rhss:
+                    for lhs in generated_lhss:
                         rule = Rule(lhs, rhs)                       
 
                         is_new_rule = True
@@ -191,7 +187,7 @@ class RulesDetector(object):
                                 r.set_last_occurence(current_index)
                                 r.increment_occurrences()
                                 r.occurrences.append(current_index)
-                                #print("Rule already in set:", r)
+                                print("Rule already in set:", r)
                                 generated_rules[seq_index].append(r)
 
                         if is_new_rule:
@@ -199,24 +195,24 @@ class RulesDetector(object):
                             rule.increment_occurrences()
                             rule.occurrences.append(current_index)
                             self.simulator.rules_sets[seq_index].add(rule)
-                            #print("New rule:", rule)
+                            print("New rule:", rule)
                             generated_rules[seq_index].append(rule)
 
-        print("==============================================")
+        #print("==============================================")
         combined_rule = []
         #[self.simulator.combined_rules.add((x,y,z)) if x.rhs == y.rhs and x.rhs == z.rhs else None for x in generated_rules[0] for y in generated_rules[1] for z in generated_rules[2]]
         
-        for seq_rules in generated_rules:
-            if seq_rules:
-                combined_rule.append(seq_rules[-1])
-                print(seq_rules[-1])
-                for gr in seq_rules:
-                    print(gr)
-                print("==============================================")
-        
-        if len(combined_rule) > 0:
-            print("Adding to combined rules")
-            self.simulator.combined_rules.add(tuple(combined_rule))
+        # for seq_rules in generated_rules:
+        #     if seq_rules:
+        #         combined_rule.append(seq_rules[-1])
+        #         print(seq_rules[-1])
+        #         for gr in seq_rules:
+        #             print(gr)
+        #         print("==============================================")
+        #
+        # if len(combined_rule) > 0:
+        #     print("Adding to combined rules")
+        #     self.simulator.combined_rules.add(tuple(combined_rule))
 
     def generalize_rule(self, seq_index, new_rule):
         for rule in self.simulator.rules_sets[seq_index]:

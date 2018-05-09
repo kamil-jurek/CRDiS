@@ -38,7 +38,7 @@ simulator = OnlineSimulator(None,
                             [detector1, detector2, detector3, detector4],
                             [seq1, seq2, seq3, seq4],
                             ["attr_1", "attr_2", "attr_3", "attr_4"])
-simulator.run(plot=True,detect_rules=False)
+simulator.run(plot=True, detect_rules=False)
 
-print(simulator.get_detected_changes())
 detected_change_points = np.array(simulator.get_detected_changes())
+print(detected_change_points)

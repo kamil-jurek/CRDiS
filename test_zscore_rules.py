@@ -1,10 +1,10 @@
 import matplotlib.pyplot as plt
 import numpy as np
-import sys; sys.path.append('./detectors/')
+import sys; sys.path.append('./detectors/'); sys.path.append('./others/')
 import pandas as pd
 import encoders as en
 from detector import ChangeDetector
-from detector import OnlineSimulator
+from online_simulator import OnlineSimulator
 from zscore_rules import ZScoreDetectorRules
 from math import gcd
 
@@ -22,17 +22,18 @@ seq4 = np.array(df['attr_4'])
 # sequence = np.array(df['day_of_week'])
 # sequence = en.encode(sequence)
 
-win_size = int(len(sequence)*(1/100))
-print("win size:", win_size)
+win_size = 20
 
 detector1 = ZScoreDetectorRules(window_size = win_size, threshold=2.5)
 detector2 = ZScoreDetectorRules(window_size = win_size, threshold=2.5)
 detector3 = ZScoreDetectorRules(window_size = win_size, threshold=2.5)
 detector4 = ZScoreDetectorRules(window_size = win_size, threshold=2.5)
-simulator = OnlineSimulator([detector1, detector2, detector3, detector4],
+
+simulator = OnlineSimulator(None,
+                            [detector1, detector2, detector3, detector4],
                             [seq1, seq2, seq3, seq4],
                             ["attr_1", "attr_2", "attr_3", "attr_4"])
-simulator.run(plot=True)
+simulator.run(plot=True, detect_rules=False)
 
 #print(simulator.get_detected_changes())
 detected_change_points = np.array(simulator.get_detected_changes())

@@ -3,7 +3,7 @@ import sys; sys.path.append('./detectors/')
 import pandas as pd
 import encoders as en
 from detector import ChangeDetector
-from detector import OnlineSimulator
+from online_simulator import OnlineSimulator
 from zscore_detector import ZScoreDetector
 
 #Numerical data
@@ -19,8 +19,11 @@ win_size = int(len(seq)*(1/100))
 print("win size:", win_size)
 
 detector = ZScoreDetector(window_size = win_size, threshold=2.5)
-simulator = OnlineSimulator(detector, seq)
-simulator.run()
+simulator = OnlineSimulator(None,
+                            [detector],
+                            [seq],
+                            ["attr_1"])
+simulator.run(plot=False, detect_rules=False)
 
 detected_change_points = simulator.get_detected_changes()
-print(np.array(detected_change_points)- int(2/3 * len(seq)))
+print(np.array(detected_change_points))

@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 from detectors import detector
 from change_point import ChangePoint
-from lhs_element import LHS_element
+from rule_component import RuleComponent
 from rule import Rule
 from collections import defaultdict
 
@@ -46,7 +46,6 @@ class OnlineSimulator(object):
                 res = detector.step(value)
 
                 for k, v in res.items():
-                    #print(k, v)
                     parameters_history[j][k].append(v)
 
                 if detector.is_change_detected is True:
@@ -55,7 +54,6 @@ class OnlineSimulator(object):
 
                     change_point = ChangePoint(detector.previous_value, detector.current_value, i, prev_value_len, self.sequences_names[j])
                     self.detected_change_points[j].append(change_point)
-                    #print(change_point)
 
                 if i == self.sequence_size - 1:
                     detector.is_change_detected = True
@@ -63,7 +61,6 @@ class OnlineSimulator(object):
                     prev_value_len = i - prev_at
                     change_point = ChangePoint(detector.current_value, -1, i, prev_value_len, self.sequences_names[j])
                     self.detected_change_points[j].append(change_point)
-                    #print(change_point)
 
                 if i == 0:
                     detector.is_change_detected = True
@@ -106,33 +103,29 @@ class OnlineSimulator(object):
             elif plotcount == 1:
                 ax = axes
 
-            ax.plot(sequence, 'b.')
+            ax.plot(sequence, 'b.', markersize=3)
             ax.plot(sequence, 'b-', alpha=0.25)
 
             ax.set_title(sequence_name)
 
             ax.set_ylim(
-                np.nanmin(sequence)*.5,
-                np.nanmax(sequence)*1.5)
+                np.nanmin(sequence)-1,
+                np.nanmax(sequence)+1)
             ax.set_xlim(0, len(sequence))
             xl = ax.get_xticks()
-            ticks = xl #- int(2/3 * len(sequence))
+            ticks = xl
 
             ax.set_xticklabels(ticks)
 
             # Plot a horizontal line where the change_point is detected
             for change_point in detected_change_points:
-                ax.vlines(x=change_point.at_, ymin=0, ymax=ax.get_ylim()[1],
-                      colors='r', linestyles='dotted')
+                ax.axvline(change_point.at_, color='r', linestyle='--')
 
             # Plot each parameter
             for ii, (res_name, res_values) in enumerate(parameters_history.items()):
                 ax = axes[ii+1]
-                ax.plot(res_values, 'g.', alpha=0.7)
+                ax.plot(res_values, '-', alpha=0.7)
                 ax.set_title("Parameter #{}: {}".format(ii+1, res_name))
 
-                for change_poin in detected_change_points:
-                    ax.vlines(x=change_poin.at_, ymin=0, ymax=ax.get_ylim()[1],
-                          colors='r', linestyles='dotted')
-
-        plt.show()
+                for change_point in detected_change_points:
+                    ax.axvline(change_point.at_, color='r', linestyle='--')

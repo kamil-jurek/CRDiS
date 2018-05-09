@@ -1,5 +1,5 @@
 
-class LHS_element(object):
+class RuleComponent(object):
     def __init__(self, len_, value_, attr_name_):
         self.len = len_
         self.value = value_
@@ -9,7 +9,7 @@ class LHS_element(object):
         return(str(self.attr_name_) + ": " + str(self.value) + "{"+ str(self.len) + "}" )
 
     def __eq__(self, other):
-        if isinstance(other, LHS_element):
+        if isinstance(other, RuleComponent):
             return ((self.len == other.len) and (self.value == other.value) and (self.attr_name_ == other.attr_name_))
         else:
             return False
@@ -21,7 +21,7 @@ class LHS_element(object):
         return hash(self.__repr__())
 
     def generalize(self, other):
-        generalized_lhs_elem = LHS_element(None, None, None)
+        generalized_lhs_elem = RuleComponent(None, None, None)
         contains = 0
         if (self.attr_name_ == other.attr_name_ and
             self.value == other.value):

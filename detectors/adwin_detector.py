@@ -95,7 +95,6 @@ class ListItem:
 
 
 class List:
-
     def __init__(self):
         self.count = None
         self.head = None
@@ -141,7 +140,6 @@ class List:
         self.count -= 1
 
 class ADWIN:
-
     def __init__(self, delta):
 
         self.DELTA = delta
