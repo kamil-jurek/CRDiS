@@ -24,7 +24,8 @@ def round_to_hundreds(x):
 # seq3 = np.array(df['occupancy'])
 
 #df = pd.read_csv('sequences/sequence_2018_04_30-14.42.37.csv')
-df = pd.read_csv('sequences/sequence_2018_05_03-16.54.37.csv')
+#df = pd.read_csv('sequences/sequence_2018_05_03-16.54.37.csv')
+df = pd.read_csv('sequences/sequence_2018_05_07-19.06.27.csv')
 seq1 = np.array(df['attr_1'])
 seq2 = np.array(df['attr_2'])
 seq3 = np.array(df['attr_3'])
@@ -64,7 +65,7 @@ simulator = OnlineSimulator(rules_detector,
 import time
 start_time = time.time()
 
-simulator.run(plot=False, detect_rules=True)
+simulator.run(plot=True, detect_rules=True)
 print_detected_change_points(simulator.get_detected_changes())
 print_rules(simulator.get_rules_sets(), 0)
 print_combined_rules(simulator.get_combined_rules(), 0)
