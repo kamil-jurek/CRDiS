@@ -22,9 +22,16 @@ df = pd.read_csv('sequences/sequence_2018_05_03-16.54.37.csv')
 #df = pd.read_csv('sequences/sequence_2018_05_07-19.06.27.csv')
 seq_names = ['attr_1', 'attr_2', 'attr_3','attr_4' ]
 
-sequences = []
+base_seqs =[]
+
 for name in seq_names:
-    sequences.append(np.array(df[name]))
+    base_seqs.append(np.array(df[name]))
+    #sequences.append(np.array(df[name]))
+
+sequences = [[] for i in range(len(base_seqs))]
+for nr in range(1):
+    for i, seq in enumerate(sequences):
+        sequences[i] = np.concatenate((seq, base_seqs[i]))
 
 win_size = 20
 detector1 = ZScoreDetector(window_size = win_size, threshold=4.5)
@@ -49,9 +56,9 @@ simulator = OnlineSimulator(rules_detector,
 
 start_time = time.time()
 
-simulator.run(plot=False, detect_rules=True)
-print_detected_change_points(simulator.get_detected_changes())
-print_rules(simulator.get_rules_sets(), 5)
+simulator.run(plot=True, detect_rules=True)
+#print_detected_change_points(simulator.get_detected_changes())
+print_rules(simulator.get_rules_sets(), 1)
 #print_combined_rules(simulator.get_combined_rules(), 0)
 
 end_time = time.time()

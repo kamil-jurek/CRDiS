@@ -187,7 +187,7 @@ class RulesDetector(object):
                                 r.set_last_occurence(current_index)
                                 r.increment_occurrences()
                                 r.occurrences.append(current_index)
-                                print("Rule already in set:", r)
+                                #print("Rule already in set:", r)
                                 generated_rules[seq_index].append(r)
 
                         if is_new_rule:
@@ -195,7 +195,7 @@ class RulesDetector(object):
                             rule.increment_occurrences()
                             rule.occurrences.append(current_index)
                             self.simulator.rules_sets[seq_index].add(rule)
-                            print("New rule:", rule)
+                            #print("New rule:", rule)
                             generated_rules[seq_index].append(rule)
 
         #print("==============================================")

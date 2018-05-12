@@ -18,6 +18,9 @@ class OnlineSimulator(object):
         self.parameters_history = [defaultdict(list) for i in range(len(self.sequences))]
         self.rules_detector = rules_detector
         self.combined_rules = set()
+        self.round_to = 100
+        self.predicted = []
+        self.predicted_len = 10000
 
         if rules_detector != None:
             self.rules_detector.set_online_simulator(self)
@@ -70,6 +73,10 @@ class OnlineSimulator(object):
                 if detect_rules:
                     self.rules_detector.search_rules(j, i)
 
+                if i >= 10000 and i % self.rules_detector.round_to == 0 and i == self.predicted_len: #self.rules_detector.target_seq_index == j and
+                    print(i)
+                    self.predict_sequence(j, i)
+
 
         def dict_to_arrays(ddict):
             new_dict = {}
@@ -106,6 +113,12 @@ class OnlineSimulator(object):
             ax.plot(sequence, 'b.', markersize=3)
             ax.plot(sequence, 'b-', alpha=0.25)
 
+            if i == 3:
+                for pr in self.predicted:
+                    ax.plot(pr, linewidth=3.0)
+                    #print(pr[1000:])
+
+
             ax.set_title(sequence_name)
 
             ax.set_ylim(
@@ -129,3 +142,109 @@ class OnlineSimulator(object):
 
                 for change_point in detected_change_points:
                     ax.axvline(change_point.at_, color='r', linestyle='--')
+
+    def predict_sequence(self, seq_index, curr_elem_index):
+        #for seq_index, change_point_list in enumerate(self.detected_change_points):
+        if seq_index == self.rules_detector.target_seq_index or seq_index != 0:
+            return
+
+        window_end = round_to(curr_elem_index, self.round_to)
+        window_begin = window_end - 1000
+
+        points_before_window, points_in_window, points_after_window = self.get_change_points_in_window(seq_index, window_begin, window_end)
+
+        lhss = []
+        #print(points_in_window)
+        predictions = {}
+        if not points_in_window:
+            lhs_elem_len = round_to(window_end - window_begin, self.round_to)
+            if lhs_elem_len > 0:
+                for lhs_len in range(self.round_to, lhs_elem_len, self.round_to):
+                    lhs_elem = RuleComponent(lhs_len,
+                                             points_before_window[-1].curr_value if len(points_before_window) > 0 else np.nan,
+                                             self.simulator.sequences_names[seq_index])
+                    lhss.append([lhs_elem])
+                    for r in sorted(self.rules_sets[seq_index],
+                                    key=lambda x: (x.number_of_occurrences, len(x.lhs), x.rhs.len, x.lhs[0].len),
+                                    reverse=True):
+                        if r.lhs == lhss[-1]:
+                            if r.rhs in predictions:
+                                predictions[r.rhs] = (lhss[-1], r, predictions[r.rhs][2] + 1)
+                            else:
+                                predictions[r.rhs] = (lhss[-1], r, 1)
+                            #print("In moment:", curr_elem_index, "predict", lhss[-1], "==>", r.rhs, predictions[r.rhs], "because of rule:\n", r)
+                            break
+        else:
+            last_point = points_in_window[-1]
+            if last_point.at_ <= window_end:
+                lhs_elem_len = round_to(window_end - last_point.at_, self.round_to)
+                for lhs_len in range(self.round_to, lhs_elem_len + 1, self.round_to):
+                    lhs_elem = RuleComponent(lhs_len,
+                                           last_point.curr_value,
+                                           last_point.attr_name)
+                    lhss.append([lhs_elem])
+                    print("lhs:", lhss[-1], curr_elem_index)
+                    for r in sorted(self.rules_sets[seq_index],
+                                    key=lambda x: (x.number_of_occurrences, len(x.lhs), x.rhs.len, x.lhs[0].len),
+                                    reverse=True):
+                        if r.lhs == lhss[-1]:
+                            if r.rhs in predictions:
+                                predictions[r.rhs] = (lhss[-1], r, predictions[r.rhs][2] + 1)
+                            else:
+                                predictions[r.rhs] = (lhss[-1], r, 1)
+                            #print("In moment:", curr_elem_index, "predict", lhss[-1], "==>", r.rhs, predictions[r.rhs], "because of rule:\n", r)
+                            break
+
+            for point_index in range(1, len(points_in_window)):
+                prefix = lhss[-1] if lhss else []
+                point = points_in_window[-point_index]
+                # print(point)
+                lhs_elem_len = round_to(point.prev_value_len, self.round_to)
+                if lhs_elem_len > 0:
+                    for lhs_len in range(self.round_to, lhs_elem_len + 1, self.round_to):
+                        lhs_elem = RuleComponent(lhs_len,
+                                                 point.prev_value,
+                                                 point.attr_name)
+
+                        lhss.append([lhs_elem] + prefix)
+                        #print("lhs:", lhss[-1], curr_elem_index)
+                        #print()
+                        for r in sorted(self.rules_sets[seq_index],key=lambda x: (x.number_of_occurrences, len(x.lhs), x.rhs.len, x.lhs[0].len),reverse=True):
+                            if r.lhs == lhss[-1]:
+                                if r.rhs in predictions:
+                                    predictions[r.rhs] = (lhss[-1], r, predictions[r.rhs][2] + 1)
+                                else:
+                                    predictions[r.rhs] = (lhss[-1], r, 1)
+
+                                break
+            if predictions:
+                for k, prediction in predictions.items():
+                    print("In moment:", curr_elem_index, "predict", prediction[0], "==>", k, "nr of times:", prediction[2],"because of rule:\n", prediction[1])
+                    print()
+                    li = [-1 for i in range(curr_elem_index)]
+                    for i in range(k.len):
+                        li.append(k.value)
+                    self.predicted.append(li)
+                    self.predicted_len = curr_elem_index+k.len
+                    break
+
+                # print("Prediction made in:", curr_elem_index)
+                # print(predictions)
+
+
+    def get_change_points_in_window(self, seq_index, window_begin, window_end):
+        points_in_window = []
+        points_before_window = []
+        points_after_window = []
+        for change_point in self.detected_change_points[seq_index]:
+            if round_to(change_point.at_, self.round_to) > window_begin:
+                if round_to(change_point.at_, self.round_to) < window_end:
+                    points_in_window.append(change_point)
+                else:  # change point is after windows end
+                    points_after_window.append(change_point)
+            else:  # change point is before windows start
+                points_before_window.append(change_point)
+        return (points_before_window, points_in_window, points_after_window)
+
+def round_to(x, _to):
+    return int(round(x / _to)) * _to
