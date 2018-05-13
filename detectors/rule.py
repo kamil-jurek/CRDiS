@@ -1,3 +1,4 @@
+import numpy as np
 
 class Rule(object):
     def __init__(self, lhs, rhs):
@@ -11,7 +12,7 @@ class Rule(object):
     def __repr__(self):
         generalized = " Generalized" if self.generalized else ""
         return(str(self.lhs) + " ==> " + str(self.rhs) + "\n\t| nr_of_occurences:" + str(self.number_of_occurrences) +
-               " | last_occurence:" + str(self.last_occurrence) + " | occurences:" + str(self.occurrences) + generalized)
+               " | rule_score:" + str(self.get_rule_score()) + " | last_occurence:" + str(self.last_occurrence) + " | occurences:" + str(self.occurrences) + generalized)
         #  + "nr:" + str(self.number_of_occurrences) + " lastOcc:" + str(self.last_occurrence)
 
     def __eq__(self, other):
@@ -31,3 +32,12 @@ class Rule(object):
 
     def set_last_occurence(self, last):
         self.last_occurrence = last
+
+    def get_rule_score(self):
+        if self.lhs and self.rhs:
+            lhs_score = np.sum([lhs.len for lhs in self.lhs])
+            rhs_score = self.rhs.len
+
+            return self.number_of_occurrences * (lhs_score + rhs_score)
+        else:
+            return 0

@@ -3,7 +3,8 @@ import math
 def print_rules(rules_sets,support):
     print("---------------------------------------------------------------------------------------")
     for rules_set in rules_sets:
-        for rule in sorted(rules_set, key=lambda x: (x.number_of_occurrences, len(x.lhs), x.rhs.len, x.lhs[0].len), reverse=True):
+        #for rule in sorted(rules_set, key=lambda x: (x.number_of_occurrences, len(x.lhs), x.rhs.len, x.lhs[0].len), reverse=True):
+        for rule in sorted(rules_set, key=lambda r: (r.get_rule_score()),reverse=True):
             if rule.number_of_occurrences >= support:
                 print(rule)
                 print("----------------------------------------------------------------------------------------")

@@ -119,8 +119,8 @@ class RulesDetector(object):
         generated_rules = [[] for i in range(len(self.simulator.detected_change_points))]
         
         for seq_index, change_point_list in enumerate(self.simulator.detected_change_points):
-            if seq_index == self.target_seq_index:
-                continue
+            # if seq_index == self.target_seq_index:
+            #     continue
 
             generated_lhss = []
             generated_rhss = []
@@ -130,7 +130,7 @@ class RulesDetector(object):
             if not points_in_window:
                 lhs_elem_len = round_to(window_end - window_begin, self.round_to)
                 if lhs_elem_len > 0:
-                    for lhs_len in range(self.round_to, lhs_elem_len, self.round_to):
+                    for lhs_len in range(self.round_to, lhs_elem_len + 1, self.round_to):
                         lhs_elem = RuleComponent(lhs_len,
                                                  points_before_window[-1].curr_value if len(points_before_window) > 0 else np.nan,
                                                  self.simulator.sequences_names[seq_index])
