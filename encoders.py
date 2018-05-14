@@ -1,6 +1,6 @@
 from sklearn.preprocessing import LabelEncoder
 from sklearn.preprocessing import OneHotEncoder
-import category_encoders as ce
+#import category_encoders as ce
 import numpy as np
 
 label_encoder = None

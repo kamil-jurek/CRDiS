@@ -1,21 +1,17 @@
-import numpy as np
-import matplotlib.pyplot as plt
 import sys; sys.path.append('./detectors/')
-import pandas as pd
 import time
 
-import encoders as en
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
 
-from utils import *
-from online_simulator import OnlineSimulator
-from zscore_detector import ZScoreDetector
-from rules_detector import RulesDetector
+import encoders as en
 #from rules_detector_2 import RulesDetector
 from adwin_detector import AdwinDetector
-
-def round_to_hundreds(x):
-    return int(round(x / 100.0)) * 100
-
+from online_simulator import OnlineSimulator
+from rules_detector import RulesDetector
+from utils import *
+from zscore_detector import ZScoreDetector
 
 #df = pd.read_csv('sequences/sequence_2018_04_30-14.42.37.csv')
 #df = pd.read_csv('sequences/sequence_2018_05_03-16.54.37.csv')

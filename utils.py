@@ -1,5 +1,8 @@
 import math
 
+def round_to(x, _round_to):
+    return int(round(x / _round_to)) * _round_to
+
 def print_rules(rules_sets,support):
     print("---------------------------------------------------------------------------------------")
     for rules_set in rules_sets:
