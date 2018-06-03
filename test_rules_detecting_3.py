@@ -52,12 +52,14 @@ simulator = OnlineSimulator(rules_detector,
 
 start_time = time.time()
 
-simulator.run(plot=True, detect_rules=True)
+simulator.run(plot=True, detect_rules=True, predict_seq=True)
 #print_detected_change_points(simulator.get_detected_changes())
-print_rules(simulator.get_rules_sets(), 1)
+#print_rules(simulator.get_rules_sets(), 1)
 #print_combined_rules(simulator.get_combined_rules(), 0)
 
 end_time = time.time()
 print(end_time - start_time)
 
+for k, p in enumerate(simulator.predictions):
+    print(k ,":", p)
 plt.show()

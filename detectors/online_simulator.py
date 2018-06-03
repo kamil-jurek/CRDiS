@@ -23,6 +23,8 @@ class OnlineSimulator(object):
         self.predicted = []
         self.predicted_len = 0
         self.predicted_rule = Rule(None, None)
+        self.predictions = []
+        self.MIN_LHS_LEN = 300
 
         if rules_detector != None:
             self.rules_detector.set_online_simulator(self)
@@ -41,7 +43,7 @@ class OnlineSimulator(object):
     def get_combined_rules(self):
         return self.combined_rules
 
-    def run(self, plot=True, detect_rules=True, **kwargs):
+    def run(self, plot=True, detect_rules=True, predict_seq=False, **kwargs):
         parameters_history = [defaultdict(list) for i in range(len(self.sequences))]
 
         for i in range(0, self.sequence_size):
@@ -76,8 +78,9 @@ class OnlineSimulator(object):
                 if detect_rules:
                     self.rules_detector.search_rules(j, i)
 
-                if i >= 4000 and (i % self.rules_detector.round_to == 0):# and i == self.predicted_len: #self.rules_detector.target_seq_index == j and
-                    print(i)
+                if(predict_seq and
+                   i >= self.sequence_size * 0.7 and
+                   i % self.rules_detector.round_to == 0):
                     self.predict_sequence(j, i)
 
 
@@ -117,8 +120,8 @@ class OnlineSimulator(object):
             ax.plot(sequence, 'b-', alpha=0.25)
 
             if i == 3:
-                for pr in self.predicted:
-                    ax.plot(pr, linewidth=3.0)
+                #for pr in self.predicted:
+                ax.plot(self.predicted, 'r', linewidth=3.0)
                     #print(pr[1000:])
 
 
@@ -152,14 +155,13 @@ class OnlineSimulator(object):
         #     return
         if seq_index != 0: #self.rules_detector.target_seq_index:
             return
-
+        print("---START Predict sequence ", "seq_index:", seq_index, "curr_elem_index:",curr_elem_index)
         window_end = round_to(curr_elem_index, self.round_to)
         window_begin = window_end - 1500
 
         points_before_window, points_in_window, points_after_window = self.get_change_points_in_window(seq_index, window_begin, window_end)
 
         lhss = []
-        #print(points_in_window)
         predictions = {}
         if not points_in_window:
             lhs_elem_len = round_to(window_end - window_begin, self.round_to)
@@ -169,7 +171,7 @@ class OnlineSimulator(object):
                                              points_before_window[-1].curr_value if len(points_before_window) > 0 else np.nan,
                                              self.sequences_names[seq_index])
                     lhss.append([lhs_elem])
-                    print("no chnage point", lhss[-1])
+                    #print("no chnage point", lhss[-1])
                     self.find_common_lhs_part(seq_index, lhss[-1], predictions)
 
         else:
@@ -181,7 +183,7 @@ class OnlineSimulator(object):
                                            last_point.curr_value,
                                            last_point.attr_name)
                     lhss.append([lhs_elem])
-                    print("lhs:", lhss[-1], curr_elem_index)
+                    #print("lhs:", lhss[-1], curr_elem_index)
                     self.find_common_lhs_part(seq_index, lhss[-1], predictions)
 
             for point_index in range(1, len(points_in_window)):
@@ -196,46 +198,58 @@ class OnlineSimulator(object):
                                                  point.attr_name)
 
                         lhss.append([lhs_elem] + prefix)
-                        print("lhs:", lhss[-1], curr_elem_index)
+                        #print("lhs:", lhss[-1], curr_elem_index)
                         self.find_common_lhs_part(seq_index, lhss[-1], predictions)
 
-            print("all possible predictions are:")    
+            print("-----------------------------------------------------------------------------------------------")
+            print("All possible predictions are:")
             prediction_list = []
             for k, predictions_list in predictions.items():
                 for p in predictions_list:
                     print("\t", p.lhs, "==>", p.rhs, " nr:", p.number_of_occurrences, p.rule.number_of_occurrences, p.rule.get_rule_score())
-                print("-----------------------------------------------------------------------------------------------")
-                print("\t", predictions_list[-1].lhs, "==>", predictions_list[-1].rhs, " nr:", predictions_list[-1].number_of_occurrences, 
-                      predictions_list[-1].rule.number_of_occurrences, predictions_list[-1].rule.get_rule_score(), 
-                      "score:", predictions_list[-1].get_prediction_score())
-                prediction_list.append(predictions_list[-1])
-                print("-----------------------------------------------------------------------------------------------")
 
-            #########################################################################################
-            #for k, prediction_list in predictions.items():
-            MIN_LHS_LEN = 300
+                print("-----------------------------------------------------------------------------------------------")
+                pred = predictions_list[-1]
+                print("\tPossible Best Prediction: ", pred.lhs, "==>", pred.rhs,
+                      " nrOfPredOcc:", pred.number_of_occurrences,
+                      " nrOfRuleOcc:", pred.rule.number_of_occurrences,
+                      " ruleScore:", pred.rule.get_rule_score(),
+                      " predScore:", pred.get_prediction_score())
+
+                #adding the best prediction for each RHS
+                prediction_list.append(pred)
+                print("-----------------------------------------------------------------------------------------------")
             
             if prediction_list:
-                #print("predictions:", predictions.values())
-                prediction = sorted(prediction_list, key=lambda p: (p.get_prediction_score()), reverse=True)[0]#prediction_list[-1]
-                print("prediction:",prediction)
-                print("In moment:", curr_elem_index, "predicting", prediction.lhs, "==>", k, "nr of rules supporting:",
-                        prediction.number_of_occurrences, "because of rule:\n", prediction.rule)
+                #geting best possible prediction
 
                 #if prediction_list[-1][1].get_rule_score() >= self.predicted_rule.get_rule_score():
-                if curr_elem_index >= self.predicted_len:
+                prediction = sorted(prediction_list, key=lambda p: (p.get_prediction_score()), reverse=True)[0]
+                if (prediction.get_prediction_score() > (self.predictions[-1].get_prediction_score() if self.predictions else 0) or
+                    curr_elem_index >= self.predicted_len): #curr_elem_index >= self.predicted_len:
+                    print("Best prediction:", prediction)
+                    print("In index ", curr_elem_index, "predicting", prediction.lhs, "==>", k,
+                          "nr of rules supporting:", prediction.number_of_occurrences,
+                          "because of rule:\n", prediction.rule)
+
                     self.predicted_rule = prediction.rule
+
                     lhs_seq = []
                     for lhs_elem in prediction.rule.lhs:
                         for elem in range(lhs_elem.len):
                             lhs_seq.append(lhs_elem.value)
 
-                    if len(lhs_seq) >= MIN_LHS_LEN:
+                    if len(lhs_seq) >= self.MIN_LHS_LEN:
                         print("Adding new prediction")
+                        self.predictions.append(prediction)
                         predicted_seq = [-1 for i in range(curr_elem_index)] #-len(lhs_seq))] + lhs_seq
                         for i in range(k.len):
                             predicted_seq.append(k.value)
-                        self.predicted.append(predicted_seq)
+
+                        if self.predicted == []:
+                            self.predicted = predicted_seq
+
+                        self.predicted = self.predicted[:curr_elem_index] + [k.value for i in range(k.len)]
                         self.predicted_len = curr_elem_index + k.len
 
                         # if curr_elem_index <= self.predicted_len:
@@ -244,10 +258,8 @@ class OnlineSimulator(object):
                         # else:
                         # self.predicted.append(predicted_seq)
                         # self.predicted_len = curr_elem_index+k.len
-                        #break
-
-                # print("Prediction made in:", curr_elem_index)
-                # print(predictions)
+        print("---END Predict sequence ", "seq_index:", seq_index, "curr_elem_index:", curr_elem_index)
+        print("========================================================================================")
 
     def find_common_lhs_part(self, seq_index, lhs, predictions):
         for rule in sorted(self.rules_sets[seq_index], key=lambda r: (r.get_rule_score()), reverse=True):
@@ -256,8 +268,8 @@ class OnlineSimulator(object):
                     predictions[rule.rhs].append(Prediction(rule.rhs, lhs, rule, predictions[rule.rhs][-1].number_of_occurrences + 1))
                 else:
                     predictions[rule.rhs] = [Prediction(rule.rhs, lhs, rule, 1)]
-                print("Adding to predictions", lhs, "==>", rule.rhs, "nr of rules supporting:", predictions[rule.rhs][-1].number_of_occurrences, "because of rule:\n", rule)
-                print()
+                #print("Adding to predictions", lhs, "==>", rule.rhs, "nr of rules supporting:", predictions[rule.rhs][-1].number_of_occurrences, "because of rule:\n", rule)
+                #print()
                 break
 
     def get_change_points_in_window(self, seq_index, window_begin, window_end):
