@@ -33,11 +33,6 @@ class OnlineSimulator(object):
         return self.detected_change_points
 
     def get_rules_sets(self):
-        # result = []
-        # for i, rs in enumerate(self.rules_sets):
-        #     if i != self.rules_detector.target_seq_index:
-        #         result.append(rs)
-        # return result
         return self.rules_sets
 
     def get_combined_rules(self):
@@ -79,7 +74,7 @@ class OnlineSimulator(object):
                     self.rules_detector.search_rules(j, i)
 
                 if(predict_seq and
-                   i >= self.sequence_size * 0.7 and
+                   i >= self.sequence_size*0.8 and
                    i % self.rules_detector.round_to == 0):
                     self.predict_sequence(j, i)
 
@@ -119,7 +114,7 @@ class OnlineSimulator(object):
             ax.plot(sequence, 'b.', markersize=3)
             ax.plot(sequence, 'b-', alpha=0.25)
 
-            if i == 3:
+            if i == self.rules_detector.target_seq_index:
                 #for pr in self.predicted:
                 ax.plot(self.predicted, 'r', linewidth=3.0)
                     #print(pr[1000:])
@@ -153,7 +148,7 @@ class OnlineSimulator(object):
         #for seq_index, change_point_list in enumerate(self.detected_change_points):
         # if seq_index == self.rules_detector.target_seq_index or seq_index != 0:
         #     return
-        if seq_index != 0: #self.rules_detector.target_seq_index:
+        if seq_index == self.rules_detector.target_seq_index:
             return
         print("---START Predict sequence ", "seq_index:", seq_index, "curr_elem_index:",curr_elem_index)
         window_end = round_to(curr_elem_index, self.round_to)
@@ -201,24 +196,24 @@ class OnlineSimulator(object):
                         #print("lhs:", lhss[-1], curr_elem_index)
                         self.find_common_lhs_part(seq_index, lhss[-1], predictions)
 
-            print("-----------------------------------------------------------------------------------------------")
-            print("All possible predictions are:")
+            #print("-----------------------------------------------------------------------------------------------")
+            #print("All possible predictions are:")
             prediction_list = []
             for k, predictions_list in predictions.items():
-                for p in predictions_list:
-                    print("\t", p.lhs, "==>", p.rhs, " nr:", p.number_of_occurrences, p.rule.number_of_occurrences, p.rule.get_rule_score())
+                #for p in predictions_list:
+                    #print("\t", p.lhs, "==>", p.rhs, " nr:", p.number_of_occurrences, p.rule.number_of_occurrences, p.rule.get_rule_score())
 
-                print("-----------------------------------------------------------------------------------------------")
+                #print("-----------------------------------------------------------------------------------------------")
                 pred = predictions_list[-1]
-                print("\tPossible Best Prediction: ", pred.lhs, "==>", pred.rhs,
-                      " nrOfPredOcc:", pred.number_of_occurrences,
-                      " nrOfRuleOcc:", pred.rule.number_of_occurrences,
-                      " ruleScore:", pred.rule.get_rule_score(),
-                      " predScore:", pred.get_prediction_score())
+                # print("\tPossible Best Prediction: ", pred.lhs, "==>", pred.rhs,
+                #       " nrOfPredOcc:", pred.number_of_occurrences,
+                #       " nrOfRuleOcc:", pred.rule.number_of_occurrences,
+                #       " ruleScore:", pred.rule.get_rule_score(),
+                #       " predScore:", pred.get_prediction_score())
 
                 #adding the best prediction for each RHS
                 prediction_list.append(pred)
-                print("-----------------------------------------------------------------------------------------------")
+                #print("-----------------------------------------------------------------------------------------------")
             
             if prediction_list:
                 #geting best possible prediction
@@ -249,6 +244,8 @@ class OnlineSimulator(object):
                         if self.predicted == []:
                             self.predicted = predicted_seq
 
+                        print("curr_elem_index:",curr_elem_index)
+                        print("k.value:", k.value)
                         self.predicted = self.predicted[:curr_elem_index] + [k.value for i in range(k.len)]
                         self.predicted_len = curr_elem_index + k.len
 

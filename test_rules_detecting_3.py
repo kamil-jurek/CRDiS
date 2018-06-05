@@ -14,8 +14,8 @@ from utils import *
 from zscore_detector import ZScoreDetector
 
 #df = pd.read_csv('sequences/sequence_2018_04_30-14.42.37.csv')
-#df = pd.read_csv('sequences/sequence_2018_05_03-16.54.37.csv')
-df = pd.read_csv('sequences/sequence_2018_05_07-19.06.27.csv')
+df = pd.read_csv('sequences/sequence_2018_05_03-16.54.37.csv')
+#df = pd.read_csv('sequences/sequence_2018_05_07-19.06.27.csv')
 seq_names = ['attr_1', 'attr_2', 'attr_3','attr_4' ]
 
 base_seqs =[]
@@ -25,7 +25,7 @@ for name in seq_names:
     #sequences.append(np.array(df[name]))
 
 sequences = [[] for i in range(len(base_seqs))]
-for nr in range(5):
+for nr in range(2):
     for i, seq in enumerate(sequences):
         sequences[i] = np.concatenate((seq, base_seqs[i]))
 
