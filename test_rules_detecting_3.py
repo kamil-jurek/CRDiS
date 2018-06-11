@@ -4,6 +4,8 @@ import time
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import scipy as sp
+from scipy import signal
 
 import encoders as en
 #from rules_detector_2 import RulesDetector
@@ -25,7 +27,7 @@ for name in seq_names:
     #sequences.append(np.array(df[name]))
 
 sequences = [[] for i in range(len(base_seqs))]
-for nr in range(2):
+for nr in range(1):
     for i, seq in enumerate(sequences):
         sequences[i] = np.concatenate((seq, base_seqs[i]))
 
@@ -60,6 +62,24 @@ simulator.run(plot=True, detect_rules=True, predict_seq=True)
 end_time = time.time()
 print(end_time - start_time)
 
-for k, p in enumerate(simulator.predictions):
+for k, p in enumerate(simulator.predictor.predictions):
     print(k ,":", p)
+
+pr = int(len(sequences[3])*0.9) + 20
+predicted = simulator.predictor.predicted[pr:len(sequences[3])]
+real = sp.signal.medfilt(sequences[3][pr:],21)
+
+plt.figure()
+plt.plot(real, 'b')
+plt.plot(predicted, 'r', linewidth=3.0)
+
+mse = np.mean((real - predicted)**2)
+print("pred len:", real)
+print("real len:", predicted)
+print("mse:", mse)
+
+
+# print("pred:", simulator.predictor.predicted[-1420:])
+# print("real:", sequences[3][-1420:])
+
 plt.show()
