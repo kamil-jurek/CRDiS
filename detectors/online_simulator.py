@@ -52,19 +52,19 @@ class OnlineSimulator(object):
                     prev_at = self.detected_change_points[j][-1].at_ if len(self.detected_change_points[j]) > 0 else 0
                     prev_value_len = i - prev_at
 
-                    change_point = ChangePoint(detector.previous_value, detector.current_value, i, prev_value_len, self.sequences_names[j])
+                    change_point = ChangePoint(detector.previous_value, detector.current_value, i, prev_value_len, self.sequences_names[j], detector.percent)
                     self.detected_change_points[j].append(change_point)
 
                 if i == self.sequence_size - 1:
                     detector.is_change_detected = True
                     prev_at = self.detected_change_points[j][-1].at_ if len(self.detected_change_points[j]) > 0 else 0
                     prev_value_len = i - prev_at
-                    change_point = ChangePoint(detector.current_value, -1, i, prev_value_len, self.sequences_names[j])
+                    change_point = ChangePoint(detector.current_value, -1, i, prev_value_len, self.sequences_names[j], detector.percent)
                     self.detected_change_points[j].append(change_point)
 
                 if i == 0:
                     detector.is_change_detected = True
-                    change_point = ChangePoint(-1, value, i, 0, self.sequences_names[j])
+                    change_point = ChangePoint(-1, value, i, 0, self.sequences_names[j], detector.percent)
                     self.detected_change_points[j].append(change_point)
 
                 if detect_rules:

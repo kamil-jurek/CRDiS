@@ -7,7 +7,7 @@ from rule import Rule
 from online_simulator import OnlineSimulator
 
 class RulesDetector(object):
-    def __init__(self, target_seq_index, window_size=0,round_to=100,type="closed"):
+    def __init__(self, target_seq_index, window_size=0, round_to=100, type="closed"):
         self.target_seq_index = target_seq_index
         self.round_to = round_to
         self.window_size = window_size
@@ -133,7 +133,10 @@ class RulesDetector(object):
                     for lhs_len in range(self.round_to, lhs_elem_len + 1, self.round_to):
                         lhs_elem = RuleComponent(lhs_len,
                                                  points_before_window[-1].curr_value if len(points_before_window) > 0 else np.nan,
-                                                 self.simulator.sequences_names[seq_index])
+                                                 self.simulator.sequences_names[seq_index],
+                                                 points_before_window[-1].percent if len(points_before_window) > 0 else
+                                                 (list(self.simulator.sequences[seq_index][window_begin:window_end]).count(self.simulator.change_detectors[seq_index].current_value) / lhs_elem_len) *100)
+                        #print("no changes in window:", list(self.simulator.sequences[seq_index][window_begin:window_end]).count(self.simulator.change_detectors[seq_index].current_value) / lhs_elem_len)
                         generated_lhss.append([lhs_elem])
             else:
                 last_point = points_in_window[-1]
@@ -142,7 +145,8 @@ class RulesDetector(object):
                     for lhs_len in range(self.round_to, lhs_elem_len + 1, self.round_to):
                         lhs_elem = RuleComponent(lhs_len,
                                                last_point.curr_value,
-                                               last_point.attr_name)
+                                               last_point.attr_name,
+                                               last_point.percent)
                         generated_lhss.append([lhs_elem])
 
                 for point_index in range(1, len(points_in_window)):
@@ -153,7 +157,8 @@ class RulesDetector(object):
                         for lhs_len in range(self.round_to, lhs_elem_len + 1, self.round_to):
                             lhs_elem = RuleComponent(lhs_len,
                                                      point.prev_value,
-                                                    point.attr_name)
+                                                     point.attr_name,
+                                                     point.percent)
                             generated_lhss.append([lhs_elem] + prefix)
                 
                 first_point = points_in_window[0]
@@ -164,7 +169,8 @@ class RulesDetector(object):
                         for lhs_len in range(self.round_to, lhs_elem_len + 1, self.round_to):
                             lhs_elem = RuleComponent(lhs_len,
                                                      first_point.prev_value,
-                                                     first_point.attr_name)
+                                                     first_point.attr_name,
+                                                     first_point.percent)
                             generated_lhss.append([lhs_elem] + prefix)
                                                 
             last_target_change_point = self.simulator.detected_change_points[self.target_seq_index][-1]
@@ -172,7 +178,8 @@ class RulesDetector(object):
             for rhs_len in range(self.round_to, rhs_elem_len + 1, self.round_to):
                 rhs_elem = RuleComponent(rhs_len,
                                          last_target_change_point.prev_value,
-                                         last_target_change_point.attr_name)
+                                         last_target_change_point.attr_name,
+                                         last_target_change_point.percent)
                 generated_rhss.append(rhs_elem)
 
             if generated_lhss:

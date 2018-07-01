@@ -1,12 +1,13 @@
 
 class RuleComponent(object):
-    def __init__(self, len_, value_, attr_name_):
+    def __init__(self, len_, value_, attr_name_, percent_):
         self.len = len_
         self.value = value_
         self.attr_name_ = attr_name_
+        self.percent = percent_
 
     def __repr__(self):
-        return(str(self.attr_name_) + ": " + str(self.value) + "{"+ str(self.len) + "}" )
+        return(str(self.attr_name_) + ": " + str(self.value) + "{"+ str(self.len) + "; " + str(self.percent) +"% " +"}")
 
     def __eq__(self, other):
         if isinstance(other, RuleComponent):
@@ -21,7 +22,7 @@ class RuleComponent(object):
         return hash(self.__repr__())
 
     def generalize(self, other):
-        generalized_lhs_elem = RuleComponent(None, None, None)
+        generalized_lhs_elem = RuleComponent(None, None, None, 0)
         contains = 0
         if (self.attr_name_ == other.attr_name_ and
             self.value == other.value):

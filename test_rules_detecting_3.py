@@ -56,7 +56,7 @@ start_time = time.time()
 
 simulator.run(plot=True, detect_rules=True, predict_seq=True)
 #print_detected_change_points(simulator.get_detected_changes())
-#print_rules(simulator.get_rules_sets(), 1)
+print_rules(simulator.get_rules_sets(), 5)
 #print_combined_rules(simulator.get_combined_rules(), 0)
 
 end_time = time.time()
@@ -73,11 +73,12 @@ plt.figure()
 plt.plot(real, 'b')
 plt.plot(predicted, 'r', linewidth=3.0)
 
-mse = np.mean((real - predicted)**2)
-print("pred len:", real)
-print("real len:", predicted)
-print("mse:", mse)
-
+# mse = np.mean((real - predicted)**2)
+# print("pred len:", real)
+# print("real len:", predicted)
+# print("mse:", mse)
+rmse = np.sqrt(((predicted - real) ** 2).mean())
+print('Mean Squared Error: {}'.format(round(rmse, 5)))
 
 # print("pred:", simulator.predictor.predicted[-1420:])
 # print("real:", sequences[3][-1420:])

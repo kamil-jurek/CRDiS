@@ -46,7 +46,8 @@ class SequencePredictor(object):
                 for lhs_len in range(self.simulator.round_to, lhs_elem_len + 1, self.simulator.round_to):
                     lhs_elem = RuleComponent(lhs_len,
                                              last_point.curr_value,
-                                             last_point.attr_name)
+                                             last_point.attr_name,
+                                             last_point.percent)
                     lhss.append([lhs_elem])
                     # print("lhs:", lhss[-1], curr_elem_index)
                     self.find_common_lhs_part(seq_index, lhss[-1], predictions)
@@ -60,7 +61,8 @@ class SequencePredictor(object):
                     for lhs_len in range(self.simulator.round_to, lhs_elem_len + 1, self.simulator.round_to):
                         lhs_elem = RuleComponent(lhs_len,
                                                  point.prev_value,
-                                                 point.attr_name)
+                                                 point.attr_name,
+                                                 point.percent)
 
                         lhss.append([lhs_elem] + prefix)
                         # print("lhs:", lhss[-1], curr_elem_index)
