@@ -7,7 +7,7 @@ class RuleComponent(object):
         self.percent = percent_
 
     def __repr__(self):
-        return(str(self.attr_name_) + ": " + str(self.value) + "{"+ str(self.len) + "; " + "{0:.2f}".format(self.percent) + "% " +"}")
+        return(str(self.attr_name_) + "(" + str(self.value) + "){"+ str(self.len) + "; " + "{0:.0f}".format(self.percent) + "%" +"}")
 
     def __eq__(self, other):
         if isinstance(other, RuleComponent):

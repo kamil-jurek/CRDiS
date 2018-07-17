@@ -8,4 +8,4 @@ class ChangePoint(object):
         self.percent = percent_
 
     def __repr__(self):
-        return("(" + self.attr_name + " changed from:" + str(self.prev_value) + "(len= " + str(self.prev_value_len) + ") to:" + str(self.curr_value) + " at: " + str(self.at_) + ")" + self.percent +"%")
+        return("(" + self.attr_name + " changed from:" + str(self.prev_value) + "(len= " + str(self.prev_value_len) + ") to:" + str(self.curr_value) + " at: " + str(self.at_) + ")" + str(self.percent) +"%")

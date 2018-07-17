@@ -183,6 +183,29 @@ class RulesDetector(object):
                 generated_rhss.append(rhs_elem)
 
             if generated_lhss:
+
+                # TEST
+                for lhs in generated_lhss:
+                    rule = Rule(lhs, [])
+
+                    is_new_rule = True
+                    for r in self.simulator.lhs_sets[seq_index]:
+                        if r == rule:
+                            is_new_rule = False
+                            r.set_last_occurence(current_index)
+                            r.increment_occurrences()
+                            r.occurrences.append(current_index)
+                            # print("Rule already in set:", r)
+                            # generated_rules[seq_index].append(r)
+
+                    if is_new_rule:
+                        rule.set_last_occurence(current_index)
+                        rule.increment_occurrences()
+                        rule.occurrences.append(current_index)
+                        self.simulator.lhs_sets[seq_index].add(rule)
+                        # print("New rule:", rule)
+                        # generated_rules[seq_index].append(rule)
+
                 for rhs in generated_rhss:
                     for lhs in generated_lhss:
                         rule = Rule(lhs, rhs)                       
@@ -194,6 +217,7 @@ class RulesDetector(object):
                                 r.set_last_occurence(current_index)
                                 r.increment_occurrences()
                                 r.occurrences.append(current_index)
+                                r.support = self.get_support_of(lhs,seq_index)
                                 #print("Rule already in set:", r)
                                 generated_rules[seq_index].append(r)
 
@@ -201,9 +225,12 @@ class RulesDetector(object):
                             rule.set_last_occurence(current_index)
                             rule.increment_occurrences()
                             rule.occurrences.append(current_index)
+                            rule.support = self.get_support_of(lhs, seq_index)
                             self.simulator.rules_sets[seq_index].add(rule)
                             #print("New rule:", rule)
                             generated_rules[seq_index].append(rule)
+
+
 
         #print("==============================================")
         combined_rule = []
@@ -262,6 +289,12 @@ class RulesDetector(object):
             else:  # change point is before windows start
                 points_before_window.append(change_point)
         return (points_before_window, points_in_window, points_after_window)
+
+    def get_support_of(self, lhs, seq_index):
+        for r in self.simulator.lhs_sets[seq_index]:
+            if r == Rule(lhs, []):
+               print("get_support_of: ", lhs, " support:", r.number_of_occurrences)
+               return r.number_of_occurrences
 
 def round_to(x, _to):
     return int(round(x / _to)) * _to

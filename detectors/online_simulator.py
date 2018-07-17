@@ -22,6 +22,7 @@ class OnlineSimulator(object):
         self.combined_rules = set()
         self.round_to = 100
         self.predictor = SequencePredictor(self)
+        self.lhs_sets = [set() for i in range(len(self.sequences))]
 
         if rules_detector != None:
             self.rules_detector.set_online_simulator(self)
@@ -91,12 +92,13 @@ class OnlineSimulator(object):
 
         return detector.is_change_detected
 
-    def display_results(self, sequence_name='Sequence', **kwargs):
+    def display_results(self, sequence_name='Sequence ', **kwargs):
         for i in range(0, len(self.sequences)):
             sequence = self.sequences[i]
             detector = self.change_detectors[i]
             parameters_history = self.parameters_history[i]
             detected_change_points = self.detected_change_points[i]
+            sequence_name = 'Sequence ' + self.sequences_names[i]
 
             plotcount = 1 + len(parameters_history)
             fig, axes = plt.subplots(nrows=plotcount, ncols=1, sharex=True,

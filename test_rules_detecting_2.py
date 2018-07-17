@@ -24,7 +24,8 @@ def round_to_hundreds(x):
 
 #df = pd.read_csv('sequences/sequence_2018_04_30-14.42.37.csv')
 #df = pd.read_csv('sequences/sequence_2018_05_03-16.54.37.csv')
-df = pd.read_csv('sequences/sequence_2018_05_07-19.06.27.csv')
+df = pd.read_csv('sequences/sequence_2018_07_14-18.24.58.csv')
+df = pd.read_csv('sequences/sequence_2018_05_03-16.54.37.csv')
 seq_names = ['attr_1', 'attr_2', 'attr_3','attr_4' ]
 
 sequences = []
@@ -42,12 +43,12 @@ for name in seq_names:
 #     seq4 = np.concatenate((seq4, seq4))
 
 win_size = 20
-detector1 = ZScoreDetector(window_size = win_size, threshold=4.5)
-detector2 = ZScoreDetector(window_size = win_size, threshold=4.5)
-detector3 = ZScoreDetector(window_size = win_size, threshold=5.5)
+detector1 = ZScoreDetector(window_size = 20, threshold=3.5)
+detector2 = ZScoreDetector(window_size = 25, threshold=3.5)
+detector3 = ZScoreDetector(window_size = win_size, threshold=3.5)
 detector4 = ZScoreDetector(window_size = win_size, threshold=4)
 
-# detector1 = AdwinDetector()
+#detector1 = AdwinDetector()
 # detector2 = AdwinDetector()
 # detector3 = AdwinDetector()
 # detector4 = AdwinDetector()
@@ -67,8 +68,13 @@ import time
 start_time = time.time()
 
 simulator.run(plot=True, detect_rules=True)
-print_detected_change_points(simulator.get_detected_changes())
+#print_detected_change_points(simulator.get_detected_changes())
 print_rules(simulator.get_rules_sets(), 0)
+
+# for x in simulator.lhs_sets:
+#     for y in x:
+#         print(y)
+
 #print_combined_rules(simulator.get_combined_rules(), 0)
 
 end_time = time.time()

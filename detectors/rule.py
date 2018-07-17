@@ -7,11 +7,13 @@ class Rule(object):
         self.number_of_occurrences = 0
         self.last_occurrence = -1
         self.occurrences = []
+        self.support = 0
         self.generalized = False
 
     def __repr__(self):
         generalized = " Generalized" if self.generalized else ""
         return(str(self.lhs) + " ==> " + str(self.rhs) + "\n\t| nr_of_occurences:" + str(self.number_of_occurrences) +
+               " | support:" + str(self.support) +  " | confidence:" + str(self.number_of_occurrences/self.support) +
                " | rule_score:" + str(self.get_rule_score()) + " | last_occurence:" + str(self.last_occurrence) + " | occurences:" + str(self.occurrences) + generalized)
         #  + "nr:" + str(self.number_of_occurrences) + " lastOcc:" + str(self.last_occurrence)
 
