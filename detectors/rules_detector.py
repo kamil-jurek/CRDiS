@@ -7,7 +7,7 @@ from rule import Rule
 from online_simulator import OnlineSimulator
 
 class RulesDetector(object):
-    def __init__(self, target_seq_index, window_size=0, round_to=100, type="closed"):
+    def __init__(self, target_seq_index, window_size=0, round_to=100, type="all"):
         self.target_seq_index = target_seq_index
         self.round_to = round_to
         self.window_size = window_size
@@ -23,10 +23,12 @@ class RulesDetector(object):
 
             prev_prev_change_point_target = self.simulator.detected_change_points[self.target_seq_index][-3] if len(self.simulator.detected_change_points[self.target_seq_index]) > 2 else None
             prev_change_point_target = self.simulator.detected_change_points[self.target_seq_index][-2]
+
             if self.window_size > 0:
                 window_begin = round_to(prev_change_point_target.at_, self.round_to) - self.window_size if prev_prev_change_point_target != None else 0
             else:
                 window_begin = round_to(prev_prev_change_point_target.at_, self.round_to) if prev_prev_change_point_target != None else 0
+
             window_end = round_to(prev_change_point_target.at_, self.round_to)
 
             if self.type == "closed":
@@ -116,7 +118,7 @@ class RulesDetector(object):
             self.simulator.combined_rules.add(tuple(combined_rule))
 
     def generate_all_rules(self, window_begin, window_end, current_index):
-        generated_rules = [[] for i in range(len(self.simulator.detected_change_points))]
+        generated_rules = [[] for i in range(len(self.simulator.sequences))]
         
         for seq_index, change_point_list in enumerate(self.simulator.detected_change_points):
             # if seq_index == self.target_seq_index:
@@ -124,7 +126,8 @@ class RulesDetector(object):
 
             generated_lhss = []
             generated_rhss = []
-            points_before_window, points_in_window, points_after_window = self.get_change_points_in_window(seq_index, window_begin, window_end)
+            points_before_window, points_in_window, points_after_window = \
+                self.get_change_points_in_window(seq_index, window_begin, window_end)
 
             # no change points in window
             if not points_in_window:
@@ -236,17 +239,18 @@ class RulesDetector(object):
         combined_rule = []
         #[self.simulator.combined_rules.add((x,y,z)) if x.rhs == y.rhs and x.rhs == z.rhs else None for x in generated_rules[0] for y in generated_rules[1] for z in generated_rules[2]]
         
-        # for seq_rules in generated_rules:
-        #     if seq_rules:
-        #         combined_rule.append(seq_rules[-1])
-        #         print(seq_rules[-1])
-        #         for gr in seq_rules:
-        #             print(gr)
-        #         print("==============================================")
-        #
-        # if len(combined_rule) > 0:
-        #     print("Adding to combined rules")
-        #     self.simulator.combined_rules.add(tuple(combined_rule))
+        for seq_rules in generated_rules:
+            #print("===", seq_rules)
+            if seq_rules:
+                combined_rule.append(seq_rules[-1])
+                #print("seq_rule:", seq_rules[-1])
+                # for gr in seq_rules:
+                #     print(gr)
+                #print("==============================================")
+
+        if len(combined_rule) > 0:
+            #print("Adding to combined rules")
+            self.simulator.combined_rules.add(tuple(combined_rule))
 
     def generalize_rule(self, seq_index, new_rule):
         for rule in self.simulator.rules_sets[seq_index]:
@@ -293,8 +297,8 @@ class RulesDetector(object):
     def get_support_of(self, lhs, seq_index):
         for r in self.simulator.lhs_sets[seq_index]:
             if r == Rule(lhs, []):
-               print("get_support_of: ", lhs, " support:", r.number_of_occurrences)
-               return r.number_of_occurrences
+                #print("get_support_of: ", lhs, " support:", r.number_of_occurrences)
+                return r.number_of_occurrences
 
 def round_to(x, _to):
     return int(round(x / _to)) * _to

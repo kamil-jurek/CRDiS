@@ -9,11 +9,12 @@ class Rule(object):
         self.occurrences = []
         self.support = 0
         self.generalized = False
+        self.RHS_factor = 1.5
 
     def __repr__(self):
         generalized = " Generalized" if self.generalized else ""
         return(str(self.lhs) + " ==> " + str(self.rhs) + "\n\t| nr_of_occurences:" + str(self.number_of_occurrences) +
-               " | support:" + str(self.support) +  " | confidence:" + str(self.number_of_occurrences/self.support) +
+               " | support:" + str(self.support) +  " | confidence:" + str(self.get_confidence()) +
                " | rule_score:" + str(self.get_rule_score()) + " | last_occurence:" + str(self.last_occurrence) + " | occurences:" + str(self.occurrences) + generalized)
         #  + "nr:" + str(self.number_of_occurrences) + " lastOcc:" + str(self.last_occurrence)
 
@@ -35,11 +36,14 @@ class Rule(object):
     def set_last_occurence(self, last):
         self.last_occurrence = last
 
+    def get_confidence(self):
+        return self.number_of_occurrences/self.support
+
     def get_rule_score(self):
         if self.lhs and self.rhs:
             lhs_score = np.sum([lhs.len for lhs in self.lhs])
             rhs_score = self.rhs.len
 
-            return self.number_of_occurrences * (lhs_score + rhs_score)
+            return self.number_of_occurrences * self.get_confidence() * (lhs_score + rhs_score * self.RHS_factor)
         else:
             return 0
