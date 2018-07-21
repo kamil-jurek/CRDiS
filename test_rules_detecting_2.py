@@ -25,7 +25,7 @@ def round_to_hundreds(x):
 #df = pd.read_csv('sequences/sequence_2018_04_30-14.42.37.csv')
 #df = pd.read_csv('sequences/sequence_2018_05_03-16.54.37.csv')
 df = pd.read_csv('sequences/sequence_2018_07_14-18.24.58.csv')
-df = pd.read_csv('sequences/sequence_2018_05_03-16.54.37.csv')
+#df = pd.read_csv('sequences/sequence_2018_05_03-16.54.37.csv')
 seq_names = ['attr_1', 'attr_2', 'attr_3','attr_4' ]
 
 sequences = []

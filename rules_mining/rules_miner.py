@@ -18,7 +18,7 @@ class RulesMiner(object):
         self.max_window_size = max_window_size
         self.frequent_seqs = []
         self.rules = []
-        self.gcd = 10
+        self.gcd = 100
 
         self.x = [(i, 0) for i in range(len(self.sequences))]
 
@@ -57,35 +57,50 @@ class RulesMiner(object):
         return self.rules
 
     def print_rules(self):
-        for rule in self.rules:
+        for rule in sorted(self.rules, key=lambda r: r[2],reverse=True):
             lhs = rule[0]
             rhs = rule[1]
 
-            counter = 1
-            lhs_short = ""
-            for i in range(1, len(lhs)):
-                if(i == 0):
-                    lhs_short += str(gcd) + " * " + str(lhs[i] + "; ")
+            is_rhs_target = True
+            for elem in rhs:
+                if elem.split(":")[0] != "attr_4":
+                    is_rhs_target = False
+                    break
+            for elem in lhs:
+                if elem.split(":")[0] == "attr_4":
+                    is_rhs_target = False
+                    break
 
-                elif lhs[i] == lhs[i-1]:
-                    counter += 1
-                else:
-                    lhs_short += str(counter*self.gcd) + " * " + str(lhs[i-1]) + "; "
-            lhs_short += str(counter*self.gcd) + " * " + str(lhs[-1]) +  " ===>"
+            if is_rhs_target:
 
-            counter = 1
-            rhs_short = ""
-            for i in range(1, len(rhs)):
-                if(i == 0):
-                    rhs_short += str(gcd) + " * " + str(rhs[i] + "; ")
+                counter = 1
+                lhs_short = ""
+                for i in range(1, len(lhs)):
+                    if(i == 0):
+                        lhs_short +=  str(lhs[i] + "{" + str(gcd) + "} ")
 
-                elif rhs[i] == rhs[i-1]:
-                    counter += 1
-                else:
-                    rhs_short += str(counter*self.gcd) + " * " + str(rhs[i-1]) + "; "
-            rhs_short += str(counter*self.gcd) + " * " + str(rhs[-1])
+                    elif lhs[i] == lhs[i-1]:
+                        counter += 1
+                    else:
+                        lhs_short += str(lhs[i-1]) + "{" + str(counter*self.gcd) + "} "
+                        counter = 1
 
-            #print(lhs_short, rhs_short)
-            print(rule[0], "==>", rule[1], "\tSup:", rule[2])
-            #print(rule)
-            #print("--------------------")
+                lhs_short += str(lhs[-1]) + "{" + str(counter*self.gcd) + "}"
+
+                counter = 1
+                rhs_short = ""
+                for i in range(1, len(rhs)):
+                    if(i == 0):
+                        rhs_short += str(rhs[i] + "{" + str(gcd)+ "} ")
+
+                    elif rhs[i] == rhs[i-1]:
+                        counter += 1
+                    else:
+                        rhs_short += str(rhs[i-1]) + "{" + str(counter*self.gcd) +"} "
+
+                rhs_short += str(rhs[-1]) + "{" +str(counter*self.gcd)+ "} "
+
+                print(lhs_short, "==>", rhs_short, "\tSupp:", rule[2])
+                print(rule[0], "==>", rule[1], "\tSup:", rule[2])
+                #print(rule)
+                print("-----------------------------------------------------")

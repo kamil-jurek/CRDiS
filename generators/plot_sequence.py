@@ -66,14 +66,16 @@ else:
         N = 1
         ind = np.arange(N)    # the x locations for the groups
 
+        print("Plotting ", column)
         for i in range(0, len(seq)):
+            print("index:", i) if i % 1000 == 0 else None
             if not seq[i] in colors:
                 colors[seq[i]] = np.random.rand(1,3)
                 p = axarr[j].barh(ind, 1, left=i, color=colors[seq[i]])
                 pLegend.append(p)
             else:
                 axarr[j].barh(ind, 1, left=i, color=colors[seq[i]])
-        print("Plotting ", column)
+
 
         axarr[j].set_xlabel('State index')
         axarr[j].set_ylabel(str(column))

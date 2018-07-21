@@ -12,6 +12,7 @@ class AdwinDetector(ChangeDetector):
         self.is_change_detected = False
         self.drift_status = False
         self.subseq = []
+        self.percent = 0
 
     def update(self, new_value):
         super(AdwinDetector, self).update(new_value)
@@ -24,6 +25,7 @@ class AdwinDetector(ChangeDetector):
             self.is_change_detected = True
             self.previous_value = max(set(self.subseq), key=self.subseq.count)  # mode(self.subseq)
             self.current_value = max(set(self.subseq[-1:]), key=self.subseq[-1:].count)  # mode(self.subseq[-1:])
+            self.percent = (self.subseq.count(self.previous_value) / len(self.subseq)) * 100
             self.adwin = ADWIN(self.DELTA)
             self.subseq = []
 

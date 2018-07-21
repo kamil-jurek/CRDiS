@@ -23,6 +23,7 @@ class OnlineSimulator(object):
         self.round_to = 100
         self.predictor = SequencePredictor(self)
         self.lhs_sets = [set() for i in range(len(self.sequences))]
+        self.discretized_sequences = []
 
         if rules_detector != None:
             self.rules_detector.set_online_simulator(self)
@@ -100,7 +101,8 @@ class OnlineSimulator(object):
             detected_change_points = self.detected_change_points[i]
             sequence_name = 'Sequence ' + self.sequences_names[i]
 
-            plotcount = 1 + len(parameters_history)
+            #plotcount = 1 + len(parameters_history)
+            plotcount = 1 + len(self.sequences)
             fig, axes = plt.subplots(nrows=plotcount, ncols=1, sharex=True,
                                      figsize=(12, plotcount*3))
 
@@ -114,7 +116,7 @@ class OnlineSimulator(object):
             ax.plot(sequence, 'b-', alpha=0.25)
 
             # Print predicted sequence
-            if i == self.rules_detector.target_seq_index:
+            if self.rules_detector and i == self.rules_detector.target_seq_index:
                 ax.plot(self.predictor.predicted, 'r', linewidth=3.0)
 
 
@@ -134,12 +136,23 @@ class OnlineSimulator(object):
                 ax.axvline(change_point.at_, color='r', linestyle='--')
 
             # Plot each parameter
-            for ii, (res_name, res_values) in enumerate(parameters_history.items()):
-                ax = axes[ii+1]
-                ax.plot(res_values, '-', alpha=0.7)
-                ax.set_title("Parameter #{}: {}".format(ii+1, res_name))
+            # for ii, (res_name, res_values) in enumerate(parameters_history.items()):
+            #     ax = axes[ii+1]
+            #     ax.plot(res_values, '-', alpha=0.7)
+            #     ax.set_title("Parameter #{}: {}".format(ii+1, res_name))
+            #
+            #     for change_point in detected_change_points:
+            #         ax.axvline(change_point.at_, color='r', linestyle='--')
+            for k in range(0, len(self.sequences)):
+                print("k:",k)
+                ax = axes[k + 1]
+                sequence1 = self.sequences[k]
+                ax.plot(sequence1, 'b.', markersize=3)
+                ax.plot(sequence1, 'b-', alpha=0.25)
+                # ax.plot(res_values, '-', alpha=0.7)
+                ax.set_title("Detector {}".format(self.sequences_names[k]))
 
-                for change_point in detected_change_points:
+                for change_point in self.detected_change_points[k]:
                     ax.axvline(change_point.at_, color='r', linestyle='--')
 
 def round_to(x, _to):

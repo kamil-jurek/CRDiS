@@ -16,6 +16,7 @@ class PageHinkleyDetector(ChangeDetector):
         self.n = 0
         self.subseq = []
         self.is_change_detected = False
+        self.percent = 0
 
     def update(self, new_value):
         super(PageHinkleyDetector, self).update(new_value)
@@ -36,4 +37,5 @@ class PageHinkleyDetector(ChangeDetector):
             self.is_change_detected = True
             self.previous_value = max(set(self.subseq), key=self.subseq.count)
             self.current_value = max(set(self.subseq[-1:]), key=self.subseq[-1:].count)
+            self.percent = (self.subseq.count(self.previous_value) / len(self.subseq)) * 100
             self.reset()

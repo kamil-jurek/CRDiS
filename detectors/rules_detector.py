@@ -33,8 +33,15 @@ class RulesDetector(object):
 
             if self.type == "closed":
                 self.generate_closed_rules(window_begin, window_end, current_index)
-            else:
+
+            elif self.type == "generate_discretized":
+                self.generate_discretized_sequences(window_begin, window_end, current_index)
+
+            elif self.type == "all":
                 self.generate_all_rules(window_begin, window_end, current_index)
+
+            else:
+                print("ERROR - incorrect rules_detector type")
 
     def generate_closed_rules(self, window_begin, window_end, current_index):
         combined_rule = []
@@ -50,7 +57,8 @@ class RulesDetector(object):
                 if round_to(window_end - window_begin, self.round_to):
                     lhs_elem = RuleComponent(round_to(window_end - window_begin, self.round_to),
                                            points_before_window[-1].curr_value if len(points_before_window) > 0 else -1,
-                                           self.simulator.sequences_names[seq_index])
+                                           self.simulator.sequences_names[seq_index],
+                                             0)
                     lhs.append(lhs_elem)
 
             else:
@@ -61,7 +69,8 @@ class RulesDetector(object):
                     if round_to(first_point.at_ - window_begin, self.round_to) > 0:
                         lhs_elem = RuleComponent(round_to(first_point.at_ - window_begin, self.round_to),
                                                first_point.prev_value,
-                                               first_point.attr_name)
+                                               first_point.attr_name,
+                                                 first_point.percent)
                         lhs.append(lhs_elem)
                         skip_first_point = True
 
@@ -70,7 +79,8 @@ class RulesDetector(object):
                     if round_to(point.prev_value_len, self.round_to) > 0:
                         lhs_elem = RuleComponent(round_to(point.prev_value_len, self.round_to),
                                                point.prev_value,
-                                               point.attr_name)
+                                               point.attr_name,
+                                            point.percent)
                         lhs.append(lhs_elem)
 
                 last_point = points_in_window[-1]
@@ -78,14 +88,16 @@ class RulesDetector(object):
                     # print("after window case")
                     lhs_elem = RuleComponent(round_to(window_end - last_point.at_, self.round_to),
                                            last_point.curr_value,
-                                           last_point.attr_name)
+                                           last_point.attr_name,
+                                             last_point.percent)
                     lhs.append(lhs_elem)
 
             rhs_elem = RuleComponent(
                 round_to(self.simulator.detected_change_points[self.target_seq_index][-1].prev_value_len,
                          self.round_to),
                 self.simulator.detected_change_points[self.target_seq_index][-1].prev_value,
-                self.simulator.detected_change_points[self.target_seq_index][-1].attr_name)
+                self.simulator.detected_change_points[self.target_seq_index][-1].attr_name,
+                self.simulator.detected_change_points[self.target_seq_index][-1].percent)
 
             if len(lhs) > 0:
                 rule = Rule(lhs, rhs_elem)
@@ -98,12 +110,14 @@ class RulesDetector(object):
                         r.set_last_occurence(current_index)
                         r.increment_occurrences()
                         r.occurrences.append(current_index)
+                        r.support = 1
                         combined_rule.append(r)
                         print("Rule already in set:", r)
 
                 if is_new_rule:
                     rule.set_last_occurence(current_index)
                     rule.increment_occurrences()
+                    rule.support = 1
                     # gen_rule = self.generalize_rule(seq_index, rule)
                     # if gen_rule != None:
                     #     gen_rule.set_last_occurence(current_index)
@@ -299,6 +313,63 @@ class RulesDetector(object):
             if r == Rule(lhs, []):
                 #print("get_support_of: ", lhs, " support:", r.number_of_occurrences)
                 return r.number_of_occurrences
+
+    def generate_discretized_sequences(self, window_begin, window_end, current_index):
+        for seq_index, change_point_list in enumerate(self.simulator.detected_change_points):
+            if seq_index == self.target_seq_index:
+                continue
+
+            lhs_x = []
+            points_before_window, points_in_window, points_after_window = self.get_change_points_in_window(seq_index, window_begin, window_end)
+
+            # no change points in window
+            if len(points_in_window) == 0:
+                if round_to(window_end - window_begin, self.round_to):
+                    x = round_to(window_end - window_begin, self.round_to)
+                    if x > 0:
+                        for lhs_len in range(0, x, self.round_to):
+                            lhs_x.append(str(self.simulator.sequences_names[seq_index]) + ":" + str(points_before_window[-1].curr_value if len(points_before_window) > 0 else -1))
+
+            else:
+                first_point = points_in_window[0]
+                skip_first_point = False
+                if first_point.at_ - first_point.prev_value_len < window_begin:
+                    # print("before window case")
+                    if round_to(first_point.at_ - window_begin, self.round_to) > 0:
+                        skip_first_point = True
+
+                        x = round_to(first_point.at_ - window_begin, self.round_to)
+                        if x > 0:
+                            for lhs_len in range(0, x, self.round_to):
+                                lhs_x.append(str(self.simulator.sequences_names[seq_index]) + ":" + str(first_point.prev_value))
+
+                for point in points_in_window[1:] if skip_first_point else points_in_window:
+                    # print("inside window case")
+                    if round_to(point.prev_value_len, self.round_to) > 0:
+                        x = round_to(point.prev_value_len, self.round_to)
+                        if x > 0:
+                            for lhs_len in range(0, x, self.round_to):
+                                lhs_x.append(str(self.simulator.sequences_names[seq_index]) + ":" + str(point.prev_value))
+
+                last_point = points_in_window[-1]
+                if last_point.at_ < window_end:
+                    # print("after window case")
+                    x = round_to(window_end - last_point.at_, self.round_to)
+                    if x > 0:
+                        for lhs_len in range(0, x, self.round_to):
+                            lhs_x.append(
+                                str(self.simulator.sequences_names[seq_index]) + ":" + str(last_point.curr_value))
+
+            if lhs_x:
+                x = round_to(self.simulator.detected_change_points[self.target_seq_index][-1].prev_value_len, self.round_to)
+                if x > 0:
+                    for lhs_len in range(0, x, self.round_to):
+                        lhs_x.append(
+                            str(self.simulator.detected_change_points[self.target_seq_index][-1].attr_name) + ":" +
+                            str(self.simulator.detected_change_points[self.target_seq_index][-1].prev_value))
+
+                print(lhs_x)
+                self.simulator.discretized_sequences.append(lhs_x)
 
 def round_to(x, _to):
     return int(round(x / _to)) * _to

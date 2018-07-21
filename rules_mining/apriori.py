@@ -2,13 +2,14 @@ import numpy as np
 from collections import defaultdict
 
 class Rule(object):
-    def __init__(self, lhs, rhs, conf):
+    def __init__(self, lhs, rhs, conf, supp):
         self.lhs = lhs
         self.rhs = rhs
         self.conf = conf
+        self.supp = supp
 
     def __repr__(self):
-        return(str(self.lhs) + " ==> " + str(self.rhs) + "\tconf:" + str(self.conf))
+        return(str(self.lhs) + " ==> " + str(self.rhs) + "\tconf:" + str(self.conf)+ "\tsupp:"+ str(self.supp))
 
 def createC1(data_set):
     candidate_seqs_1 = []
@@ -85,8 +86,8 @@ def generateRules(L, supportData, target, minConf=0.7):
                 rhs = freqSeq[j:]
                 conf = supportData[freqSeq] / supportData[rhs]  # calc confidence
                 print(conf)
-                if conf >= minConf and rhs == (target,):
-                    rule = Rule(lhs, rhs, conf)
+                if conf >= minConf: # and rhs == (target,):
+                    rule = Rule(lhs, rhs, conf, supportData[freqSeq])
                     attrName = getAttrName(lhs)
 
                     rulesDict[attrName].append(rule)
@@ -107,13 +108,19 @@ def getAttrName(lhs):
 #             ['a', 'b', 'c'],
 #             [2, 5],
 #             ['a', 'b', 'c']]
-# dataSet = [['attr_1:2', 'attr_1:2', 'attr_1:2', 'attr_1:3', 'attr_1:3', 'attr_1:3', 'attr_1:3', 'attr_1:3', 'target'],
-#            ['attr_2:4', 'attr_2:4', 'attr_2:4', 'attr_2:4', 'attr_2:4', 'attr_2:5', 'attr_2:5', 'attr_2:5', 'target'],
-#            ['attr_2:1', 'attr_2:4', 'attr_2:4', 'attr_2:4', 'attr_2:4', 'attr_2:5', 'attr_2:5', 'attr_2:5', 'target'],
-#            ['attr_3:1', 'attr_3:1', 'attr_3:1', 'attr_3:1', 'attr_3:1', 'attr_3:1', 'attr_3:1', 'attr_3:4', 'target'],
-#            ['attr_1:1', 'attr_1:2', 'attr_1:2', 'attr_1:3', 'attr_1:3', 'attr_1:3', 'attr_1:3', 'attr_1:3', 'target']]
-# L, suppData = apriori(dataSet, minSupport=0.1)
-# rules, rulesDict= generateRules(L,suppData, minConf=0.0)
+
+dataSet = [['attr_1:2', 'attr_1:2', 'attr_1:2', 'attr_1:3', 'attr_1:3', 'attr_1:3', 'attr_1:1', 'attr_1:1', 'target'],
+           ['attr_2:4', 'attr_2:4', 'attr_2:4', 'attr_2:4', 'attr_2:4', 'attr_2:5', 'attr_2:5', 'attr_2:1', 'target'],
+           #['attr_2:1', 'attr_2:4', 'attr_2:4', 'attr_2:4', 'attr_2:4', 'attr_2:5', 'attr_2:5', 'attr_2:5', 'target'],
+           ['attr_3:1', 'attr_3:1', 'attr_3:1', 'attr_3:1', 'attr_3:1', 'attr_3:1', 'attr_3:1', 'attr_3:4', 'target'],
+           #['attr_1:1', 'attr_1:2', 'attr_1:2', 'attr_1:3', 'attr_1:3', 'attr_1:3', 'attr_1:3', 'attr_1:3', 'target']
+           ]
+
+# # L, suppData = aprioriAlgo(dataSet, minSupport=0.1)
+# # rules, rulesDict= generateRules(L,suppData, minConf=0.0)
+# target = 'target'
+# L, suppData = aprioriAlgo(dataSet, minSupport=0.0)
+# rules, rulesDict = generateRules(L,suppData, target, minConf=0.0)
 #
 # # for r in rules:
 # #     print(r)
@@ -121,3 +128,6 @@ def getAttrName(lhs):
 # for k, r in rulesDict.items():
 #     r.sort(key=lambda t: len(t.lhs), reverse=True)
 #     print(k, r[0])
+#     print("------------------------------------")
+#     for ru in r:
+#         print(k, ru)

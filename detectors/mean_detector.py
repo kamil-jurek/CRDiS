@@ -12,6 +12,7 @@ class MeanDetector(ChangeDetector):
         self.previous_value = -1
         self.current_value = -1
         self.subseq = []
+        self.percent = 0
 
     def update(self, new_value):
         super(MeanDetector, self).update(new_value)
@@ -20,6 +21,8 @@ class MeanDetector(ChangeDetector):
         self.n += 1
         self.mean_ = self.total_val / self.n
         self.diff_ = np.absolute(self.mean_ - new_value)
+        #print(self.diff_)
+
 
     def reset(self):
         self.total_val = 0
@@ -28,12 +31,15 @@ class MeanDetector(ChangeDetector):
         self.diff_ = 0
         self.subseq = []
 
-    def check_stopping_rules(self, new_value):
+    def check_change(self, new_value):
         threshold_level = self.mean_ * self.threshold
         self.rules_triggered = False
-
+        print(self.diff_)
+        print("threshold_level:", threshold_level)
         if self.diff_ > threshold_level:
+            #print(self.diff_)
             self.rules_triggered = True
             self.previous_value = max(set(self.subseq), key=self.subseq.count)
             self.current_value = max(set(self.subseq[-1:]), key=self.subseq[-1:].count)
+            self.percent = (self.subseq.count(self.previous_value) / len(self.subseq)) * 100
             self.reset()

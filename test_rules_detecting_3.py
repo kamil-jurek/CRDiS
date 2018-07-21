@@ -18,6 +18,7 @@ from zscore_detector import ZScoreDetector
 #df = pd.read_csv('sequences/sequence_2018_04_30-14.42.37.csv')
 df = pd.read_csv('sequences/sequence_2018_05_03-16.54.37.csv')
 #df = pd.read_csv('sequences/sequence_2018_05_07-19.06.27.csv')
+df = pd.read_csv('sequences/sequence_2018_07_21-20.53.53.csv')
 seq_names = ['attr_1', 'attr_2', 'attr_3','attr_4' ]
 
 base_seqs =[]

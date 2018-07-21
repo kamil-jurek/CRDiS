@@ -62,7 +62,7 @@ k = len(grouped_config_list)
 f, axarr = plt.subplots(k)
 j = 0
 for x in range(nr_of_repetitions):
-    rand_len = random.randint(1, 3) * 100
+    rand_len = random.randint(1, 4) * 100
     for config_ind, config in enumerate(grouped_config_list):
         config_values = config['value']
         domain = ast.literal_eval(config_values[0]['domain'])
