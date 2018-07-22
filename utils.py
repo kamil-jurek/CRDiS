@@ -1,4 +1,5 @@
 import math
+import numpy as np
 
 def round_to(x, _round_to):
     return int(round(x / _round_to)) * _round_to
@@ -33,3 +34,23 @@ def print_detected_change_points(detected_changes):
         for point in attr_detected_change:
             print(point)
         print("---------------------------------------------------------------------------------------")
+
+
+def evaluate_change_detectors(simulator, actual_change_points):
+    for k in range(len(simulator.sequences)):
+        detected_change_points = np.array(simulator.get_detected_changes())[k]
+        detected_change_points = [x.at_ for x in detected_change_points]
+
+        print("====== ", simulator.sequences_names[k], " ===============================")
+        print("Actual change points:   ", list(actual_change_points))
+        print("Detected change points: ", detected_change_points)
+
+        delta = np.abs(actual_change_points - detected_change_points)
+
+        print("Difference: ", delta)
+        print("Errors sum: ", np.sum(delta))
+        print("Errors avg: ", np.sum(delta) / len(detected_change_points))
+
+        rmse = np.sqrt(((detected_change_points - actual_change_points) ** 2).mean())
+        print('Mean Squared Error: {}'.format(round(rmse, 5)))
+        print("==============================================================================")

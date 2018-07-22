@@ -368,7 +368,7 @@ class RulesDetector(object):
                             str(self.simulator.detected_change_points[self.target_seq_index][-1].attr_name) + ":" +
                             str(self.simulator.detected_change_points[self.target_seq_index][-1].prev_value))
 
-                print(lhs_x)
+                #print(lhs_x)
                 self.simulator.discretized_sequences.append(lhs_x)
 
 def round_to(x, _to):

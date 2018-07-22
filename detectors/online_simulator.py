@@ -10,7 +10,7 @@ from sequence_predictor import SequencePredictor
 from collections import defaultdict
 
 class OnlineSimulator(object):
-    def __init__(self, rules_detector, change_detectors, sequences, seqs_names):
+    def __init__(self, rules_detector, change_detectors, sequences, seqs_names, plot_change_detectors=False):
         self.sequences = sequences
         self.sequences_names = seqs_names
         self.change_detectors = change_detectors
@@ -24,6 +24,7 @@ class OnlineSimulator(object):
         self.predictor = SequencePredictor(self)
         self.lhs_sets = [set() for i in range(len(self.sequences))]
         self.discretized_sequences = []
+        self.plot_change_detectors = plot_change_detectors
 
         if rules_detector != None:
             self.rules_detector.set_online_simulator(self)
@@ -101,8 +102,7 @@ class OnlineSimulator(object):
             detected_change_points = self.detected_change_points[i]
             sequence_name = 'Sequence ' + self.sequences_names[i]
 
-            #plotcount = 1 + len(parameters_history)
-            plotcount = 1 + len(self.sequences)
+            plotcount = 1 + len(parameters_history)
             fig, axes = plt.subplots(nrows=plotcount, ncols=1, sharex=True,
                                      figsize=(12, plotcount*3))
 
@@ -119,16 +119,13 @@ class OnlineSimulator(object):
             if self.rules_detector and i == self.rules_detector.target_seq_index:
                 ax.plot(self.predictor.predicted, 'r', linewidth=3.0)
 
-
             ax.set_title(sequence_name)
-
-            ax.set_ylim(
-                np.nanmin(sequence)-1,
-                np.nanmax(sequence)+1)
+            ax.set_ylim(np.nanmin(sequence)-1,
+                        np.nanmax(sequence)+1)
             ax.set_xlim(0, len(sequence))
+
             xl = ax.get_xticks()
             ticks = xl
-
             ax.set_xticklabels(ticks)
 
             # Plot a horizontal line where the change_point is detected
@@ -136,21 +133,39 @@ class OnlineSimulator(object):
                 ax.axvline(change_point.at_, color='r', linestyle='--')
 
             # Plot each parameter
-            # for ii, (res_name, res_values) in enumerate(parameters_history.items()):
-            #     ax = axes[ii+1]
-            #     ax.plot(res_values, '-', alpha=0.7)
-            #     ax.set_title("Parameter #{}: {}".format(ii+1, res_name))
-            #
-            #     for change_point in detected_change_points:
-            #         ax.axvline(change_point.at_, color='r', linestyle='--')
+            for ii, (res_name, res_values) in enumerate(parameters_history.items()):
+                ax = axes[ii+1]
+                ax.plot(res_values, '-', alpha=0.7)
+                ax.set_title("Parameter #{}: {}".format(ii+1, res_name))
+
+                for change_point in detected_change_points:
+                    ax.axvline(change_point.at_, color='r', linestyle='--')
+
+        if self.plot_change_detectors:
+            plotcount = len(self.sequences)
+            fig, axes = plt.subplots(nrows=plotcount, ncols=1, sharex=True,
+                                     figsize=(12, plotcount * 3))
+
+            if plotcount > 1:
+                ax = axes[0]
+            elif plotcount == 1:
+                ax = axes
+
             for k in range(0, len(self.sequences)):
                 print("k:",k)
-                ax = axes[k + 1]
+                ax = axes[k]
                 sequence1 = self.sequences[k]
                 ax.plot(sequence1, 'b.', markersize=3)
                 ax.plot(sequence1, 'b-', alpha=0.25)
                 # ax.plot(res_values, '-', alpha=0.7)
                 ax.set_title("Detector {}".format(self.sequences_names[k]))
+
+                ax.set_ylim(np.nanmin(self.sequences[k]) - 1,
+                            np.nanmax(self.sequences[k]) + 1)
+                ax.set_xlim(0, len(self.sequences[k]))
+                xl = ax.get_xticks()
+                ticks = xl
+                ax.set_xticklabels(ticks)
 
                 for change_point in self.detected_change_points[k]:
                     ax.axvline(change_point.at_, color='r', linestyle='--')

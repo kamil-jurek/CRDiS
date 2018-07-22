@@ -73,7 +73,7 @@ signal = np.array(df['attr_1'])
 win_size = int(len(signal)*(5/250))
 print("win size:", win_size)
 # Create detector
-#detector = MeanDetector(threshold=0.85)
+#detector = GeometricMovingAverageDetector(threshold=0.85)
 detector = ZScoreDetector(window_size = win_size, threshold=2.5)
 #detector = StackZScoreDetector(signal, lag=55, threshold=1, influence=0.3)
 #detector = PageHinkleyDetector(delta=0.001, lambd=15, alpha=0.99)
