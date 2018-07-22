@@ -87,5 +87,5 @@ else:
         j += 1
 
     axarr[0].legend((pLegend), list(colors.keys()), bbox_to_anchor=(1, 1.0))
-    plt.savefig("../plots/plot_" + seqName.rsplit('/')[1][:-4] + '.png')
+    plt.savefig("../plots/plot_" + seqName + '.png')
     plt.show()

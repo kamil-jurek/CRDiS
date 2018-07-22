@@ -80,7 +80,7 @@ for s in simulator.discretized_sequences:
 
 # PREFIXSPAN
 max_window_size = 20
-min_sup = 1
+min_sup = 5
 gcd = 100
 
 rules_miner = RulesMiner(simulator.discretized_sequences, min_sup, max_window_size)
