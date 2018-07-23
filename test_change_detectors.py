@@ -16,6 +16,7 @@ from page_hinkley_detector import PageHinkleyDetector
 from adwin_detector import AdwinDetector
 from cusum_detector import CusumDetector
 from geometric_moving_average_detector import GeometricMovingAverageDetector
+from ddm_detector import DDMDetector
 from utils import *
 
 def round_to_hundreds(x):
@@ -36,27 +37,29 @@ detector1 = ZScoreDetector(window_size = 30, threshold=5.0)
 detector2 = PageHinkleyDetector(delta=0.001, lambd=20, alpha=0.99)
 detector3 = AdwinDetector(delta = 0.005)
 detector4 = CusumDetector(delta=0.0001, lambd=50)
+detector5 = DDMDetector(delta=0.0001, lambd=50)
 
 
 rules_detector = RulesDetector(target_seq_index=5, type="generate_discretized")
 
 simulator = OnlineSimulator(None,
-                            [detector1, detector2, detector3, detector4],
-                            [seq1, seq1, seq1, seq1],
+                            [detector1, detector2, detector3, detector4, detector5],
+                            [seq1, seq1, seq1, seq1, seq1],
                             ["ZScoreDetector(window_size = 30, threshold=5.0)",
                              "PageHinkleyDetector(delta=0.001, lambd=20, alpha=0.99)",
                              "AdwinDetector(delta = 0.005)",
-                             'CusumDetector(delta=0.0001, lambd=50)'
+                             'CusumDetector(delta=0.0001, lambd=50)',
+                             'DDMDetector(lambd=25)'
                             ],
                             plot_change_detectors=True)
 
 simulator.run(plot=True, detect_rules=False)
 
-print("-----------------------------------------------------------------------------------------------------------")
-detected_change_points = np.array(simulator.get_detected_changes())
-for cps in detected_change_points:
-    print(cps[1:])
-print("-----------------------------------------------------------------------------------------------------------")
+# print("-----------------------------------------------------------------------------------------------------------")
+# detected_change_points = np.array(simulator.get_detected_changes())
+# for cps in detected_change_points:
+#     print(cps[1:])
+# print("-----------------------------------------------------------------------------------------------------------")
 
 
 # L, suppData = aprioriAlgo(simulator.discretized_sequences, minSupport=0.0)

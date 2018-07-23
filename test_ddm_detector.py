@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
+import matplotlib.pyplot as plt
 import sys; sys.path.append('./detectors/'); sys.path.append('./others/')
 import pandas as pd
 import encoders as en
@@ -27,4 +28,5 @@ simulator = OnlineSimulator(None,
                             ['attr_1'])
 simulator.run(plot=True, detect_rules=False)
 
+plt.show()
 
