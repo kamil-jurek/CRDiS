@@ -34,8 +34,8 @@ class GeometricMovingAverageDetector(ChangeDetector):
     def check_change(self, new_value):
         threshold_level = self.mean_ * self.threshold
         self.is_change_detected = False
-        print("diff:", self.diff_)
-        print("threshold_level:", threshold_level)
+        #print("diff:", self.diff_)
+        #print("threshold_level:", threshold_level)
         if self.diff_ > threshold_level:
             #print(self.diff_)
             self.is_change_detected = True

@@ -1,13 +1,14 @@
 from sklearn.preprocessing import LabelEncoder
 from sklearn.preprocessing import OneHotEncoder
-#import category_encoders as ce
+import category_encoders as ce
 import numpy as np
 
 label_encoder = None
 
 def encode(data):
     #encoder = ce.BinaryEncoder( ) #obiecujacy
-    encoder = ce.HelmertEncoder( ) #obiecujacy
+    encoder = ce.HelmertEncoder() #obiecujacy
+
     #encoder = ce.OrdinalEncoder( ) #simple but working
 
     #encoder = ce.polynomial.PolynomialEncoder()
