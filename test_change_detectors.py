@@ -16,6 +16,7 @@ from page_hinkley_detector import PageHinkleyDetector
 from adwin_detector import AdwinDetector
 from cusum_detector import CusumDetector
 from geometric_moving_average_detector import GeometricMovingAverageDetector
+from ddm_detector import DDMDetector
 from utils import *
 
 import encoders as en
@@ -25,10 +26,10 @@ def round_to_hundreds(x):
 
 
 # Symbolic data
-df = pd.read_csv('sequences/sequence_2017_11_22-19.35.27.csv')
-seq1 = np.array(df['day_of_week'])
-seq1 = en.encode(seq1)
-seq1 = [np.abs(np.mean(e)) for e in seq1]
+# df = pd.read_csv('sequences/sequence_2017_11_22-19.35.27.csv')
+# seq1 = np.array(df['day_of_week'])
+# seq1 = en.encode(seq1)
+# seq1 = [np.abs(np.mean(e)) for e in seq1]
 
 
 #Numerical data
@@ -36,39 +37,42 @@ seq1 = [np.abs(np.mean(e)) for e in seq1]
 # df = pd.read_csv('sequences/sequence_2018_05_03-16.54.37.csv')
 # df = pd.read_csv('sequences/sequence_2018_07_21-20.53.53.csv')
 
-# df = pd.read_csv('sequences/sequence_2018_07_21-22.24.18.csv')
-# seq1 = np.array(df['attr_1'])
-# seq2 = np.array(df['attr_2'])
-# seq3 = np.array(df['attr_3'])
-# seq4 = np.array(df['attr_4'])
+df = pd.read_csv('sequences/sequence_2018_07_21-22.24.18.csv')
+seq1 = np.array(df['attr_1'])
+seq2 = np.array(df['attr_2'])
+seq3 = np.array(df['attr_3'])
+seq4 = np.array(df['attr_4'])
 
 win_size = 20
 detector1 = ZScoreDetector(window_size = 30, threshold=5.0)
 detector2 = PageHinkleyDetector(delta=0.001, lambd=20, alpha=0.99)
 detector3 = AdwinDetector(delta = 0.005)
 detector4 = CusumDetector(delta=0.0001, lambd=50)
-detector5 = GeometricMovingAverageDetector(threshold=0.65)
+detector5 = DDMDetector(delta=0.0001, lambd=50)
+detector6 = GeometricMovingAverageDetector(threshold=0.65)
+
 
 rules_detector = RulesDetector(target_seq_index=5, type="generate_discretized")
 
 simulator = OnlineSimulator(None,
-                            [detector1, detector2, detector3, detector4, detector5],
-                            [seq1, seq1, seq1, seq1, seq1],
+                            [detector1, detector2, detector3, detector4, detector5, detector6],
+                            [seq1, seq1, seq1, seq1, seq1, seq1],
                             ["ZScoreDetector(window_size = 30, threshold=5.0)",
                              "PageHinkleyDetector(delta=0.001, lambd=20, alpha=0.99)",
                              "AdwinDetector(delta = 0.005)",
                              'CusumDetector(delta=0.0001, lambd=50)',
-                            'GeometricMovingAverageDetector(threshold=0.65)'
+                             'DDMDetector(lambd=25)',
+                             'GeometricMovingAverageDetector(threshold=0.65)'
                             ],
                             plot_change_detectors=True)
 
 simulator.run(plot=True, detect_rules=False)
 
-print("-----------------------------------------------------------------------------------------------------------")
-detected_change_points = np.array(simulator.get_detected_changes())
-for cps in detected_change_points:
-    print(cps[1:])
-print("-----------------------------------------------------------------------------------------------------------")
+# print("-----------------------------------------------------------------------------------------------------------")
+# detected_change_points = np.array(simulator.get_detected_changes())
+# for cps in detected_change_points:
+#     print(cps[1:])
+# print("-----------------------------------------------------------------------------------------------------------")
 
 
 # L, suppData = aprioriAlgo(simulator.discretized_sequences, minSupport=0.0)
