@@ -10,7 +10,7 @@ from sequence_predictor import SequencePredictor
 from collections import defaultdict
 
 class OnlineSimulator(object):
-    def __init__(self, rules_detector, change_detectors, sequences, seqs_names, plot_change_detectors=False):
+    def __init__(self, rules_detector, change_detectors, sequences, seqs_names, predict_ratio=0.9, plot_change_detectors=False):
         self.sequences = sequences
         self.sequences_names = seqs_names
         self.change_detectors = change_detectors
@@ -25,6 +25,7 @@ class OnlineSimulator(object):
         self.lhs_sets = [set() for i in range(len(self.sequences))]
         self.discretized_sequences = []
         self.plot_change_detectors = plot_change_detectors
+        self.predict_ratio = predict_ratio
 
         if rules_detector != None:
             self.rules_detector.set_online_simulator(self)
@@ -74,7 +75,7 @@ class OnlineSimulator(object):
                     self.rules_detector.search_rules(j, i)
 
                 if(predict_seq and
-                   i >= self.sequence_size*0.9 and
+                   i >= self.sequence_size*self.predict_ratio and
                    i % self.rules_detector.round_to == 0):
                     self.predictor.predict_sequence(j, i)
 

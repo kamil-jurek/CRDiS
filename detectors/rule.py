@@ -42,7 +42,10 @@ class Rule(object):
         self.last_occurrence = last
 
     def get_confidence(self):
-        return self.number_of_occurrences/self.support
+        if self.lhs and self.rhs:
+            return self.number_of_occurrences/self.support
+        else:
+            return 0
 
     def get_rule_score(self):
         if self.lhs and self.rhs:

@@ -7,11 +7,12 @@ from rule import Rule
 from online_simulator import OnlineSimulator
 
 class RulesDetector(object):
-    def __init__(self, target_seq_index, window_size=0, round_to=100, type="all"):
+    def __init__(self, target_seq_index, window_size=0, round_to=100, type="all", combined=False):
         self.target_seq_index = target_seq_index
         self.round_to = round_to
         self.window_size = window_size
         self.type = type
+        self.combined = combined
 
     def set_online_simulator(self, sim):
         self.simulator = sim
@@ -248,23 +249,22 @@ class RulesDetector(object):
                             generated_rules[seq_index].append(rule)
 
 
+        if self.combined:
+            combined_rule = []
+            #[self.simulator.combined_rules.add((x,y,z)) if x.rhs == y.rhs and x.rhs == z.rhs else None for x in generated_rules[0] for y in generated_rules[1] for z in generated_rules[2]]
 
-        #print("==============================================")
-        combined_rule = []
-        #[self.simulator.combined_rules.add((x,y,z)) if x.rhs == y.rhs and x.rhs == z.rhs else None for x in generated_rules[0] for y in generated_rules[1] for z in generated_rules[2]]
-        
-        for seq_rules in generated_rules:
-            #print("===", seq_rules)
-            if seq_rules:
-                combined_rule.append(seq_rules[-1])
-                #print("seq_rule:", seq_rules[-1])
-                # for gr in seq_rules:
-                #     print(gr)
-                #print("==============================================")
+            for seq_rules in generated_rules:
+                #print("===", seq_rules)
+                if seq_rules:
+                    combined_rule.append(seq_rules[-1])
+                    #print("seq_rule:", seq_rules[-1])
+                    # for gr in seq_rules:
+                    #     print(gr)
+                    #print("==============================================")
 
-        if len(combined_rule) > 0:
-            #print("Adding to combined rules")
-            self.simulator.combined_rules.add(tuple(combined_rule))
+            if len(combined_rule) > 0:
+                #print("Adding to combined rules")
+                self.simulator.combined_rules.add(tuple(combined_rule))
 
     def generalize_rule(self, seq_index, new_rule):
         for rule in self.simulator.rules_sets[seq_index]:
