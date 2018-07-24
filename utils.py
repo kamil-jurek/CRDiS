@@ -1,5 +1,6 @@
 import math
 import numpy as np
+import pandas as pd
 
 def round_to(x, _round_to):
     return int(round(x / _round_to)) * _round_to
@@ -54,3 +55,24 @@ def evaluate_change_detectors(simulator, actual_change_points):
         rmse = np.sqrt(((detected_change_points - actual_change_points) ** 2).mean())
         print('Mean Squared Error: {}'.format(round(rmse, 5)))
         print("==============================================================================")
+
+def generate_classical_dataset(detected_changes, discretization_step=100, save_csv=False):
+    classical = [[] for i in range(len(detected_changes))]
+    for j, seq_changes in enumerate(detected_changes):
+        for point in seq_changes:
+            for i in range(round_to(point.at_ - point.prev_value_len, discretization_step), round_to(point.at_ - discretization_step, discretization_step), discretization_step):
+                classical[j].append(
+                    str(str(point.attr_name) + ":" + str(point.prev_value) + "->" + str(point.prev_value)))
+                print(point.attr_name, ":", point.prev_value, "->", point.prev_value)
+            classical[j].append(str(str(point.attr_name) + ":" + str(point.prev_value) + "->" + str(point.curr_value)))
+            print(point.attr_name, ":", point.prev_value, "->", point.curr_value)
+
+    df = pd.DataFrame()
+    df['attr_1'] = classical[0][1:-2]
+    df['attr_2'] = classical[1][1:-2]
+    df['attr_3'] = classical[2][1:-2]
+    df['attr_4'] = classical[3][1:-2]
+
+    if save_csv:
+        df.to_csv('calssical_dataset.csv', sep=',')
+    print(df)

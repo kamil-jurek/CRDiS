@@ -51,12 +51,14 @@ start_time = time.time()
 
 simulator.run(plot=True, detect_rules=True, predict_seq=False)
 
-#print_detected_change_points(simulator.get_detected_changes())
-print_rules(simulator.get_rules_sets(), 0)
-print("------------------------------------------------------------------------------------------")
-print_combined_rules(simulator.get_combined_rules(), 0)
+print_detected_change_points(simulator.get_detected_changes())
 
-end_time = time.time()
-print(end_time - start_time)
+generate_classical_dataset(simulator.get_detected_changes())
+#print_rules(simulator.get_rules_sets(), 0)
+# print("------------------------------------------------------------------------------------------")
+# print_combined_rules(simulator.get_combined_rules(), 0)
+#
+# end_time = time.time()
+# print(end_time - start_time)
 
 plt.show()
