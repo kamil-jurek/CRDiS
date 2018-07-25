@@ -1,3 +1,24 @@
+# The MIT License
+# Copyright (c) 2018 Kamil Jurek
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+# THE SOFTWARE.
+
 import numpy as np
 from detector import ChangeDetector
 
@@ -21,8 +42,6 @@ class GeometricMovingAverageDetector(ChangeDetector):
         self.n += 1
         self.mean_ = self.total_val / self.n
         self.diff_ = np.absolute(self.mean_ - new_value)
-        #print(self.diff_)
-
 
     def reset(self):
         self.total_val = 0
@@ -34,10 +53,8 @@ class GeometricMovingAverageDetector(ChangeDetector):
     def check_change(self, new_value):
         threshold_level = self.mean_ * self.threshold
         self.is_change_detected = False
-        #print("diff:", self.diff_)
-        #print("threshold_level:", threshold_level)
+
         if self.diff_ > threshold_level:
-            #print(self.diff_)
             self.is_change_detected = True
             self.previous_value = max(set(self.subseq), key=self.subseq.count)
             self.current_value = max(set(self.subseq[-1:]), key=self.subseq[-1:].count)

@@ -1,3 +1,24 @@
+# The MIT License
+# Copyright (c) 2018 Kamil Jurek
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+# THE SOFTWARE.
+
 import numpy as np
 
 from detectors import detector
@@ -5,6 +26,7 @@ from change_point import ChangePoint
 from rule_component import RuleComponent
 from rule import Rule
 from online_simulator import OnlineSimulator
+from utils import *
 
 class RulesDetector(object):
     def __init__(self, target_seq_index, window_size=0, round_to=100, type="all", combined=False):
@@ -22,13 +44,17 @@ class RulesDetector(object):
             self.simulator.change_detectors[seq_index].is_change_detected is True and
             len(self.simulator.detected_change_points[seq_index]) > 1):
 
-            prev_prev_change_point_target = self.simulator.detected_change_points[self.target_seq_index][-3] if len(self.simulator.detected_change_points[self.target_seq_index]) > 2 else None
+            prev_prev_change_point_target = \
+                self.simulator.detected_change_points[self.target_seq_index][-3] if \
+                    len(self.simulator.detected_change_points[self.target_seq_index]) > 2 else None
             prev_change_point_target = self.simulator.detected_change_points[self.target_seq_index][-2]
 
             if self.window_size > 0:
-                window_begin = round_to(prev_change_point_target.at_, self.round_to) - self.window_size if prev_prev_change_point_target != None else 0
+                window_begin = round_to(prev_change_point_target.at_, self.round_to) - \
+                               self.window_size if prev_prev_change_point_target != None else 0
             else:
-                window_begin = round_to(prev_prev_change_point_target.at_, self.round_to) if prev_prev_change_point_target != None else 0
+                window_begin = round_to(prev_prev_change_point_target.at_, self.round_to) \
+                    if prev_prev_change_point_target != None else 0
 
             window_end = round_to(prev_change_point_target.at_, self.round_to)
 
@@ -51,7 +77,8 @@ class RulesDetector(object):
                 continue
 
             lhs = []
-            points_before_window, points_in_window, points_after_window = self.get_change_points_in_window(seq_index, window_begin, window_end)
+            points_before_window, points_in_window, points_after_window = \
+                self.get_change_points_in_window(seq_index, window_begin, window_end)
 
             # no change points in window
             if len(points_in_window) == 0:
@@ -154,7 +181,6 @@ class RulesDetector(object):
                                                  self.simulator.sequences_names[seq_index],
                                                  points_before_window[-1].percent if len(points_before_window) > 0 else
                                                  (list(self.simulator.sequences[seq_index][window_begin:window_end]).count(self.simulator.change_detectors[seq_index].current_value) / lhs_elem_len) *100)
-                        #print("no changes in window:", list(self.simulator.sequences[seq_index][window_begin:window_end]).count(self.simulator.change_detectors[seq_index].current_value) / lhs_elem_len)
                         generated_lhss.append([lhs_elem])
             else:
                 last_point = points_in_window[-1]
@@ -320,7 +346,8 @@ class RulesDetector(object):
                 continue
 
             lhs_x = []
-            points_before_window, points_in_window, points_after_window = self.get_change_points_in_window(seq_index, window_begin, window_end)
+            points_before_window, points_in_window, points_after_window = \
+                self.get_change_points_in_window(seq_index, window_begin, window_end)
 
             # no change points in window
             if len(points_in_window) == 0:
@@ -328,7 +355,8 @@ class RulesDetector(object):
                     x = round_to(window_end - window_begin, self.round_to)
                     if x > 0:
                         for lhs_len in range(0, x, self.round_to):
-                            lhs_x.append(str(self.simulator.sequences_names[seq_index]) + ":" + str(points_before_window[-1].curr_value if len(points_before_window) > 0 else -1))
+                            lhs_x.append(str(self.simulator.sequences_names[seq_index]) + ":" +
+                                         str(points_before_window[-1].curr_value if len(points_before_window) > 0 else -1))
 
             else:
                 first_point = points_in_window[0]
@@ -341,7 +369,8 @@ class RulesDetector(object):
                         x = round_to(first_point.at_ - window_begin, self.round_to)
                         if x > 0:
                             for lhs_len in range(0, x, self.round_to):
-                                lhs_x.append(str(self.simulator.sequences_names[seq_index]) + ":" + str(first_point.prev_value))
+                                lhs_x.append(str(self.simulator.sequences_names[seq_index]) + ":" +
+                                             str(first_point.prev_value))
 
                 for point in points_in_window[1:] if skip_first_point else points_in_window:
                     # print("inside window case")
@@ -349,7 +378,8 @@ class RulesDetector(object):
                         x = round_to(point.prev_value_len, self.round_to)
                         if x > 0:
                             for lhs_len in range(0, x, self.round_to):
-                                lhs_x.append(str(self.simulator.sequences_names[seq_index]) + ":" + str(point.prev_value))
+                                lhs_x.append(str(self.simulator.sequences_names[seq_index]) + ":" +
+                                             str(point.prev_value))
 
                 last_point = points_in_window[-1]
                 if last_point.at_ < window_end:
@@ -370,6 +400,3 @@ class RulesDetector(object):
 
                 #print(lhs_x)
                 self.simulator.discretized_sequences.append(lhs_x)
-
-def round_to(x, _to):
-    return int(round(x / _to)) * _to

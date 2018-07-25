@@ -1,3 +1,24 @@
+# The MIT License
+# Copyright (c) 2018 Kamil Jurek
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+# THE SOFTWARE.
+
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -8,9 +29,12 @@ from rule import Rule
 from prediction import Prediction
 from sequence_predictor import SequencePredictor
 from collections import defaultdict
+from utils import *
 
 class OnlineSimulator(object):
-    def __init__(self, rules_detector, change_detectors, sequences, seqs_names, predict_ratio=0.9, plot_change_detectors=False):
+    def __init__(self, rules_detector, change_detectors, sequences, seqs_names,
+                 predict_ratio=0.9, plot_change_detectors=False):
+
         self.sequences = sequences
         self.sequences_names = seqs_names
         self.change_detectors = change_detectors
@@ -56,19 +80,34 @@ class OnlineSimulator(object):
                     prev_at = self.detected_change_points[j][-1].at_ if len(self.detected_change_points[j]) > 0 else 0
                     prev_value_len = i - prev_at
 
-                    change_point = ChangePoint(detector.previous_value, detector.current_value, i, prev_value_len, self.sequences_names[j], detector.percent)
+                    change_point = ChangePoint(detector.previous_value,
+                                               detector.current_value,
+                                               i,
+                                               prev_value_len,
+                                               self.sequences_names[j],
+                                               detector.percent)
                     self.detected_change_points[j].append(change_point)
 
                 if i == self.sequence_size - 1:
                     detector.is_change_detected = True
                     prev_at = self.detected_change_points[j][-1].at_ if len(self.detected_change_points[j]) > 0 else 0
                     prev_value_len = i - prev_at
-                    change_point = ChangePoint(detector.current_value, -1, i, prev_value_len, self.sequences_names[j], detector.percent)
+                    change_point = ChangePoint(detector.current_value,
+                                               -1,
+                                               i,
+                                               prev_value_len,
+                                               self.sequences_names[j],
+                                               detector.percent)
                     self.detected_change_points[j].append(change_point)
 
                 if i == 0:
                     detector.is_change_detected = True
-                    change_point = ChangePoint(-1, value, i, 0, self.sequences_names[j], detector.percent)
+                    change_point = ChangePoint(-1,
+                                               value,
+                                               i,
+                                               0,
+                                               self.sequences_names[j],
+                                               detector.percent)
                     self.detected_change_points[j].append(change_point)
 
                 if detect_rules:
@@ -170,6 +209,3 @@ class OnlineSimulator(object):
 
                 for change_point in self.detected_change_points[k]:
                     ax.axvline(change_point.at_, color='r', linestyle='--')
-
-def round_to(x, _to):
-    return int(round(x / _to)) * _to

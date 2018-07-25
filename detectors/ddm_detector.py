@@ -1,9 +1,29 @@
+# The MIT License
+# Copyright (c) 2018 Kamil Jurek
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+# THE SOFTWARE.
+
 import math
 import numpy as np
 from detector import ChangeDetector
 
 class DDMDetector(ChangeDetector):
-
     def __init__(self, lambd=5, delta=0.001):
         super( DDMDetector, self ).__init__()
         self.prob_of_false = 1
@@ -58,10 +78,8 @@ class DDMDetector(ChangeDetector):
         self.subseq = []
 
     def check_change(self, new_value):
-        x = new_value
         self.is_change_detected = False
-        #print("p+s=",self.prob_of_false + self.std_)
-        
+
         if self.prob_of_false + self.std_ > self.p_min + 2 * self.s_min_:
             self.is_change_detected = True
             self.previous_value = max(set(self.subseq), key=self.subseq.count)

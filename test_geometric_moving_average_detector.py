@@ -21,33 +21,29 @@
 
 import sys;
 sys.path.append('./detectors/')
-sys.path.insert(0, './rules_mining/')
-import numpy as np
 import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
 import encoders as en
-
-from utils import *
+from detector import ChangeDetector
 from online_simulator import OnlineSimulator
-from adwin_detector import AdwinDetector
+from geometric_moving_average_detector import GeometricMovingAverageDetector
 from rules_detector import RulesDetector
-
+from utils import *
 
 #Numerical data
-#df = pd.read_csv('sequences/sequence_2017_11_24-20.16.00.csv')
-df = pd.read_csv('sequences/sequence_2018_04_15-22.22.16.csv')
-seq_1 = np.array(df['attr_1'])
-seq_2 = np.array(df['attr_4'])
+df = pd.read_csv('sequences/sequence_2017_11_28-18.07.57.csv')
+seq = np.array(df['attr_1'])
 
-detector_1 = AdwinDetector(delta = 0.01)
-detector_2 = AdwinDetector(delta = 0.01)
+detector = GeometricMovingAverageDetector(threshold=0.75)
+simulator = OnlineSimulator(None,
+                            [detector],
+                            [seq],
+                            ['attr_1'])
 
-rules_detector = RulesDetector(target_seq_index=1)
+simulator.run(plot=True, detect_rules=False)
 
-simulator = OnlineSimulator(rules_detector,
-                            [detector_1, detector_2],
-                            [seq_1, seq_2],
-                            ['attr_1', 'attr_2'])
+detected_change_points = simulator.get_detected_changes()
+print_detected_change_points(detected_change_points)
 
-simulator.run(plot=True, detect_rules=True)
-
-print_rules(simulator.get_rules_sets(), 1)
+plt.show()

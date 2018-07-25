@@ -1,3 +1,24 @@
+# The MIT License
+# Copyright (c) 2018 Kamil Jurek
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+# THE SOFTWARE.
+
 import math
 import numpy as np
 import pandas as pd
@@ -76,3 +97,17 @@ def generate_classical_dataset(detected_changes, discretization_step=100, save_c
     if save_csv:
         df.to_csv('calssical_dataset.csv', sep=',')
     print(df)
+
+def generate_discretized_sequence(change_points):
+    sequences = [[] for i in range(len(change_points))]
+    for k, attr_p in enumerate(change_points):
+        attr_p = attr_p[1:]
+        attr_name = attr_p[0].attr_name
+        for i, p in enumerate(attr_p):
+            prev = round_to(attr_p[i-1].at_,100) if i > 0 else 0
+
+            if i < len(attr_p)-1:
+                for j in range(prev, round_to(p.at_,100), 100):
+                    elem = attr_name + ":" + str(p.prev_value)
+                    sequences[k].append(elem)
+    return sequences

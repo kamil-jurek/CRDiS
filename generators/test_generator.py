@@ -1,3 +1,24 @@
+# The MIT License
+# Copyright (c) 2018 Kamil Jurek
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+# THE SOFTWARE.
+
 from generators import sequence_generator as sg
 import matplotlib.pyplot as plt
 
@@ -25,14 +46,5 @@ sg.plotSequence(axarr[0], seq1, domain1, '1', curr_state)
 sg.plotSequence(axarr[1], seq2, domain2, '2', curr_state)
 sg.plotSequence(axarr[2], seq3, domain3, '3', curr_state)
 
-#f.set_size_inches(w=10,h=5)
 plt.show()
 
-# import csv
-# import time
-#
-# timestr = time.strftime("%Y_%m_%d-%H:%M:%S")
-# with open('sequence_'+timestr+'.csv','wb') as csv_file:
-#     writer = csv.writer(csv_file, delimiter=',')
-#     for i in range(len(seq1)):
-#         writer.writerow([i,seq1[i],seq2[i],seq3[i]])
