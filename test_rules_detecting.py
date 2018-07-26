@@ -36,7 +36,8 @@ from zscore_detector import ZScoreDetector
 
 
 predict_ratio = 0.9
-df = pd.read_csv('sequences/sequence_2018_07_21-20.53.53.csv')
+# df = pd.read_csv('sequences/sequence_2018_07_21-20.53.53.csv')
+df = pd.read_csv('sequences/sequence_2018_07_21-22.24.18.csv')
 seq_names = ['attr_1', 'attr_2', 'attr_3','attr_4' ]
 
 base_seqs =[]
@@ -67,34 +68,29 @@ simulator = OnlineSimulator(rules_detector,
 
 start_time = time.time()
 
-simulator.run(plot=True, detect_rules=True, predict_seq=True)
-#print_detected_change_points(simulator.get_detected_changes())
-print_rules(simulator.get_rules_sets(), 5)
-#print_combined_rules(simulator.get_combined_rules(), 0)
+simulator.run(plot=False, detect_rules=True, predict_seq=False)
+
+# print_detected_change_points(simulator.get_detected_changes())
+# print_rules(simulator.get_rules_sets(), 5)
+# print_combined_rules(simulator.get_combined_rules(), 0)
+print_best_rules(simulator.get_rules_sets())
 
 end_time = time.time()
 print(end_time - start_time)
 
 
-for k, p in enumerate(simulator.predictor.predictions):
-    print(k ,":", p)
+# for k, p in enumerate(simulator.predictor.predictions):
+#     print(k ,":", p)
+#
+# pr = int(len(sequences[3])*predict_ratio) + 20
+# predicted = simulator.predictor.predicted[pr:len(sequences[3])]
+# real = sp.signal.medfilt(sequences[3][pr:],21)
+#
+# plt.figure()
+# plt.plot(real, 'b')
+# plt.plot(predicted, 'r', linewidth=3.0)
 
-pr = int(len(sequences[3])*predict_ratio) + 20
-predicted = simulator.predictor.predicted[pr:len(sequences[3])]
-real = sp.signal.medfilt(sequences[3][pr:],21)
-
-plt.figure()
-plt.plot(real, 'b')
-plt.plot(predicted, 'r', linewidth=3.0)
-
-# mse = np.mean((real - predicted)**2)
-# print("pred len:", real)
-# print("real len:", predicted)
-# print("mse:", mse)
-rmse = np.sqrt(((predicted - real) ** 2).mean())
-print('Mean Squared Error: {}'.format(round(rmse, 5)))
-
-# print("pred:", simulator.predictor.predicted[-1420:])
-# print("real:", sequences[3][-1420:])
+# rmse = np.sqrt(((predicted - real) ** 2).mean())
+# print('Mean Squared Error: {}'.format(round(rmse, 5)))
 
 plt.show()

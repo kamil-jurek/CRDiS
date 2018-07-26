@@ -33,18 +33,19 @@ from utils import *
 
 class OnlineSimulator(object):
     def __init__(self, rules_detector, change_detectors, sequences, seqs_names,
-                 predict_ratio=0.9, plot_change_detectors=False):
+                 round_to=100, predict_ratio=0.9, plot_change_detectors=False):
 
         self.sequences = sequences
         self.sequences_names = seqs_names
         self.change_detectors = change_detectors
         self.sequence_size = len(sequences[0])
         self.detected_change_points = [[] for i in range(len(self.sequences))]
+        self.rounded_change_points = [[] for i in range(len(self.sequences))]
         self.rules_sets = [set() for i in range(len(self.sequences))]
         self.parameters_history = [defaultdict(list) for i in range(len(self.sequences))]
         self.rules_detector = rules_detector
         self.combined_rules = set()
-        self.round_to = 100
+        self.round_to = round_to
         self.predictor = SequencePredictor(self)
         self.lhs_sets = [set() for i in range(len(self.sequences))]
         self.discretized_sequences = []
@@ -195,8 +196,9 @@ class OnlineSimulator(object):
                                     self.sequences_names[seq_index],
                                     detector.percent)
         self.detected_change_points[seq_index][-1].curr_value_len = change_point.prev_value_len
-        self.detected_change_points[seq_index][-1].curr_value_percent = change_point.percent
+        self.detected_change_points[seq_index][-1].curr_value_percent = change_point.prev_value_percent
         self.detected_change_points[seq_index].append(change_point)
+        self.rounded_change_points[seq_index].append(change_point.get_rounded(self.round_to))
 
     def add_change_point_at_end(self, curr_index, seq_index, detector, value):                   
         detector.is_change_detected = True
@@ -209,8 +211,9 @@ class OnlineSimulator(object):
                                    self.sequences_names[seq_index],
                                    detector.percent)
         self.detected_change_points[seq_index][-1].curr_value_len = change_point.prev_value_len
-        self.detected_change_points[seq_index][-1].curr_value_percent = change_point.percent
+        self.detected_change_points[seq_index][-1].curr_value_percent = change_point.prev_value_percent
         self.detected_change_points[seq_index].append(change_point)
+        self.rounded_change_points[seq_index].append(change_point.get_rounded(self.round_to))
 
     def add_change_point_at_start(self, curr_index, seq_index, detector, value): 
         detector.is_change_detected = True
@@ -221,3 +224,4 @@ class OnlineSimulator(object):
                                     self.sequences_names[seq_index],
                                     detector.percent)
         self.detected_change_points[seq_index].append(change_point)
+        self.rounded_change_points[seq_index].append(change_point.get_rounded(self.round_to))

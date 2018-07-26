@@ -26,36 +26,47 @@ import pandas as pd
 def round_to(x, _round_to):
     return int(round(x / _round_to)) * _round_to
 
-def print_rules(rules_sets,support):
-    print("---------------------------------------------------------------------------------------")
+def print_separator():
+    print("-----------------------------------------------------------------------------------------------------------")
+
+def print_rules(rules_sets, support):
+    print_separator()
     for rules_set in rules_sets:
         #for rule in sorted(rules_set, key=lambda x: (x.number_of_occurrences, len(x.lhs), x.rhs.len, x.lhs[0].len), reverse=True):
         for rule in sorted(rules_set, key=lambda r: (r.get_rule_score()),reverse=True):
-            if rule.number_of_occurrences >= support:
+            if rule.rule_support >= support:
                 print(rule)
-                print("----------------------------------------------------------------------------------------")
-        print("----------------------------------------------------------------------------------------")
+                print_separator()
+        print_separator()
+    print()
+
+def print_best_rules(rules_sets):
+    print_separator()
+    for rules_set in rules_sets:
+        best_rule = sorted(rules_set, key=lambda r: (r.get_rule_score()), reverse=True)[0]
+        print(best_rule)
+        print_separator()
     print()
 
 def print_combined_rules(combined_rules, support):
-    print("---------------------------------------------------------------------------------------")
-    for combined_rule in sorted(combined_rules, key=lambda x: min(x[i].number_of_occurrences for i in range(len(x))), reverse=True):
+    print_separator()
+    for combined_rule in sorted(combined_rules, key=lambda x: min(x[i].rule_support for i in range(len(x))), reverse=True):
         # print(combined_rule)
-        nr_of_occu = min([combined_rule[i].number_of_occurrences for i in range(len(combined_rule))])
+        nr_of_occu = min([combined_rule[i].rule_support for i in range(len(combined_rule))])
         if nr_of_occu >= support:
-            for i, rule in enumerate(combined_rule):
-                print(rule.lhs, rule.number_of_occurrences, rule.last_occurrence, rule.occurrences, "AND" if i < len(combined_rule)-1 else "")
+            for i, rule in enumerate(combined_rule[:-1]):
+                print(rule.lhs, "{supp:", rule.rule_support, "conf:", rule.get_confidence(), "} AND" if i < len(combined_rule)-1 else "}")
             print(" ==>", )
             print(combined_rule[0].rhs)
             print("number of occurenes:", nr_of_occu)
-            print("---------------------------------------------------------------------------------------")
+            print_separator()
 
 def print_detected_change_points(detected_changes):
-    print("---------------------------------------------------------------------------------------")
+    print_separator()
     for attr_detected_change in detected_changes:
         for point in attr_detected_change:
             print(point)
-        print("---------------------------------------------------------------------------------------")
+        print_separator()
 
 
 def evaluate_change_detectors(simulator, actual_change_points):

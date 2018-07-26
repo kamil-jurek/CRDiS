@@ -36,25 +36,23 @@ class RulesDetector(object):
         self.type = type
         self.combined = combined
 
-    def set_online_simulator(self, sim):
-        self.simulator = sim
+    def set_online_simulator(self, simulator):
+        self.simulator = simulator
 
     def search_rules(self, seq_index, current_index):
-        if (seq_index == self.target_seq_index and
-            self.simulator.change_detectors[seq_index].is_change_detected is True and
-            len(self.simulator.detected_change_points[seq_index]) > 1):
+        if(seq_index == self.target_seq_index and
+           self.simulator.change_detectors[seq_index].is_change_detected is True and
+           len(self.simulator.detected_change_points[seq_index]) > 1):
 
-            prev_prev_change_point_target = \
-                self.simulator.detected_change_points[self.target_seq_index][-3] if \
-                    len(self.simulator.detected_change_points[self.target_seq_index]) > 2 else None
-            prev_change_point_target = self.simulator.detected_change_points[self.target_seq_index][-2]
+            prev_change_point_target = self.get_previous_change_point_in_target()
+            pre_prev_change_point_target = self.get_pre_previuus_change_point_in_target()
 
-            if self.window_size > 0:
-                window_begin = round_to(prev_change_point_target.at_, self.round_to) - \
-                               self.window_size if prev_prev_change_point_target != None else 0
+            if self.window_size:
+                window_begin = round_to(prev_change_point_target.at_, self.round_to) - self.window_size \
+                    if pre_prev_change_point_target != None else 0
             else:
-                window_begin = round_to(prev_prev_change_point_target.at_, self.round_to) \
-                    if prev_prev_change_point_target != None else 0
+                window_begin = round_to(pre_prev_change_point_target.at_, self.round_to) \
+                    if pre_prev_change_point_target != None else 0
 
             window_end = round_to(prev_change_point_target.at_, self.round_to)
 
@@ -69,6 +67,16 @@ class RulesDetector(object):
 
             else:
                 print("ERROR - incorrect rules_detector type")
+
+    def get_previous_change_point_in_target(self):
+        prev_change_point = self.simulator.detected_change_points[self.target_seq_index][-2]
+        return prev_change_point
+
+    def get_pre_previuus_change_point_in_target(self):
+        pre_prev_change_point = None
+        if len(self.simulator.detected_change_points[self.target_seq_index]) > 2:
+            pre_prev_change_point = self.simulator.detected_change_points[self.target_seq_index][-3]
+        return pre_prev_change_point
 
     def generate_closed_rules(self, window_begin, window_end, current_index):
         combined_rule = []
@@ -98,7 +106,7 @@ class RulesDetector(object):
                         lhs_elem = RuleComponent(round_to(first_point.at_ - window_begin, self.round_to),
                                                first_point.prev_value,
                                                first_point.attr_name,
-                                                 first_point.percent)
+                                                 first_point.prev_value_percent)
                         lhs.append(lhs_elem)
                         skip_first_point = True
 
@@ -108,7 +116,7 @@ class RulesDetector(object):
                         lhs_elem = RuleComponent(round_to(point.prev_value_len, self.round_to),
                                                point.prev_value,
                                                point.attr_name,
-                                            point.percent)
+                                            point.prev_value_percent)
                         lhs.append(lhs_elem)
 
                 last_point = points_in_window[-1]
@@ -117,7 +125,7 @@ class RulesDetector(object):
                     lhs_elem = RuleComponent(round_to(window_end - last_point.at_, self.round_to),
                                            last_point.curr_value,
                                            last_point.attr_name,
-                                             last_point.percent)
+                                             last_point.prev_value_percent)
                     lhs.append(lhs_elem)
 
             rhs_elem = RuleComponent(
@@ -125,7 +133,7 @@ class RulesDetector(object):
                          self.round_to),
                 self.simulator.detected_change_points[self.target_seq_index][-1].prev_value,
                 self.simulator.detected_change_points[self.target_seq_index][-1].attr_name,
-                self.simulator.detected_change_points[self.target_seq_index][-1].percent)
+                self.simulator.detected_change_points[self.target_seq_index][-1].prev_value_percent)
 
             if len(lhs) > 0:
                 rule = Rule(lhs, rhs_elem)
@@ -136,16 +144,16 @@ class RulesDetector(object):
                     if r == rule:
                         is_new_rule = False
                         r.set_last_occurence(current_index)
-                        r.increment_occurrences()
+                        r.increment_rule_support()
                         r.occurrences.append(current_index)
-                        r.support = 1
+                        r.lhs_support = 1
                         combined_rule.append(r)
                         print("Rule already in set:", r)
 
                 if is_new_rule:
                     rule.set_last_occurence(current_index)
-                    rule.increment_occurrences()
-                    rule.support = 1
+                    rule.increment_rule_support()
+                    rule.lhs_support = 1
                     # gen_rule = self.generalize_rule(seq_index, rule)
                     # if gen_rule != None:
                     #     gen_rule.set_last_occurence(current_index)
@@ -171,126 +179,147 @@ class RulesDetector(object):
             points_before_window, points_in_window, points_after_window = \
                 self.get_change_points_in_window(seq_index, window_begin, window_end)
 
-            # no change points in window
             if not points_in_window:
-                lhs_elem_len = round_to(window_end - window_begin, self.round_to)
-                if lhs_elem_len > 0:
-                    for lhs_len in range(self.round_to, lhs_elem_len + 1, self.round_to):
-                        lhs_elem = RuleComponent(lhs_len,
-                                                 points_before_window[-1].curr_value if len(points_before_window) > 0 else np.nan,
-                                                 self.simulator.sequences_names[seq_index],
-                                                 points_before_window[-1].percent if len(points_before_window) > 0 else
-                                                 (list(self.simulator.sequences[seq_index][window_begin:window_end]).count(self.simulator.change_detectors[seq_index].current_value) / lhs_elem_len) *100)
-                        generated_lhss.append([lhs_elem])
+                generated_lhss = self.generate_lhss_for_empty_window(seq_index, points_before_window, window_begin, window_end)
             else:
-                last_point = points_in_window[-1]
-                if last_point.at_ <= window_end:
-                    lhs_elem_len = round_to(window_end - last_point.at_, self.round_to)
-                    for lhs_len in range(self.round_to, lhs_elem_len + 1, self.round_to):
-                        lhs_elem = RuleComponent(lhs_len,
-                                               last_point.curr_value,
-                                               last_point.attr_name,
-                                               last_point.percent)
-                        generated_lhss.append([lhs_elem])
+                generated_lhss = self.generate_lhss(points_in_window, window_begin, window_end)
 
-                for point_index in range(1, len(points_in_window)):
-                    prefix = generated_lhss[-1] if generated_lhss else []
-                    point = points_in_window[-point_index]
-                    lhs_elem_len = round_to(point.prev_value_len, self.round_to)
-                    if lhs_elem_len > 0:
-                        for lhs_len in range(self.round_to, lhs_elem_len + 1, self.round_to):
-                            lhs_elem = RuleComponent(lhs_len,
-                                                     point.prev_value,
-                                                     point.attr_name,
-                                                     point.percent)
-                            generated_lhss.append([lhs_elem] + prefix)
-                
-                first_point = points_in_window[0]
-                if round_to(first_point.at_ - first_point.prev_value_len, self.round_to) <= window_begin:
-                    lhs_elem_len = round_to(first_point.at_ - window_begin, self.round_to)
-                    if lhs_elem_len >= 0:
-                        prefix = generated_lhss[-1] if generated_lhss else []
-                        for lhs_len in range(self.round_to, lhs_elem_len + 1, self.round_to):
-                            lhs_elem = RuleComponent(lhs_len,
-                                                     first_point.prev_value,
-                                                     first_point.attr_name,
-                                                     first_point.percent)
-                            generated_lhss.append([lhs_elem] + prefix)
-                                                
-            last_target_change_point = self.simulator.detected_change_points[self.target_seq_index][-1]
-            rhs_elem_len = round_to(last_target_change_point.prev_value_len, self.round_to)
-            for rhs_len in range(self.round_to, rhs_elem_len + 1, self.round_to):
-                rhs_elem = RuleComponent(rhs_len,
-                                         last_target_change_point.prev_value,
-                                         last_target_change_point.attr_name,
-                                         last_target_change_point.percent)
-                generated_rhss.append(rhs_elem)
+            generated_rhss = self.generate_rhss()
 
             if generated_lhss:
-
-                # TEST
-                for lhs in generated_lhss:
-                    rule = Rule(lhs, [])
-
-                    is_new_rule = True
-                    for r in self.simulator.lhs_sets[seq_index]:
-                        if r == rule:
-                            is_new_rule = False
-                            r.set_last_occurence(current_index)
-                            r.increment_occurrences()
-                            r.occurrences.append(current_index)
-                            # print("Rule already in set:", r)
-                            # generated_rules[seq_index].append(r)
-
-                    if is_new_rule:
-                        rule.set_last_occurence(current_index)
-                        rule.increment_occurrences()
-                        rule.occurrences.append(current_index)
-                        self.simulator.lhs_sets[seq_index].add(rule)
-                        # print("New rule:", rule)
-                        # generated_rules[seq_index].append(rule)
-
-                for rhs in generated_rhss:
-                    for lhs in generated_lhss:
-                        rule = Rule(lhs, rhs)                       
-
-                        is_new_rule = True
-                        for r in self.simulator.rules_sets[seq_index]:
-                            if r == rule:
-                                is_new_rule = False
-                                r.set_last_occurence(current_index)
-                                r.increment_occurrences()
-                                r.occurrences.append(current_index)
-                                r.support = self.get_support_of(lhs,seq_index)
-                                #print("Rule already in set:", r)
-                                generated_rules[seq_index].append(r)
-
-                        if is_new_rule:
-                            rule.set_last_occurence(current_index)
-                            rule.increment_occurrences()
-                            rule.occurrences.append(current_index)
-                            rule.support = self.get_support_of(lhs, seq_index)
-                            self.simulator.rules_sets[seq_index].add(rule)
-                            #print("New rule:", rule)
-                            generated_rules[seq_index].append(rule)
-
+                self.update_discovered_lhss(seq_index, current_index, generated_lhss)
+                self.generate_and_update_rules(seq_index, current_index,
+                                                                 generated_lhss, generated_rhss,
+                                                                 generated_rules)
 
         if self.combined:
             combined_rule = []
-            #[self.simulator.combined_rules.add((x,y,z)) if x.rhs == y.rhs and x.rhs == z.rhs else None for x in generated_rules[0] for y in generated_rules[1] for z in generated_rules[2]]
+            #[self.simulator.combined_rules.add((x,y,z)) if x.rhs == y.rhs and x.rhs == z.rhs
+            # else None for x in generated_rules[0] for y in generated_rules[1] for z in generated_rules[2]]
 
             for seq_rules in generated_rules:
-                #print("===", seq_rules)
                 if seq_rules:
                     combined_rule.append(seq_rules[-1])
-                    #print("seq_rule:", seq_rules[-1])
+                    # print("seq_rule:", seq_rules[-1])
                     # for gr in seq_rules:
                     #     print(gr)
-                    #print("==============================================")
+                    # print("==============================================")
 
             if len(combined_rule) > 0:
-                #print("Adding to combined rules")
+                # print("Adding to combined rules")
                 self.simulator.combined_rules.add(tuple(combined_rule))
+
+    def generate_lhss(self,points_in_window, window_begin, window_end):
+        generated_lhss = []
+        last_point = points_in_window[-1]
+        if last_point.at_ <= window_end:
+            lhs_elem_len = round_to(window_end - last_point.at_, self.round_to)
+            for lhs_len in range(self.round_to, lhs_elem_len + 1, self.round_to):
+                lhs_elem = RuleComponent(lhs_len,
+                                         last_point.curr_value,
+                                         last_point.attr_name,
+                                         last_point.prev_value_percent)
+                generated_lhss.append([lhs_elem])
+
+        for point_index in range(1, len(points_in_window)):
+            prefix = generated_lhss[-1] if generated_lhss else []
+            point = points_in_window[-point_index]
+            lhs_elem_len = round_to(point.prev_value_len, self.round_to)
+            if lhs_elem_len > 0:
+                for lhs_len in range(self.round_to, lhs_elem_len + 1, self.round_to):
+                    lhs_elem = RuleComponent(lhs_len,
+                                             point.prev_value,
+                                             point.attr_name,
+                                             point.prev_value_percent)
+                    generated_lhss.append([lhs_elem] + prefix)
+
+        first_point = points_in_window[0]
+        if round_to(first_point.at_ - first_point.prev_value_len, self.round_to) <= window_begin:
+            lhs_elem_len = round_to(first_point.at_ - window_begin, self.round_to)
+            if lhs_elem_len >= 0:
+                prefix = generated_lhss[-1] if generated_lhss else []
+                for lhs_len in range(self.round_to, lhs_elem_len + 1, self.round_to):
+                    lhs_elem = RuleComponent(lhs_len,
+                                             first_point.prev_value,
+                                             first_point.attr_name,
+                                             first_point.prev_value_percent)
+                    generated_lhss.append([lhs_elem] + prefix)
+        return generated_lhss
+
+    def generate_rhss(self):
+        generated_rhss = []
+
+        last_target_change_point = self.simulator.detected_change_points[self.target_seq_index][-1]
+        rhs_elem_len = round_to(last_target_change_point.prev_value_len, self.round_to)
+        for rhs_len in range(self.round_to, rhs_elem_len + 1, self.round_to):
+            rhs_elem = RuleComponent(rhs_len,
+                                     last_target_change_point.prev_value,
+                                     last_target_change_point.attr_name,
+                                     last_target_change_point.prev_value_percent)
+            generated_rhss.append(rhs_elem)
+        return generated_rhss
+
+    def generate_lhss_for_empty_window(self, seq_index, points_before_window, window_begin, window_end):
+        generated_lhss = []
+        lhs_elem_len = round_to(window_end - window_begin, self.round_to)
+        if lhs_elem_len > 0:
+            for lhs_len in range(self.round_to, lhs_elem_len + 1, self.round_to):
+                percent = (list(self.simulator.sequences[seq_index][window_begin:window_end]).count(
+                    self.simulator.change_detectors[seq_index].current_value) / lhs_elem_len) * 100
+
+                lhs_elem = RuleComponent(lhs_len,
+                                         points_before_window[-1].curr_value if len(
+                                             points_before_window) > 0 else np.nan,
+                                         self.simulator.sequences_names[seq_index],
+                                         points_before_window[-1].prev_value_percent if len(
+                                             points_before_window) > 0 else percent)
+
+                generated_lhss.append([lhs_elem])
+        return generated_lhss
+
+    def update_discovered_lhss(self, seq_index, current_index, generated_lhss):
+        for lhs in generated_lhss:
+            new_lhs = Rule(lhs, [])
+            is_new_lhs = True
+
+            for lhs in self.simulator.lhs_sets[seq_index]:
+                if lhs == new_lhs:
+                    is_new_lhs = False
+                    lhs.set_last_occurence(current_index)
+                    lhs.increment_rule_support()
+                    lhs.occurrences.append(current_index)
+
+            if is_new_lhs:
+                new_lhs.set_last_occurence(current_index)
+                new_lhs.increment_rule_support()
+                new_lhs.occurrences.append(current_index)
+                self.simulator.lhs_sets[seq_index].add(new_lhs)
+
+    def generate_and_update_rules(self, seq_index, current_index, generated_lhss, generated_rhss, generated_rules):
+        #generated_rules = [[] for i in range(len(self.simulator.sequences))]
+
+        for rhs in generated_rhss:
+            for lhs in generated_lhss:
+                new_rule = Rule(lhs, rhs)
+
+                is_new_rule = True
+                for rule in self.simulator.rules_sets[seq_index]:
+                    if rule == new_rule:
+                        is_new_rule = False
+                        rule.set_last_occurence(current_index)
+                        rule.increment_rule_support()
+                        rule.occurrences.append(current_index)
+                        rule.lhs_support = self.get_support_of(lhs, seq_index)
+                        generated_rules[seq_index].append(rule)
+
+                if is_new_rule:
+                    new_rule.set_last_occurence(current_index)
+                    new_rule.increment_rule_support()
+                    new_rule.occurrences.append(current_index)
+                    new_rule.lhs_support = self.get_support_of(lhs, seq_index)
+                    self.simulator.rules_sets[seq_index].add(new_rule)
+                    generated_rules[seq_index].append(new_rule)
+        #return generated_rules
 
     def generalize_rule(self, seq_index, new_rule):
         for rule in self.simulator.rules_sets[seq_index]:
@@ -314,7 +343,7 @@ class RulesDetector(object):
                 print("new rule: ", new_rule)
                 print("gen_rule: ", gen_rule)
                 print()
-                gen_rule.number_of_occurrences = rule.number_of_occurrences + new_rule.number_of_occurrences
+                gen_rule.rule_support = rule.rule_support + new_rule.rule_support
                 gen_rule.generalized = True
                 return gen_rule
             else:
@@ -337,8 +366,7 @@ class RulesDetector(object):
     def get_support_of(self, lhs, seq_index):
         for r in self.simulator.lhs_sets[seq_index]:
             if r == Rule(lhs, []):
-                #print("get_support_of: ", lhs, " support:", r.number_of_occurrences)
-                return r.number_of_occurrences
+                return r.rule_support
 
     def generate_discretized_sequences(self, window_begin, window_end, current_index):
         for seq_index, change_point_list in enumerate(self.simulator.detected_change_points):
