@@ -66,57 +66,32 @@ class OnlineSimulator(object):
     def run(self, plot=True, detect_rules=True, predict_seq=False, **kwargs):
         parameters_history = [defaultdict(list) for i in range(len(self.sequences))]
 
-        for i in range(0, self.sequence_size):
-            for j, seq in enumerate(self.sequences):
-                detector = self.change_detectors[j]
+        for curr_index in range(0, self.sequence_size):
+            for seq_index, seq in enumerate(self.sequences):
+                detector = self.change_detectors[seq_index]
 
-                value = seq[i]
+                value = seq[curr_index]
                 res = detector.step(value)
 
                 for k, v in res.items():
-                    parameters_history[j][k].append(v)
+                    parameters_history[seq_index][k].append(v)
 
                 if detector.is_change_detected is True:
-                    prev_at = self.detected_change_points[j][-1].at_ if len(self.detected_change_points[j]) > 0 else 0
-                    prev_value_len = i - prev_at
-
-                    change_point = ChangePoint(detector.previous_value,
-                                               detector.current_value,
-                                               i,
-                                               prev_value_len,
-                                               self.sequences_names[j],
-                                               detector.percent)
-                    self.detected_change_points[j].append(change_point)
-
-                if i == self.sequence_size - 1:
-                    detector.is_change_detected = True
-                    prev_at = self.detected_change_points[j][-1].at_ if len(self.detected_change_points[j]) > 0 else 0
-                    prev_value_len = i - prev_at
-                    change_point = ChangePoint(detector.current_value,
-                                               -1,
-                                               i,
-                                               prev_value_len,
-                                               self.sequences_names[j],
-                                               detector.percent)
-                    self.detected_change_points[j].append(change_point)
-
-                if i == 0:
-                    detector.is_change_detected = True
-                    change_point = ChangePoint(-1,
-                                               value,
-                                               i,
-                                               0,
-                                               self.sequences_names[j],
-                                               detector.percent)
-                    self.detected_change_points[j].append(change_point)
+                    self.add_change_point(curr_index, seq_index, detector, value)
+                
+                if curr_index == self.sequence_size - 1:
+                    self.add_change_point_at_end(curr_index, seq_index, detector, value)    
+                
+                if curr_index == 0:
+                    self.add_change_point_at_start(curr_index, seq_index, detector, value)
 
                 if detect_rules:
-                    self.rules_detector.search_rules(j, i)
+                    self.rules_detector.search_rules(seq_index, curr_index)
 
                 if(predict_seq and
-                   i >= self.sequence_size*self.predict_ratio and
-                   i % self.rules_detector.round_to == 0):
-                    self.predictor.predict_sequence(j, i)
+                   curr_index >= self.sequence_size*self.predict_ratio and
+                   curr_index % self.rules_detector.round_to == 0):
+                    self.predictor.predict_sequence(seq_index, curr_index)
 
 
         def dict_to_arrays(ddict):
@@ -209,3 +184,40 @@ class OnlineSimulator(object):
 
                 for change_point in self.detected_change_points[k]:
                     ax.axvline(change_point.at_, color='r', linestyle='--')
+    
+    def add_change_point(self, curr_index, seq_index, detector, value):
+        prev_at = self.detected_change_points[seq_index][-1].at_ if len(self.detected_change_points[seq_index]) > 0 else 0
+        prev_value_len = curr_index - prev_at
+        change_point = ChangePoint(detector.previous_value,
+                                    detector.current_value,
+                                    curr_index,
+                                    prev_value_len,
+                                    self.sequences_names[seq_index],
+                                    detector.percent)
+        self.detected_change_points[seq_index][-1].curr_value_len = change_point.prev_value_len
+        self.detected_change_points[seq_index][-1].curr_value_percent = change_point.percent
+        self.detected_change_points[seq_index].append(change_point)
+
+    def add_change_point_at_end(self, curr_index, seq_index, detector, value):                   
+        detector.is_change_detected = True
+        prev_at = self.detected_change_points[seq_index][-1].at_ if len(self.detected_change_points[seq_index]) > 0 else 0
+        prev_value_len = curr_index - prev_at
+        change_point = ChangePoint(detector.current_value,
+                                   -1,
+                                   curr_index,
+                                   prev_value_len,
+                                   self.sequences_names[seq_index],
+                                   detector.percent)
+        self.detected_change_points[seq_index][-1].curr_value_len = change_point.prev_value_len
+        self.detected_change_points[seq_index][-1].curr_value_percent = change_point.percent
+        self.detected_change_points[seq_index].append(change_point)
+
+    def add_change_point_at_start(self, curr_index, seq_index, detector, value): 
+        detector.is_change_detected = True
+        change_point = ChangePoint(-1,
+                                    value,
+                                    curr_index,
+                                    0,
+                                    self.sequences_names[seq_index],
+                                    detector.percent)
+        self.detected_change_points[seq_index].append(change_point)
