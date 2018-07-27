@@ -205,7 +205,7 @@ class SequencePredictor(object):
                     lhs_elem = RuleComponent(lhs_len,
                                              last_point.curr_value,
                                              last_point.attr_name,
-                                             last_point.percent)
+                                             last_point.prev_value_percent)
                     lhss.append([lhs_elem])
 
             for point_index in range(1, len(points_in_window)):
@@ -217,7 +217,7 @@ class SequencePredictor(object):
                         lhs_elem = RuleComponent(lhs_len,
                                                  point.prev_value,
                                                  point.attr_name,
-                                                 point.percent)
+                                                 point.prev_value_percent)
 
                         lhss.append([lhs_elem] + prefix)
 
