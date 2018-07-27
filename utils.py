@@ -73,18 +73,36 @@ def evaluate_change_detectors(simulator, actual_change_points):
     for k in range(len(simulator.sequences)):
         detected_change_points = np.array(simulator.get_detected_changes())[k]
         detected_change_points = [x.at_ for x in detected_change_points]
+        actual_change_points2 = list(actual_change_points)
+        
 
+        print("actual:",actual_change_points)
+        print("detect:",detected_change_points)
+        if len(detected_change_points) < len(actual_change_points):
+            for i in range(len(actual_change_points)):
+                if np.abs(detected_change_points[i] - actual_change_points[i]) > 305:
+                    detected_change_points.insert(i, 0)
+            actual_change_points2 = np.array(actual_change_points)
+        
+        elif len(detected_change_points) > len(actual_change_points):
+            for i in range(len(detected_change_points)):
+                if np.abs(detected_change_points[i] - actual_change_points2[i]) > 205:
+                    actual_change_points2.insert(i, 0)
+            actual_change_points2 = np.array(actual_change_points2)
+        else:
+            actual_change_points2 = np.array(actual_change_points)
+        #actual_change_points2 = np.array(actual_change_points)
         print("====== ", simulator.sequences_names[k], " ===============================")
-        print("Actual change points:   ", list(actual_change_points))
+        print("Actual change points:   ", list(actual_change_points2))
         print("Detected change points: ", detected_change_points)
 
-        delta = np.abs(actual_change_points - detected_change_points)
+        delta = np.abs(actual_change_points2 - detected_change_points)
 
         print("Difference: ", delta)
         print("Errors sum: ", np.sum(delta))
         print("Errors avg: ", np.sum(delta) / len(detected_change_points))
 
-        rmse = np.sqrt(((detected_change_points - actual_change_points) ** 2).mean())
+        rmse = np.sqrt(((detected_change_points - actual_change_points2) ** 2).mean())
         print('Mean Squared Error: {}'.format(round(rmse, 5)))
         print("==============================================================================")
 

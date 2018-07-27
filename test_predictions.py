@@ -19,7 +19,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-import sys;
+import sys
 sys.path.append('./detectors/')
 import time
 import matplotlib.pyplot as plt
@@ -35,7 +35,7 @@ from zscore_detector import ZScoreDetector
 df = pd.read_csv('sequences/sequence_2018_07_21-22.24.18.csv')
 seq_names = ['attr_1', 'attr_4']
 
-predict_ratio=0.8
+predict_ratio=0.7
 base_seqs =[]
 
 for name in seq_names:
@@ -84,8 +84,8 @@ plt.plot(real, 'b')
 plt.plot(predicted, 'r', linewidth=3.0)
 
 mse = np.mean((real - predicted)**2)
-print("pred len:", real)
-print("real len:", predicted)
+# print("pred len:", real)
+# print("real len:", predicted)
 print("mse:", mse)
 rmse = np.sqrt(((predicted - real) ** 2).mean())
 print('Mean Squared Error: {}'.format(round(rmse, 5)))

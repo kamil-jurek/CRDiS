@@ -19,7 +19,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-import sys;
+import sys
 sys.path.append('./detectors/')
 import time
 import matplotlib.pyplot as plt
@@ -35,7 +35,7 @@ from utils import *
 from zscore_detector import ZScoreDetector
 
 
-predict_ratio = 0.9
+predict_ratio = 0.8
 # df = pd.read_csv('sequences/sequence_2018_07_21-20.53.53.csv')
 df = pd.read_csv('sequences/sequence_2018_07_21-22.24.18.csv')
 seq_names = ['attr_1', 'attr_2', 'attr_3','attr_4' ]

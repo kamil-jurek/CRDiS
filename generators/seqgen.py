@@ -31,6 +31,7 @@ past_states = 1.0
 future_states = 50
 add_random = False
 nr_of_repetitions = 1
+rand_subseq_prob = 0.6
 
 parser = argparse.ArgumentParser(description='Sequence Generator.')
 parser.add_argument('-i','--input', help='Config input file name',required=True)
@@ -112,10 +113,12 @@ for x in range(nr_of_repetitions):
             if(args.plot):
                 sg.plotSequence(axarr[j], seq, domain, config['attr_name'], curr_state)
         j += 1
+        
         if add_random:
             rand_elem = random.randint(0, len(domain)-1)
+            rand_len = 300           
             print("adding:",domain[rand_elem], " for", rand_len)
-            probs = numpy.array([0.9 if i == rand_elem else (1.0-0.9)/(len(domain)-1) for i in range(len(domain))])
+            probs = numpy.array([rand_subseq_prob if i == 0 else (1.0-rand_subseq_prob)/(len(domain)-1) for i in range(len(domain))])
             probs /= probs.sum()
             rand_seq = [numpy.random.choice(domain, p = probs) for i in range(rand_len)]
             seqs[config_ind] = numpy.concatenate((seqs[config_ind], seq))
