@@ -73,8 +73,8 @@ simulator.run(plot=False, detect_rules=True, predict_seq=False)
 # print_detected_change_points(simulator.get_detected_changes())
 # print_rules(simulator.get_rules_sets(), 5)
 # print_combined_rules(simulator.get_combined_rules(), 0)
-print_best_rules(simulator.get_rules_sets())
-
+#print_best_rules(simulator.get_rules_sets())
+print_rules(simulator.get_rules_sets(), 0)
 end_time = time.time()
 print(end_time - start_time)
 

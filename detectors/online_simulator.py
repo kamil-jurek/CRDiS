@@ -89,10 +89,34 @@ class OnlineSimulator(object):
                 if detect_rules:
                     self.rules_detector.search_rules(seq_index, curr_index)
 
-                if(predict_seq and
-                   curr_index >= self.sequence_size*self.predict_ratio and
-                   curr_index % self.rules_detector.round_to == 0):
-                    self.predictor.predict_sequence(seq_index, curr_index)
+                first_pred = True if self.predictor.predicted_rule == Rule(None, None) else False;
+                predict_first = (first_pred and seq_index == self.rules_detector.target_seq_index and detector.is_change_detected is True)
+                next_pred = False
+
+
+                if (predict_seq and curr_index >= self.sequence_size * self.predict_ratio):
+                    print("curr_index:", curr_index)
+                    print("first_pred:", first_pred)
+                    if first_pred:
+                        print("seq_index == self.rules_detector.target_seq_index:",seq_index == self.rules_detector.target_seq_index)
+                        print("detector.is_change_detected is True:",detector.is_change_detected is True)
+                        if seq_index == self.rules_detector.target_seq_index and detector.is_change_detected is True:
+                            self.predictor.predict_sequence(seq_index, curr_index)
+                    elif curr_index % self.rules_detector.round_to == 0 and seq_index == 0:
+                        self.predictor.predict_sequence(seq_index, curr_index)
+
+                # if(predict_seq and curr_index >= self.sequence_size*self.predict_ratio and curr_index % self.rules_detector.round_to == 0):
+                #     if predict_first:
+                #         self.predictor.predict_sequence(seq_index, curr_index)
+                #         next_pred = True
+                #
+                #     if next_pred:
+                #         self.predictor.predict_sequence(seq_index, curr_index)
+                #    #(predict_first)
+                #    #curr_index % self.rules_detector.round_to == 0):
+                #    #seq_index == self.rules_detector.target_seq_index and
+                #    #detector.is_change_detected is True):
+                #     self.predictor.predict_sequence(seq_index, curr_index)
 
 
         def dict_to_arrays(ddict):

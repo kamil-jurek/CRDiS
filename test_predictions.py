@@ -32,10 +32,11 @@ from rules_detector import RulesDetector
 from utils import *
 from zscore_detector import ZScoreDetector
 
-df = pd.read_csv('sequences/sequence_2018_07_21-22.24.18.csv')
+df = pd.read_csv('sequences/sequence_2018_05_03-16.54.37.csv')
+# df = pd.read_csv('sequences/sequence_2018_07_21-22.24.18.csv')
 seq_names = ['attr_1', 'attr_4']
 
-predict_ratio=0.7
+predict_ratio=0.75
 base_seqs =[]
 
 for name in seq_names:
@@ -48,6 +49,8 @@ for nr in range(1):
 
 win_size = 20
 detector1 = ZScoreDetector(window_size=30, threshold=5)
+detector2 = ZScoreDetector(window_size=win_size, threshold=4)
+detector3 = ZScoreDetector(window_size=win_size, threshold=4)
 detector4 = ZScoreDetector(window_size=win_size, threshold=4)
 
 rules_detector = RulesDetector(target_seq_index=1,
@@ -83,12 +86,36 @@ plt.figure()
 plt.plot(real, 'b')
 plt.plot(predicted, 'r', linewidth=3.0)
 
-mse = np.mean((real - predicted)**2)
+
+fig, axes = plt.subplots(nrows=2, ncols=1, sharex=False,
+                                     figsize=(12, 2*3))
+
+axes[0].plot(sequences[0], 'b.', markersize=3)
+axes[0].plot(sequences[0], 'b-', alpha=0.25)
+for change_point in simulator.detected_change_points[0]:
+    axes[0].axvline(change_point.at_, color='r', linestyle='--')
+axes[0].set_xticks(np.arange(0, len(sequences[1]), 500))
+
+
+axes[1].plot(sequences[1], 'b.', markersize=3)
+axes[1].plot(sequences[1], 'b-', alpha=0.25)
+for change_point in simulator.detected_change_points[1]:
+    axes[1].axvline(change_point.at_, color='r', linestyle='--')
+
+axes[1].plot(simulator.predictor.predicted, 'r', linewidth=3.0)
+
+axes[1].set_xticks(np.arange(0, len(sequences[1]), 500))
+# plt.figure()
+# plt.plot(sequences[1], 'b')
+# plt.plot(simulator..predictor.predicted, 'r', linewidth=3.0)
+
+
+#mse = np.mean((real - predicted)**2)
 # print("pred len:", real)
 # print("real len:", predicted)
-print("mse:", mse)
-rmse = np.sqrt(((predicted - real) ** 2).mean())
-print('Mean Squared Error: {}'.format(round(rmse, 5)))
+#print("mse:", mse)
+#rmse = np.sqrt(((predicted - real) ** 2).mean())
+#print('Mean Squared Error: {}'.format(round(rmse, 5)))
 
 
 

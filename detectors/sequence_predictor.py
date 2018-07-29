@@ -37,12 +37,12 @@ class SequencePredictor(object):
         self.PREDICT_WIN_SIZE = 1500
 
     def predict_sequence(self, seq_index, curr_elem_index):
-        # if seq_index == self.simulator.rules_detector.target_seq_index:
+        # if seq_index != self.simulator.rules_detector.target_seq_index:
         #     return
 
-        if seq_index != 0:
-            return
-
+        # if seq_index != 0:
+        #     return
+        print("========================================================================================")
         print("---START Predict sequence ", "seq_index:", seq_index, "curr_elem_index:", curr_elem_index)
         window_end = round_to(curr_elem_index, self.simulator.round_to)
         window_begin = window_end - self.PREDICT_WIN_SIZE
@@ -57,7 +57,7 @@ class SequencePredictor(object):
         # print("-----------------------------------------------------------------------------------------------")
         # print("All LHS:")
         for lhs in lhss:
-            # print(lhs)
+            print(lhs)
             self.get_predictions_by_lhs(seq_index, lhs, predictions)
 
         predictions_dict = {}
@@ -83,7 +83,9 @@ class SequencePredictor(object):
         if best_rule:
             # new better than current or current rule
             print("best_rule.get_rule_score():", best_rule.get_rule_score())
-            print("")
+            print("self.predicted_rule.get_rule_score():", self.predicted_rule.get_rule_score())
+            print("self.predicted_len <= curr_elem_index:", self.predicted_len <= curr_elem_index)
+
             if best_rule.get_rule_score() > self.predicted_rule.get_rule_score() or self.predicted_len <= curr_elem_index:
                 if self.predicted == []:
                     predicted_seq = [-1 for i in range(curr_elem_index)]
@@ -126,6 +128,9 @@ class SequencePredictor(object):
                 print("======================================================")
         else:
             self.predicted = self.predicted + [-1 for i in range(100)]
+
+
+
             # prediction_list = []
             # for k, predictions_list in predictions.items():
             #     # for p in predictions_list:
@@ -186,6 +191,7 @@ class SequencePredictor(object):
             #             # self.predicted_len = curr_elem_index+k.len
         print("---END Predict sequence ", "seq_index:", seq_index, "curr_elem_index:", curr_elem_index)
         print("========================================================================================")
+        print()
 
     def generate_lhss(self, lhss, seq_index, window_begin, window_end, points_in_window, points_before_window, points_after_window):
         if not points_in_window:
