@@ -51,6 +51,7 @@ class OnlineSimulator(object):
         self.discretized_sequences = []
         self.plot_change_detectors = plot_change_detectors
         self.predict_ratio = predict_ratio
+        self.plot_parameters = False
 
         if rules_detector != None:
             self.rules_detector.set_online_simulator(self)
@@ -89,14 +90,25 @@ class OnlineSimulator(object):
                 if detect_rules:
                     self.rules_detector.search_rules(seq_index, curr_index)
 
-                first_pred = True if self.predictor.predicted_rule == Rule(None, None) else False;
-                predict_first = (first_pred and seq_index == self.rules_detector.target_seq_index and detector.is_change_detected is True)
-                next_pred = False
+                first_pred = True
+                if self.rules_detector:
+                    first_pred = True if self.predictor.predicted_rule == Rule(None, None) else False
+                    predict_first = (first_pred and seq_index == self.rules_detector.target_seq_index and detector.is_change_detected is True)
+                    next_pred = False
 
+                # if(predict_seq and
+                #    curr_index >= self.sequence_size * self.predict_ratio and
+                #    #seq_index == self.rules_detector.target_seq_index and
+                #    curr_index % self.rules_detector.round_to == 0
+                #    # detector.is_change_detected is True
+                # ):
+                #     #self.predictor.predict_sequence(seq_index, curr_index)
+                #     self.predictor.predict_sequence_2(curr_index)
+                #     self.predictor.predict_sequence(seq_index, curr_index)
 
                 if (predict_seq and curr_index >= self.sequence_size * self.predict_ratio):
-                    print("curr_index:", curr_index)
-                    print("first_pred:", first_pred)
+                    #print("curr_index:", curr_index)
+                    #print("first_pred:", first_pred)
                     if first_pred:
                         print("seq_index == self.rules_detector.target_seq_index:",seq_index == self.rules_detector.target_seq_index)
                         print("detector.is_change_detected is True:",detector.is_change_detected is True)
@@ -142,7 +154,10 @@ class OnlineSimulator(object):
             detected_change_points = self.detected_change_points[i]
             sequence_name = 'Sequence ' + self.sequences_names[i]
 
-            plotcount = 1 + len(parameters_history)
+            plotcount = 1
+            if self.plot_parameters:
+                plotcount = 1 + len(parameters_history)
+
             fig, axes = plt.subplots(nrows=plotcount, ncols=1, sharex=True,
                                      figsize=(12, plotcount*3))
 
@@ -152,12 +167,13 @@ class OnlineSimulator(object):
             elif plotcount == 1:
                 ax = axes
 
-            ax.plot(sequence, 'b.', markersize=3)
+            ax.plot(sequence, 'b.', markersize=3, label="Actual values")
             ax.plot(sequence, 'b-', alpha=0.25)
 
             # Print predicted sequence
             if self.rules_detector and i == self.rules_detector.target_seq_index:
-                ax.plot(self.predictor.predicted, 'r', linewidth=3.0)
+                ax.plot(self.predictor.predicted, 'r.', markersize=3, label="Predicted values")
+                ax.legend(loc=2)
 
             ax.set_title(sequence_name)
             ax.set_ylim(np.nanmin(sequence)-1,
@@ -172,14 +188,15 @@ class OnlineSimulator(object):
             for change_point in detected_change_points:
                 ax.axvline(change_point.at_, color='r', linestyle='--')
 
-            # Plot each parameter
-            for ii, (res_name, res_values) in enumerate(parameters_history.items()):
-                ax = axes[ii+1]
-                ax.plot(res_values, '-', alpha=0.7)
-                ax.set_title("Parameter #{}: {}".format(ii+1, res_name))
+            if self.plot_parameters:
+                # Plot each parameter
+                for ii, (res_name, res_values) in enumerate(parameters_history.items()):
+                    ax = axes[ii+1]
+                    ax.plot(res_values, '-', alpha=0.7)
+                    ax.set_title("Parameter #{}: {}".format(ii+1, res_name))
 
-                for change_point in detected_change_points:
-                    ax.axvline(change_point.at_, color='r', linestyle='--')
+                    for change_point in detected_change_points:
+                        ax.axvline(change_point.at_, color='r', linestyle='--')
 
         if self.plot_change_detectors:
             plotcount = len(self.sequences)

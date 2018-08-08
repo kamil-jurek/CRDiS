@@ -49,7 +49,7 @@ from apriori import *
 # df = pd.read_csv('sequences/sequence_2018_07_27-18.40.39.csv')
 
 # 95%
-# df = pd.read_csv('sequences/sequence_2018_07_27-18.47.08.csv')
+df = pd.read_csv('sequences/sequence_2018_07_27-18.47.08.csv')
 
 # 90%
 # df = pd.read_csv('sequences/sequence_2018_07_27-18.49.21.csv')
@@ -70,7 +70,7 @@ from apriori import *
 # df = pd.read_csv('sequences/sequence_2018_07_27-19.19.47.csv')
 
 # 60%
-df = pd.read_csv('sequences/sequence_2018_07_27-19.26.50.csv')
+# df = pd.read_csv('sequences/sequence_2018_07_27-19.26.50.csv')
 seq1 = np.array(df['attr_1'])
 seq2 = np.array(df['attr_2'])
 seq3 = np.array(df['attr_3'])
