@@ -40,6 +40,20 @@ def print_rules(rules_sets, support):
         print_separator()
     print()
 
+def print_rules_for_attr(rules_sets, attr_name, support):
+    print_separator()
+    for rules_set in rules_sets:
+        #for rule in sorted(rules_set, key=lambda x: (x.number_of_occurrences, len(x.lhs), x.rhs.len, x.lhs[0].len), reverse=True):
+        if list(rules_set)[0].lhs[0].attr_name_ != attr_name:
+            continue
+        
+        for rule in sorted(rules_set, key=lambda r: (r.get_rule_score()),reverse=True):
+            if rule.rule_support >= support:
+                print(rule)
+                print_separator()
+        print_separator()
+    print()
+
 def print_best_rules(rules_sets):
     print_separator()
     for rules_set in rules_sets:

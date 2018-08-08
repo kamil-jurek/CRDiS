@@ -34,7 +34,7 @@ class SequencePredictor(object):
         self.predicted_rule = Rule(None, None)
         self.predictions = []
         self.MIN_LHS_LEN = 300
-        self.PREDICT_WIN_SIZE = 1500
+        self.PREDICT_WIN_SIZE = 2000
 
     def predict_sequence(self, seq_index, curr_elem_index):
         # if seq_index != self.simulator.rules_detector.target_seq_index:

@@ -72,6 +72,6 @@ class Rule(object):
             lhs_score = np.sum([lhs.len for lhs in self.lhs])
             rhs_score = self.rhs.len
 
-            return self.rule_support  * (lhs_score + rhs_score * self.RHS_factor)
+            return self.rule_support  * self.get_confidence() *(lhs_score + rhs_score * self.RHS_factor)
         else:
             return 0

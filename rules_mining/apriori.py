@@ -109,22 +109,22 @@ def getAttrName(lhs):
 #             [2, 5],
 #             ['a', 'b', 'c']]
 
-dataSet = [['attr_1:2', 'attr_1:2', 'attr_1:2', 'attr_1:3', 'attr_1:3', 'attr_1:3', 'attr_1:1', 'attr_1:1', 'target'],
-           ['attr_2:4', 'attr_2:4', 'attr_2:4', 'attr_2:4', 'attr_2:4', 'attr_2:5', 'attr_2:5', 'attr_2:1', 'target'],
-           #['attr_2:1', 'attr_2:4', 'attr_2:4', 'attr_2:4', 'attr_2:4', 'attr_2:5', 'attr_2:5', 'attr_2:5', 'target'],
-           ['attr_3:1', 'attr_3:1', 'attr_3:1', 'attr_3:1', 'attr_3:1', 'attr_3:1', 'attr_3:1', 'attr_3:4', 'target'],
-           #['attr_1:1', 'attr_1:2', 'attr_1:2', 'attr_1:3', 'attr_1:3', 'attr_1:3', 'attr_1:3', 'attr_1:3', 'target']
+dataSet = [['attr_1(2){300}', 'attr_1(3){300}', 'attr_1(4){600}'],
+        #    ['attr_2:4', 'attr_2:4', 'attr_2:4', 'attr_2:4', 'attr_2:4', 'attr_2:5', 'attr_2:5', 'attr_2:1', 'target'],
+        #    #['attr_2:1', 'attr_2:4', 'attr_2:4', 'attr_2:4', 'attr_2:4', 'attr_2:5', 'attr_2:5', 'attr_2:5', 'target'],
+        #    ['attr_3:1', 'attr_3:1', 'attr_3:1', 'attr_3:1', 'attr_3:1', 'attr_3:1', 'attr_3:1', 'attr_3:4', 'target'],
+        #    #['attr_1:1', 'attr_1:2', 'attr_1:2', 'attr_1:3', 'attr_1:3', 'attr_1:3', 'attr_1:3', 'attr_1:3', 'target']
            ]
 
 # # L, suppData = aprioriAlgo(dataSet, minSupport=0.1)
 # # rules, rulesDict= generateRules(L,suppData, minConf=0.0)
-# target = 'target'
-# L, suppData = aprioriAlgo(dataSet, minSupport=0.0)
-# rules, rulesDict = generateRules(L,suppData, target, minConf=0.0)
+target = 'attr_1(4){600}'
+L, suppData = aprioriAlgo(dataSet, minSupport=0.0)
+rules, rulesDict = generateRules(L,suppData, target, minConf=0.0)
 #
-# # for r in rules:
-# #     print(r)
-#
+for r in rules:
+    print(r)
+
 # for k, r in rulesDict.items():
 #     r.sort(key=lambda t: len(t.lhs), reverse=True)
 #     print(k, r[0])
