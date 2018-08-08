@@ -1,10 +1,10 @@
 import numpy as np
 
 def loadDataSet():
-    return [ ['attr_1:2', 'attr_1:2', 'attr_1:2', 'attr_1:3', 'attr_1:3', 'attr_1:3', 'attr_1:1', 'attr_1:1', 'target'],
-           ['attr_2:4', 'attr_2:4', 'attr_2:4', 'attr_2:4', 'attr_2:4', 'attr_2:5', 'attr_2:5', 'attr_2:1', 'target'],
-           ['attr_2:1', 'attr_2:4', 'attr_2:4', 'attr_2:4', 'attr_2:5', 'attr_2:5', 'attr_2:5', 'attr_2:1', 'target'],
-           ['attr_3:1', 'attr_3:1', 'attr_3:1', 'attr_3:1', 'attr_3:1', 'attr_3:1', 'attr_3:1', 'attr_3:4', 'target'],
+    return [ ['attr_1(2){300}', 'attr_1(3){300}', 'attr_1(4){600}'],
+        #    ['attr_2:4', 'attr_2:4', 'attr_2:4', 'attr_2:4', 'attr_2:4', 'attr_2:5', 'attr_2:5', 'attr_2:1', 'target'],
+        #    ['attr_2:1', 'attr_2:4', 'attr_2:4', 'attr_2:4', 'attr_2:5', 'attr_2:5', 'attr_2:5', 'attr_2:1', 'target'],
+        #    ['attr_3:1', 'attr_3:1', 'attr_3:1', 'attr_3:1', 'attr_3:1', 'attr_3:1', 'attr_3:1', 'attr_3:4', 'target'],
            #['attr_1:1', 'attr_1:2', 'attr_1:2', 'attr_1:3', 'attr_1:3', 'attr_1:3', 'attr_1:3', 'attr_1:3', 'target'],
            ]
 
@@ -29,7 +29,7 @@ def contains(small, big):
             return i, i+len(small)
     return False
 
-print(contains([1,3,4], [1, 3, 4]))
+# print(contains([1,3,4], [1, 3, 4]))
 
 
 def scanD(D, Ck, minSupport):
@@ -59,7 +59,7 @@ D = dataSet
 #print(D)
 #
 L1,suppDat0 = scanD(D,C1,0.5)
-print(L1)
+#print(L1)
 
 def aprioriGen(Lk, k): #creates Ck
     retList = []
@@ -87,8 +87,8 @@ def apriori(dataSet, minSupport = 0.5):
     return L, supportData
 
 L,suppData = apriori(dataSet)
-print(L)
-print(suppData)
+#print(L)
+#print(suppData)
 
 def generateRules(L, supportData, minConf=0.7):  #supportData is a dict coming from scanD
     bigRuleList = []

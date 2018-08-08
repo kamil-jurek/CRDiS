@@ -110,8 +110,8 @@ class OnlineSimulator(object):
                     #print("curr_index:", curr_index)
                     #print("first_pred:", first_pred)
                     if first_pred:
-                        print("seq_index == self.rules_detector.target_seq_index:",seq_index == self.rules_detector.target_seq_index)
-                        print("detector.is_change_detected is True:",detector.is_change_detected is True)
+                        #print("seq_index == self.rules_detector.target_seq_index:",seq_index == self.rules_detector.target_seq_index)
+                        #print("detector.is_change_detected is True:",detector.is_change_detected is True)
                         if seq_index == self.rules_detector.target_seq_index and detector.is_change_detected is True:
                             self.predictor.predict_sequence(seq_index, curr_index)
                     elif curr_index % self.rules_detector.round_to == 0 and seq_index == 0:
