@@ -30,7 +30,7 @@ class Rule(object):
         self.occurrences = []
         self.lhs_support = 0
         self.generalized = False
-        self.RHS_factor = 1.0
+        self.RHS_factor = 1.5
 
     def __repr__(self):
         generalized = " Generalized" if self.generalized else ""

@@ -33,7 +33,7 @@ class ChangePoint(object):
         self.curr_value_percent = -1
 
     def __repr__(self):
-        return(self.attr_name + " at: " + str(self.at_) + "\t" + 
+        return(self.attr_name + " at: " + str(round_to(self.at_, 60)) + "\t" + 
                 str(self.prev_value) + "{" + str(self.prev_value_len) + "}" + " -> " + str(self.curr_value) +
                 "{" + str(self.curr_value_len) + "}")
                 

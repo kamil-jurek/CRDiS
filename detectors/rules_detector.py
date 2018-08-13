@@ -65,6 +65,9 @@ class RulesDetector(object):
             elif self.type == "all":
                 self.generate_all_rules(window_begin, window_end, current_index)
 
+            elif self.type == "simple":
+                self.generate_simple_rules(window_begin, window_end, current_index)
+            
             else:
                 print("ERROR - incorrect rules_detector type")
 
@@ -77,6 +80,67 @@ class RulesDetector(object):
         if len(self.simulator.detected_change_points[self.target_seq_index]) > 2:
             pre_prev_change_point = self.simulator.detected_change_points[self.target_seq_index][-3]
         return pre_prev_change_point
+
+    def generate_simple_rules(self, window_begin, window_end, current_index):
+        for seq_index, change_point_list in enumerate(self.simulator.detected_change_points):           
+            lhs = []
+            points_before_window, points_in_window, points_after_window = \
+                self.get_change_points_in_window(seq_index, window_begin, window_end)
+
+            # no change points in window
+            if len(points_in_window) == 0:
+                if round_to(window_end - window_begin, self.round_to):
+                    lhs_elem = RuleComponent(-1, 
+                                             points_before_window[-1].curr_value if len(points_before_window) > 0 else -1,
+                                             self.simulator.sequences_names[seq_index],
+                                             0)
+                    lhs_elem.prev_value = points_before_window[-1].curr_value if len(points_before_window) > 0 else -1
+                    lhs.append(lhs_elem)
+
+            else:
+                for point in points_in_window:
+                    # print("inside window case")
+                    if round_to(point.prev_value_len, self.round_to) > 0:
+                        lhs_elem = RuleComponent(-1,
+                                                 point.curr_value,
+                                                 point.attr_name,
+                                                 point.prev_value_percent)
+                        lhs_elem.prev_value = point.prev_value
+                        lhs.append(lhs_elem)
+                    
+
+            rhs_elem = RuleComponent(self.simulator.detected_change_points[self.target_seq_index][-2].curr_value,
+                                    self.simulator.detected_change_points[self.target_seq_index][-2].curr_value,
+                                    self.simulator.detected_change_points[self.target_seq_index][-2].attr_name,
+                                    self.simulator.detected_change_points[self.target_seq_index][-2].prev_value_percent)
+            rhs_elem.prev_value = self.simulator.detected_change_points[self.target_seq_index][-2].prev_value
+
+            if len(lhs) > 0:
+                rule = Rule(lhs, rhs_elem)
+                rule.occurrences.append(current_index)
+
+                is_new_rule = True
+                for r in self.simulator.rules_sets[seq_index]:
+                    if r == rule:
+                        is_new_rule = False
+                        r.set_last_occurence(current_index)
+                        r.increment_rule_support()
+                        r.occurrences.append(current_index)
+                        r.lhs_support = 1
+                        print("Rule already in set:", r)
+
+                if is_new_rule:
+                    rule.set_last_occurence(current_index)
+                    rule.increment_rule_support()
+                    rule.lhs_support = 1
+                    # gen_rule = self.generalize_rule(seq_index, rule)
+                    # if gen_rule != None:
+                    #     gen_rule.set_last_occurence(current_index)
+                    #     self.simulator.rules_sets[m].add(gen_rule)
+
+                    self.simulator.rules_sets[seq_index].add(rule)
+                    print("New rule:", rule)
+       
 
     def generate_closed_rules(self, window_begin, window_end, current_index):
         combined_rule = []

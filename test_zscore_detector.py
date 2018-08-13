@@ -28,22 +28,32 @@ import encoders as en
 from detector import ChangeDetector
 from online_simulator import OnlineSimulator
 from zscore_detector import ZScoreDetector
+from utils import *
 
 #Numerical data
-df = pd.read_csv('sequences/sequence_2017_11_28-18.07.57.csv')
-seq = np.array(df['attr_1'])
+df = pd.read_csv('sequences/sequence_2018_07_14-18.24.58.csv')
+seq_1 = np.array(df['attr_1'])
+seq_2 = np.array(df['attr_2'])
+seq_3 = np.array(df['attr_3'])
+seq_4 = np.array(df['attr_4'])
 
-win_size = int(len(seq)*(1/100))
-print("win size:", win_size)
 
-detector = ZScoreDetector(window_size = win_size, threshold=2.5)
+win_size = 20
+
+detector_1 = ZScoreDetector(window_size = win_size, threshold=2.5)
+detector_2 = ZScoreDetector(window_size = win_size, threshold=3.5)
+detector_3 = ZScoreDetector(window_size = win_size, threshold=3.5)
+detector_4 = ZScoreDetector(window_size = win_size, threshold=3.5)
+
 simulator = OnlineSimulator(None,
-                            [detector],
-                            [seq],
-                            ["attr_1"])
+                            [detector_1, detector_2, detector_3, detector_4],
+                            [seq_1, seq_2, seq_3, seq_4],
+                            ["attr_1", "attr_2", "attr_3", "attr_4"])
 simulator.run(plot=True, detect_rules=False)
 
 detected_change_points = simulator.get_detected_changes()
-print(np.array(detected_change_points))
+#print(np.array(detected_change_points))
+print_detected_change_points(detected_change_points)
+
 
 plt.show()

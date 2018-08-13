@@ -1,6 +1,6 @@
 from collections import defaultdict
 
-db =  [['attr_1(2){300}', 'attr_1(3){300}', 'attr_1(4){600}'],
+db =  [['attr_1(1->2)', 'attr_1(2->3)', 'attr_1(3->4)'],
            #['attr_1:1', 'attr_1:2', 'attr_1:2', 'attr_1:3', 'attr_1:3', 'attr_1:3', 'attr_1:3', 'attr_1:3', 'target'],
 ]
 

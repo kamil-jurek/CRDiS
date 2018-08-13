@@ -109,7 +109,7 @@ def getAttrName(lhs):
 #             [2, 5],
 #             ['a', 'b', 'c']]
 
-dataSet = [['attr_1(2){300}', 'attr_1(3){300}', 'attr_1(4){600}'],
+dataSet = [['attr_1(1->2)', 'attr_1(2->3)', 'attr_1(3->4)'],
         #    ['attr_2:4', 'attr_2:4', 'attr_2:4', 'attr_2:4', 'attr_2:4', 'attr_2:5', 'attr_2:5', 'attr_2:1', 'target'],
         #    #['attr_2:1', 'attr_2:4', 'attr_2:4', 'attr_2:4', 'attr_2:4', 'attr_2:5', 'attr_2:5', 'attr_2:5', 'target'],
         #    ['attr_3:1', 'attr_3:1', 'attr_3:1', 'attr_3:1', 'attr_3:1', 'attr_3:1', 'attr_3:1', 'attr_3:4', 'target'],

@@ -1,7 +1,7 @@
 import numpy as np
 
 def loadDataSet():
-    return [ ['attr_1(2){300}', 'attr_1(3){300}', 'attr_1(4){600}'],
+    return [ ['attr_1(1->2)', 'attr_1(2->3)', 'attr_1(3->4)'],
         #    ['attr_2:4', 'attr_2:4', 'attr_2:4', 'attr_2:4', 'attr_2:4', 'attr_2:5', 'attr_2:5', 'attr_2:1', 'target'],
         #    ['attr_2:1', 'attr_2:4', 'attr_2:4', 'attr_2:4', 'attr_2:5', 'attr_2:5', 'attr_2:5', 'attr_2:1', 'target'],
         #    ['attr_3:1', 'attr_3:1', 'attr_3:1', 'attr_3:1', 'attr_3:1', 'attr_3:1', 'attr_3:1', 'attr_3:4', 'target'],

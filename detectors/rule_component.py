@@ -25,9 +25,14 @@ class RuleComponent(object):
         self.value = value_
         self.attr_name_ = attr_name_
         self.percent = percent_
+        self.prev_value = None
 
+    
     def __repr__(self):
-        return(str(self.attr_name_) + "(" + str(self.value) + "){"+ str(self.len) + "; " + "{0:.0f}".format(self.percent) + "%" +"}")
+        if self.prev_value:
+            return(str(self.attr_name_) + "(" + str(self.prev_value) + "->" + str(self.value) + "){" + "{0:.0f}".format(self.percent) + "%" +"}")
+        else:
+            return(str(self.attr_name_) + "(" + str(self.value) + "){"+ str(self.len) + "; " + "{0:.0f}".format(self.percent) + "%" +"}")
 
     def __eq__(self, other):
         if isinstance(other, RuleComponent):
