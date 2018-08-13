@@ -36,13 +36,9 @@ class SequencePredictor(object):
         self.MIN_LHS_LEN = 300
         self.PREDICT_WIN_SIZE = 1500
         self.best_rule_2 = Rule(None, None)
-        
 
     def predict_sequence_2(self, curr_elem_index):
         for seq_index, change_point_list in enumerate(self.simulator.detected_change_points):
-            if seq_index == self.simulator.rules_detector.target_seq_index:
-                continue
-            
             print("========================================================================================")
             print("---START Predict sequence ", "seq_index:", seq_index, "curr_elem_index:", curr_elem_index)
             window_end = round_to(curr_elem_index, self.simulator.round_to)
@@ -64,7 +60,7 @@ class SequencePredictor(object):
 
             predictions_dict = {}
             for pred in predictions:
-                print("Prediction:  ", pred)
+                # print("Prediction:  ", pred)
                 if pred.rhs in predictions_dict:
                     predictions_dict[pred.rhs].append(pred)
                 else:
@@ -73,8 +69,8 @@ class SequencePredictor(object):
             best_rule_score = -1
             best_rule = None
             for rhs, rules_list in predictions_dict.items():
-                print("rhs:", rhs)
-                print("rules_list:", rules_list)
+                # print("rhs:", rhs)
+                # print("rules_list:", rules_list)
                 if rules_list[-1].get_rule_score() > best_rule_score:
                     best_rule = rules_list[-1]
                     best_rule_score = best_rule.get_rule_score()
@@ -84,9 +80,6 @@ class SequencePredictor(object):
             print(best_rule)
             print("==========================================================")
 
-            if best_rule == None:
-                continue
-            
             if best_rule.get_rule_score() > self.best_rule_2.get_rule_score():
                 self.best_rule_2 = best_rule
 
@@ -103,20 +96,6 @@ class SequencePredictor(object):
         print("==========================================================")
         print("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX")
         best_rule = self.best_rule_2
-
-        self.simulator.best_rules.append((curr_elem_index, best_rule))
-
-        if best_rule == None or best_rule == Rule(None,None):
-            if self.predicted == []:
-                predicted_seq = [-1 for i in range(curr_elem_index)]
-                for i in range(100):
-                    predicted_seq.append(-1)
-                self.predicted = predicted_seq
-
-            else:
-                self.predicted = self.predicted + [-1 for i in range(100)]
-
-            return
 
         if self.predicted == []:
             predicted_seq = [-1 for i in range(curr_elem_index)]

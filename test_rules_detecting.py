@@ -77,11 +77,19 @@ for nr in range(1):
         sequences[i] = np.concatenate((seq, base_seqs[i]))
 
 win_size = 20
+<<<<<<< HEAD
 detector1 = ZScoreDetector(window_size = 30, threshold=3.5)
 # detector1 = ZScoreDetector(window_size = 30, threshold=5)
 detector2 = ZScoreDetector(window_size = 30, threshold=4.5)
 #detector3 = ZScoreDetector(window_size = win_size, threshold=5.5)
 detector3 = ZScoreDetector(window_size = 30, threshold=3.5)
+=======
+detector1 = ZScoreDetector(window_size = 25, threshold=3)
+# detector1 = ZScoreDetector(window_size = 30, threshold=5)
+detector2 = ZScoreDetector(window_size = 30, threshold=4)
+detector3 = ZScoreDetector(window_size = win_size, threshold=5.5)
+detector4 = ZScoreDetector(window_size = 30, threshold=3.5)
+>>>>>>> 5f1aabbf6467d5784d6948bcc0d9377a8c63e3e3
 
 rules_detector = RulesDetector(target_seq_index=2,
                                window_size=0,
@@ -103,10 +111,16 @@ print_detected_change_points(simulator.get_detected_changes())
 # print_rules(simulator.get_rules_sets(), 5)
 # print_combined_rules(simulator.get_combined_rules(), 0)
 print_best_rules(simulator.get_rules_sets())
+<<<<<<< HEAD
 
 #print_rules(simulator.get_rules_sets(), 1)
 discovered_rules = simulator.get_rules_sets()
 #print_rules_for_attr(discovered_rules, 'light', 1)
+=======
+# print_rules(simulator.get_rules_sets(), 1)
+discovered_rules = simulator.get_rules_sets()
+# print_rules_for_attr(discovered_rules, 'light', 1)
+>>>>>>> 5f1aabbf6467d5784d6948bcc0d9377a8c63e3e3
 
 end_time = time.time()
 print(end_time - start_time)
