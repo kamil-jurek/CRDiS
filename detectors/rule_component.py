@@ -30,7 +30,7 @@ class RuleComponent(object):
     
     def __repr__(self):
         if self.prev_value:
-            return(str(self.attr_name_) + "(" + str(self.prev_value) + "->" + str(self.value) + "){" + "{0:.0f}".format(self.percent) + "%" +"}")
+            return(str(self.attr_name_) + "(" + str(self.prev_value) + "->" + str(self.value) + ")")
         else:
             return(str(self.attr_name_) + "(" + str(self.value) + "){"+ str(self.len) + "; " + "{0:.0f}".format(self.percent) + "%" +"}")
 

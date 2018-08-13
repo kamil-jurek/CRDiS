@@ -91,24 +91,21 @@ class OnlineSimulator(object):
 
                 if detect_rules:
                     self.rules_detector.search_rules(seq_index, curr_index)
-                    print(curr_index)
 
-                first_pred = True
-                if self.rules_detector:
-                    first_pred = True if self.predictor.predicted_rule == Rule(None, None) else False
-                    predict_first = (first_pred and seq_index == self.rules_detector.target_seq_index and detector.is_change_detected is True)
-                    next_pred = False
-
-                if(predict_seq and
+                # no random subsequences
+                if (predict_seq and
                    curr_index >= self.sequence_size * self.predict_ratio and
                    seq_index == self.rules_detector.target_seq_index and
-                   #curr_index % self.rules_detector.round_to == 0
-                   detector.is_change_detected is True
-                ):
-                    #self.predictor.predict_sequence(seq_index, curr_index)
-                    self.predictor.predict_sequence_2(curr_index)
-                #     self.predictor.predict_sequence(seq_index, curr_index)
+                   detector.is_change_detected is True):
+                    self.predictor.predict_sequence_no_random(curr_index)
+                
 
+                # first_pred = True
+                # if self.rules_detector:
+                #     first_pred = True if self.predictor.predicted_rule == Rule(None, None) else False
+                #     predict_first = (first_pred and seq_index == self.rules_detector.target_seq_index and detector.is_change_detected is True)
+                #     next_pred = False
+                
                 # if (predict_seq and curr_index >= self.sequence_size * self.predict_ratio):
                 #     #print("curr_index:", curr_index)
                 #     #print("first_pred:", first_pred)

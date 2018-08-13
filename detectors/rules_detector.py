@@ -82,6 +82,7 @@ class RulesDetector(object):
         return pre_prev_change_point
 
     def generate_simple_rules(self, window_begin, window_end, current_index):
+        generated_rules = [[] for i in range(len(self.simulator.sequences))]
         for seq_index, change_point_list in enumerate(self.simulator.detected_change_points):           
             lhs = []
             points_before_window, points_in_window, points_after_window = \
@@ -109,39 +110,19 @@ class RulesDetector(object):
                         lhs.append(lhs_elem)
                     
 
-            rhs_elem = RuleComponent(self.simulator.detected_change_points[self.target_seq_index][-2].curr_value,
-                                    self.simulator.detected_change_points[self.target_seq_index][-2].curr_value,
-                                    self.simulator.detected_change_points[self.target_seq_index][-2].attr_name,
-                                    self.simulator.detected_change_points[self.target_seq_index][-2].prev_value_percent)
-            rhs_elem.prev_value = self.simulator.detected_change_points[self.target_seq_index][-2].prev_value
+            prev_target_cp = self.simulator.detected_change_points[self.target_seq_index][-2]
+            rhs_elem = RuleComponent(prev_target_cp.curr_value,
+                                     prev_target_cp.curr_value,
+                                     prev_target_cp.attr_name,
+                                     prev_target_cp.prev_value_percent)
+            rhs_elem.prev_value = prev_target_cp.prev_value
 
             if len(lhs) > 0:
-                rule = Rule(lhs, rhs_elem)
-                rule.occurrences.append(current_index)
-
-                is_new_rule = True
-                for r in self.simulator.rules_sets[seq_index]:
-                    if r == rule:
-                        is_new_rule = False
-                        r.set_last_occurence(current_index)
-                        r.increment_rule_support()
-                        r.occurrences.append(current_index)
-                        r.lhs_support = 1
-                        print("Rule already in set:", r)
-
-                if is_new_rule:
-                    rule.set_last_occurence(current_index)
-                    rule.increment_rule_support()
-                    rule.lhs_support = 1
-                    # gen_rule = self.generalize_rule(seq_index, rule)
-                    # if gen_rule != None:
-                    #     gen_rule.set_last_occurence(current_index)
-                    #     self.simulator.rules_sets[m].add(gen_rule)
-
-                    self.simulator.rules_sets[seq_index].add(rule)
-                    print("New rule:", rule)
+                self.update_discovered_lhss(seq_index, current_index, [lhs])
+                self.generate_and_update_rules(seq_index, current_index,
+                                               [lhs], [rhs_elem],
+                                               generated_rules)               
        
-
     def generate_closed_rules(self, window_begin, window_end, current_index):
         combined_rule = []
         for seq_index, change_point_list in enumerate(self.simulator.detected_change_points):
@@ -198,8 +179,10 @@ class RulesDetector(object):
                 self.simulator.detected_change_points[self.target_seq_index][-1].prev_value,
                 self.simulator.detected_change_points[self.target_seq_index][-1].attr_name,
                 self.simulator.detected_change_points[self.target_seq_index][-1].prev_value_percent)
-
+           
             if len(lhs) > 0:
+                
+
                 rule = Rule(lhs, rhs_elem)
                 rule.occurrences.append(current_index)
 
@@ -253,8 +236,8 @@ class RulesDetector(object):
             if generated_lhss:
                 self.update_discovered_lhss(seq_index, current_index, generated_lhss)
                 self.generate_and_update_rules(seq_index, current_index,
-                                                                 generated_lhss, generated_rhss,
-                                                                 generated_rules)
+                                               generated_lhss, generated_rhss,
+                                               generated_rules)
 
         if self.combined:
             combined_rule = []
@@ -347,11 +330,13 @@ class RulesDetector(object):
             is_new_lhs = True
 
             for lhs in self.simulator.lhs_sets[seq_index]:
+                print(lhs)
                 if lhs == new_lhs:
                     is_new_lhs = False
                     lhs.set_last_occurence(current_index)
                     lhs.increment_rule_support()
                     lhs.occurrences.append(current_index)
+                    
 
             if is_new_lhs:
                 new_lhs.set_last_occurence(current_index)
