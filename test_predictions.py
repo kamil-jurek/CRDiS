@@ -54,7 +54,9 @@ detector2 = ZScoreDetector(window_size=win_size, threshold=4)
 detector3 = ZScoreDetector(window_size=win_size, threshold=4)
 detector4 = ZScoreDetector(window_size=win_size, threshold=5)
 
-rules_detector = RulesDetector(target_seq_index=3,
+target_seq_index = 3
+
+rules_detector = RulesDetector(target_seq_index=target_seq_index,
                                window_size=0,
                                round_to=100,
                                type="all",
@@ -76,58 +78,38 @@ simulator.run(plot=True, detect_rules=True, predict_seq=True)
 end_time = time.time()
 print(end_time - start_time)
 
-for k, p in enumerate(simulator.predictor.predictions):
-    print(k ,":", p)
+print("Rules used for prediction:")
+for br in simulator.best_rules:
+    print(br)
 
-pr = int(len(sequences[1])*predict_ratio) + 170
-predicted = simulator.predictor.predicted[pr:len(sequences[1])]
-real = sp.signal.medfilt(sequences[1][pr:],21)
+prediction_start = int(len(sequences[target_seq_index])*predict_ratio)
+predicted = simulator.predictor.predicted[prediction_start:len(sequences[target_seq_index])]
+real = sp.signal.medfilt(sequences[target_seq_index][prediction_start:],21)
 
-# plt.figure()
-# #plt.plot(sequences[1][pr:], 'b')
-# #plt.plot(predicted, 'r', linewidth=3.0)
-#
-# plt.plot(sequences[1][pr:], 'b-', alpha=0.1)
-# plt.plot(sequences[1][pr:], 'b.', markersize=4, label="Actual")
-# #plt.plot(sequences[1][10800:], 'b-', alpha=0.1)
-# plt.plot(predicted, 'r', linewidth=2.0, label='Rule Prediction')
-# #plt.plot(predicted_lstm, color='g',linewidth=2.0, label='LSTM Prediction')
-# #plt.xticks(np.arange(0, len(sequences[3]), 500))
-#
-#
-# plt.legend(loc='best')
 
-fig, axes = plt.subplots(nrows=2, ncols=1, sharex=False,
+fig, axes = plt.subplots(nrows=len(seq_names), ncols=1, sharex=False,
                                      figsize=(12, 2*3))
 
-axes[0].plot(sequences[0], 'b.', markersize=3)
-axes[0].plot(sequences[0], 'b-', alpha=0.25)
-for change_point in simulator.detected_change_points[0]:
-    axes[0].axvline(change_point.at_, color='r', linestyle='--')
-axes[0].set_xticks(np.arange(0, len(sequences[1]), 500))
+seq_len = len(sequences[0])
+for i in range(len(seq_names)):  
+    axes[i].plot(sequences[i], 'b.', markersize=3)
+    axes[i].plot(sequences[i], 'b-', alpha=0.25)
+    for change_point in simulator.detected_change_points[i]:
+        axes[i].axvline(change_point.at_, color='r', linestyle='--')
+    axes[i].set_title(seq_names[i])
+    if i == target_seq_index:
+        axes[i].plot(simulator.predictor.predicted[:seq_len], 'r.', markersize=3)
+    
+    step = round_to(seq_len / 25, 100) 
+    ticks_to_use = range(0, seq_len, step)
+    labels = [ j for j in ticks_to_use]
+    axes[i].set_xticks(ticks_to_use)
+    axes[i].set_xticklabels(labels, rotation=0)
 
+rmse = np.sqrt(((predicted - real) ** 2).mean())
+print('Mean Squared Error: {}'.format(round(rmse, 5)))
 
-axes[1].plot(sequences[1], 'b.', markersize=3)
-axes[1].plot(sequences[1], 'b-', alpha=0.25)
-for change_point in simulator.detected_change_points[1]:
-    axes[1].axvline(change_point.at_, color='r', linestyle='--')
-
-axes[1].plot(simulator.predictor.predicted, 'r.', markersize=3)
-
-axes[1].set_xticks(np.arange(0, len(sequences[1]), 500))
-plt.figure()
-plt.plot(sequences[1], 'b')
-#plt.plot(simulator..predictor.predicted, 'r', linewidth=3.0)
-
-
-#mse = np.mean((real - predicted)**2)
-# print("pred len:", real)
-# print("real len:", predicted)
-#print("mse:", mse)
-#rmse = np.sqrt(((predicted - real) ** 2).mean())
-#print('Mean Squared Error: {}'.format(round(rmse, 5)))
-
-plt.legend(loc='best')
+# plt.legend(loc='best')
 
 
 plt.show()

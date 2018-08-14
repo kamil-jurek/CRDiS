@@ -330,7 +330,6 @@ class RulesDetector(object):
             is_new_lhs = True
 
             for lhs in self.simulator.lhs_sets[seq_index]:
-                print(lhs)
                 if lhs == new_lhs:
                     is_new_lhs = False
                     lhs.set_last_occurence(current_index)

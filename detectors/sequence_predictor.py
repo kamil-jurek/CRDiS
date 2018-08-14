@@ -66,14 +66,16 @@ class SequencePredictor(object):
                     best_rule = rules_list[-1]
                     best_rule_score = best_rule.get_rule_score()
 
-            if best_rule.get_rule_score() > self.last_best_rule.get_rule_score():
-                self.last_best_rule = best_rule
-
+            if best_rule:
+                if best_rule.get_rule_score() > self.last_best_rule.get_rule_score():
+                    self.last_best_rule = best_rule
+                
         if self.predicted == []:
             predicted_seq = [-1 for i in range(curr_elem_index)]             
             self.predicted = predicted_seq + [self.last_best_rule.rhs.value for i in range(self.last_best_rule.rhs.len)]
         else:
             self.predicted = self.predicted + [self.last_best_rule.rhs.value for i in range(self.last_best_rule.rhs.len)]
+            self.simulator.best_rules.append((round_to(curr_elem_index, self.simulator.round_to), self.last_best_rule) )
 
         self.last_best_rule = Rule(None, None)
         
