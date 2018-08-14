@@ -87,24 +87,7 @@ predicted = simulator.predictor.predicted[prediction_start:len(sequences[target_
 real = sp.signal.medfilt(sequences[target_seq_index][prediction_start:],21)
 
 
-fig, axes = plt.subplots(nrows=len(seq_names), ncols=1, sharex=False,
-                                     figsize=(12, 2*3))
-
-seq_len = len(sequences[0])
-for i in range(len(seq_names)):  
-    axes[i].plot(sequences[i], 'b.', markersize=3)
-    axes[i].plot(sequences[i], 'b-', alpha=0.25)
-    for change_point in simulator.detected_change_points[i]:
-        axes[i].axvline(change_point.at_, color='r', linestyle='--')
-    axes[i].set_title(seq_names[i])
-    if i == target_seq_index:
-        axes[i].plot(simulator.predictor.predicted[:seq_len], 'r.', markersize=3)
-    
-    step = round_to(seq_len / 25, 100) 
-    ticks_to_use = range(0, seq_len, step)
-    labels = [ j for j in ticks_to_use]
-    axes[i].set_xticks(ticks_to_use)
-    axes[i].set_xticklabels(labels, rotation=0)
+plot_sequences_on_one_figure(sequences, seq_names, simulator, target_seq_index)
 
 rmse = np.sqrt(((predicted - real) ** 2).mean())
 print('Mean Squared Error: {}'.format(round(rmse, 5)))

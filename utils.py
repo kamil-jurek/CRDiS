@@ -22,6 +22,7 @@
 import math
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 
 def round_to(x, _round_to):
     return int(round(x / _round_to)) * _round_to
@@ -154,3 +155,22 @@ def generate_discretized_sequence(change_points):
                     elem = attr_name + ":" + str(p.prev_value)
                     sequences[k].append(elem)
     return sequences
+
+
+def plot_sequences_on_one_figure(sequences, seq_names, simulator, target_seq_index):
+    fig, axes = plt.subplots(nrows=len(seq_names), ncols=1, sharex=False,
+                                     figsize=(12, 2*3))
+    seq_len = len(sequences[0])
+    step = round_to(seq_len / 25, 100) 
+    ticks_to_use = range(0, seq_len, step)
+    for i in range(len(seq_names)):  
+        axes[i].plot(sequences[i], 'b.', markersize=3)
+        axes[i].plot(sequences[i], 'b-', alpha=0.25)
+        for change_point in simulator.detected_change_points[i]:
+            axes[i].axvline(change_point.at_, color='r', linestyle='--')
+        axes[i].set_title(seq_names[i])
+        if i == target_seq_index:
+            axes[i].plot(simulator.predictor.predicted[:seq_len], 'r.', markersize=3)             
+        labels = [j for j in ticks_to_use]
+        axes[i].set_xticks(ticks_to_use)
+        axes[i].set_xticklabels(labels, rotation=0)

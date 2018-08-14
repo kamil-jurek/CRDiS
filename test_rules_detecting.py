@@ -92,4 +92,6 @@ print_best_rules(discovered_rules)
 end_time = time.time()
 print(end_time - start_time)
 
+plot_sequences_on_one_figure(sequences, seq_names, simulator, target_seq_index)
+
 plt.show()
