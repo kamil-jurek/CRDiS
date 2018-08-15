@@ -36,6 +36,30 @@ class SequencePredictor(object):
         self.MIN_LHS_LEN = 300
         self.PREDICT_WIN_SIZE = 1500
         self.last_best_rule = Rule(None, None)
+        self.PREDICTION_STEP = 100
+
+    def predict(self, curr_index, seq_index, detector):
+        # no random subsequences
+        if self.simulator.random_subsequences == False:
+            if (curr_index >= self.simulator.sequence_size * self.simulator.predict_ratio and
+                seq_index == self.simulator.rules_detector.target_seq_index and
+                detector.is_change_detected is True):
+            
+                self.predict_sequence_no_random(curr_index)
+        
+        else:
+            first_pred = True
+            if self.simulator.rules_detector:
+                first_pred = True if self.predicted_rule == Rule(None, None) else False
+            
+            if (curr_index >= self.simulator.sequence_size * self.simulator.predict_ratio):
+                
+                if first_pred:
+                    if seq_index == self.simulator.rules_detector.target_seq_index and detector.is_change_detected is True:
+                        self.predict_sequence(seq_index, curr_index)
+                
+                elif curr_index % self.simulator.rules_detector.round_to == 0 and seq_index == 0:
+                    self.predict_sequence(seq_index, curr_index)
 
     def predict_sequence_no_random(self, curr_elem_index):
         for seq_index, change_point_list in enumerate(self.simulator.detected_change_points):
@@ -83,11 +107,7 @@ class SequencePredictor(object):
     def predict_sequence(self, seq_index, curr_elem_index):
         # if seq_index != self.simulator.rules_detector.target_seq_index:
         #     return
-
-        # if seq_index != 0:
-        #     return
-        print("========================================================================================")
-        print("---START Predict sequence ", "seq_index:", seq_index, "curr_elem_index:", curr_elem_index)
+        
         window_end = round_to(curr_elem_index, self.simulator.round_to)
         window_begin = window_end - self.PREDICT_WIN_SIZE
 
@@ -98,15 +118,11 @@ class SequencePredictor(object):
         self.generate_lhss(lhss,seq_index,window_begin,window_end,points_in_window,points_before_window,points_after_window)
 
         predictions = []
-        # print("-----------------------------------------------------------------------------------------------")
-        # print("All LHS:")
         for lhs in lhss:
-            print(lhs)
             self.get_predictions_by_lhs(seq_index, lhs, predictions)
 
         predictions_dict = {}
         for pred in predictions:
-            #print("Prediction:  ", pred)
             if pred.rhs in predictions_dict:
                 predictions_dict[pred.rhs].append(pred)
             else:
@@ -115,131 +131,31 @@ class SequencePredictor(object):
         best_rule_score = -1
         best_rule = None
         for rhs, rules_list in predictions_dict.items():
-            #print("rhs:", rhs)
-            #print("rules_list:", rules_list)
             if rules_list[-1].get_rule_score() > best_rule_score:
                 best_rule = rules_list[-1]
                 best_rule_score = best_rule.get_rule_score()
 
-        # print("==========================================================")
-        # print("best_rule:")
-        # print(best_rule)
-        # print("==========================================================")
-
-
-
         if best_rule:
             # new better than current or current rule
-            print("best_rule.get_rule_score():", best_rule.get_rule_score())
-            print("self.predicted_rule.get_rule_score():", self.predicted_rule.get_rule_score())
-            print("self.predicted_len <= curr_elem_index:", self.predicted_len <= curr_elem_index)
-
             if best_rule.get_rule_score() > self.predicted_rule.get_rule_score() or self.predicted_len <= curr_elem_index:
                 if self.predicted == []:
-                    predicted_seq = [-1 for i in range(curr_elem_index)]
-                    for i in range(100):
-                        predicted_seq.append(best_rule.rhs.value)
-
-                    self.predicted = predicted_seq
-
+                    predicted_seq = [-1 for i in range(curr_elem_index)]             
+                    self.predicted = predicted_seq + [best_rule.rhs.value for i in range(self.PREDICTION_STEP)]
                 else:
-                    self.predicted = self.predicted + [best_rule.rhs.value for i in range(100)]
-
-                print("======================================================")
-                print("curr_elem_index:", curr_elem_index)
-                print("best_rule.rhs.value:", best_rule.rhs.value)
-                print("predicting ", best_rule.rhs.value, "for 100 next elems")
-                print(best_rule)
-                print(curr_elem_index, len(self.predicted))
-                print("self.predicted_len:", self.predicted_len)
-                print("======================================================")
-
+                    self.predicted = self.predicted + [best_rule.rhs.value for i in range(self.PREDICTION_STEP)]                   
+                
+                self.simulator.best_rules.append((round_to(curr_elem_index, self.simulator.round_to), best_rule))
                 self.predicted_len = curr_elem_index + best_rule.rhs.len
                 self.predicted_rule = best_rule
 
             else:
                 if self.predicted == []:
-                    predicted_seq = [-1 for i in range(curr_elem_index)]
-                    for i in range(100):
-                        predicted_seq.append(self.predicted_rule.rhs.value)
-                    self.predicted = predicted_seq
-
+                    predicted_seq = [-1 for i in range(curr_elem_index)]             
+                    self.predicted = predicted_seq + [self.predicted_rule.rhs.value for i in range(self.PREDICTION_STEP)]
                 else:
-                    self.predicted = self.predicted + [self.predicted_rule.rhs.value for i in range(100)]
-                print("======================================================")
-                print("curr_elem_index:", curr_elem_index)
-                print("self.predicted_rule.rhs.value:", self.predicted_rule.rhs.value)
-                print("predicting ", self.predicted_rule.rhs.value, "for 100 next elems")
-                print(self.predicted_rule)
-                print(curr_elem_index, len(self.predicted))
-                print("self.predicted_len:", self.predicted_len)
-                print("======================================================")
+                    self.predicted = self.predicted + [self.predicted_rule.rhs.value for i in range(self.PREDICTION_STEP)]
         else:
             self.predicted = self.predicted + [-1 for i in range(100)]
-
-
-
-            # prediction_list = []
-            # for k, predictions_list in predictions.items():
-            #     # for p in predictions_list:
-            #     # print("\t", p.lhs, "==>", p.rhs, " nr:", p.number_of_occurrences, p.rule.number_of_occurrences, p.rule.get_rule_score())
-            #
-            #     # print("-----------------------------------------------------------------------------------------------")
-            #     pred = predictions_list[-1]
-            #     # print("\tPossible Best Prediction: ", pred.lhs, "==>", pred.rhs,
-            #     #       " nrOfPredOcc:", pred.number_of_occurrences,
-            #     #       " nrOfRuleOcc:", pred.rule.number_of_occurrences,
-            #     #       " ruleScore:", pred.rule.get_rule_score(),
-            #     #       " predScore:", pred.get_prediction_score())
-            #
-            #     # adding the best prediction for each RHS
-            #     prediction_list.append(pred)
-            #     # print("-----------------------------------------------------------------------------------------------")
-            #
-            # if prediction_list:
-            #     # geting best possible prediction
-            #
-            #     # if prediction_list[-1][1].get_rule_score() >= self.predicted_rule.get_rule_score():
-            #     prediction = sorted(prediction_list, key=lambda p: (p.get_prediction_score()), reverse=True)[0]
-            #     if (prediction.get_prediction_score() > (
-            #     self.predictions[-1].get_prediction_score() if self.predictions else 0) or
-            #             curr_elem_index >= self.predicted_len):  # curr_elem_index >= self.predicted_len:
-            #         print("Best prediction:", prediction)
-            #         print("In index ", curr_elem_index, "predicting", prediction.lhs, "==>", k,
-            #               "nr of rules supporting:", prediction.number_of_occurrences,
-            #               "because of rule:\n", prediction.rule)
-            #
-            #         self.predicted_rule = prediction.rule
-            #
-            #         lhs_seq = []
-            #         for lhs_elem in prediction.rule.lhs:
-            #             for elem in range(lhs_elem.len):
-            #                 lhs_seq.append(lhs_elem.value)
-            #
-            #         if len(lhs_seq) >= self.MIN_LHS_LEN:
-            #             print("Adding new prediction")
-            #             self.predictions.append(prediction)
-            #             predicted_seq = [-1 for i in range(curr_elem_index)]  # -len(lhs_seq))] + lhs_seq
-            #             for i in range(k.len):
-            #                 predicted_seq.append(k.value)
-            #
-            #             if self.predicted == []:
-            #                 self.predicted = predicted_seq
-            #
-            #             print("curr_elem_index:", curr_elem_index)
-            #             print("k.value:", k.value)
-            #             self.predicted = self.predicted[:curr_elem_index] + [k.value for i in range(k.len)]
-            #             self.predicted_len = curr_elem_index + k.len
-            #
-            #             # if curr_elem_index <= self.predicted_len:
-            #             #     self.predicted.remove(self.predicted[-1]) if self.predicted else None
-            #             #     self.predicted.append(predicted_seq)
-            #             # else:
-            #             # self.predicted.append(predicted_seq)
-            #             # self.predicted_len = curr_elem_index+k.len
-        print("---END Predict sequence ", "seq_index:", seq_index, "curr_elem_index:", curr_elem_index)
-        print("========================================================================================")
-        print()
 
     def generate_lhss(self, lhss, seq_index, window_begin, window_end, points_in_window, points_before_window, points_after_window):
         if not points_in_window:
@@ -247,9 +163,8 @@ class SequencePredictor(object):
             if lhs_elem_len > 0:
                 for lhs_len in range(self.simulator.round_to, lhs_elem_len, self.simulator.round_to):
                     lhs_elem = RuleComponent(lhs_len,
-                                             points_before_window[-1].curr_value if len(
-                                                 points_before_window) > 0 else np.nan,
-                                             self.sequences_names[seq_index])
+                                             points_before_window[-1].curr_value if len(points_before_window) > 0 else np.nan,
+                                             self.simulator.sequences_names[seq_index])
                     lhss.append([lhs_elem])
         else:
             last_point = points_in_window[-1]

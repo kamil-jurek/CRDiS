@@ -161,7 +161,7 @@ def plot_sequences_on_one_figure(sequences, seq_names, simulator, target_seq_ind
     fig, axes = plt.subplots(nrows=len(seq_names), ncols=1, sharex=False,
                                      figsize=(12, 2*3))
     seq_len = len(sequences[0])
-    step = round_to(seq_len / 25, 100) 
+    step = round_to(seq_len / 30, 100) 
     ticks_to_use = range(0, seq_len, step)
     for i in range(len(seq_names)):  
         axes[i].plot(sequences[i], 'b.', markersize=3)

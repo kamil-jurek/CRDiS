@@ -32,9 +32,9 @@ from rules_detector import RulesDetector
 from utils import *
 from zscore_detector import ZScoreDetector
 
-df = pd.read_csv('sequences/sequence_2018_05_03-16.54.37.csv')
-df = pd.read_csv('sequences/sequence_2018_07_21-22.24.18.csv')
-# df = pd.read_csv('sequences/sequence_2018_07_30-17.55.58.csv')
+# df = pd.read_csv('sequences/sequence_2018_05_03-16.54.37.csv')
+# df = pd.read_csv('sequences/sequence_2018_07_21-22.24.18.csv')
+df = pd.read_csv('sequences/sequence_2018_07_30-17.55.58.csv')
 seq_names = ['attr_1', 'attr_2', 'attr_3','attr_4']
 
 predict_ratio=0.75
@@ -67,6 +67,7 @@ simulator = OnlineSimulator(rules_detector,
                             sequences,
                             seq_names,
                             predict_ratio=predict_ratio)
+simulator.random_subsequences = False
 
 start_time = time.time()
 
@@ -76,7 +77,7 @@ simulator.run(plot=True, detect_rules=True, predict_seq=True)
 #print_rules(simulator.get_rules_sets(), 0)
 
 end_time = time.time()
-print(end_time - start_time)
+
 
 print("Rules used for prediction:")
 for br in simulator.best_rules:
@@ -85,14 +86,11 @@ for br in simulator.best_rules:
 prediction_start = int(len(sequences[target_seq_index])*predict_ratio)
 predicted = simulator.predictor.predicted[prediction_start:len(sequences[target_seq_index])]
 real = sp.signal.medfilt(sequences[target_seq_index][prediction_start:],21)
-
-
-plot_sequences_on_one_figure(sequences, seq_names, simulator, target_seq_index)
-
 rmse = np.sqrt(((predicted - real) ** 2).mean())
 print('Mean Squared Error: {}'.format(round(rmse, 5)))
 
-# plt.legend(loc='best')
+plot_sequences_on_one_figure(sequences, seq_names, simulator, target_seq_index)
 
+print("Time:", end_time - start_time)
 
 plt.show()
