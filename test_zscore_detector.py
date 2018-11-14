@@ -32,23 +32,24 @@ from utils import *
 
 #Numerical data
 df = pd.read_csv('sequences/sequence_2018_07_14-18.24.58.csv')
+df = pd.read_csv('sequences/sequence_2018_07_21-22.24.18.csv')
 seq_1 = np.array(df['attr_1'])
 seq_2 = np.array(df['attr_2'])
 seq_3 = np.array(df['attr_3'])
 seq_4 = np.array(df['attr_4'])
 
 
-win_size = 20
+win_size = 30
 
-detector_1 = ZScoreDetector(window_size = win_size, threshold=2.5)
-detector_2 = ZScoreDetector(window_size = win_size, threshold=3.5)
-detector_3 = ZScoreDetector(window_size = win_size, threshold=3.5)
-detector_4 = ZScoreDetector(window_size = win_size, threshold=3.5)
+detector_1 = ZScoreDetector(window_size = win_size, threshold=3.5)
+detector_2 = ZScoreDetector(window_size = win_size, threshold=4.5)
+#detector_3 = ZScoreDetector(window_size = win_size, threshold=3.5)
+detector_4 = ZScoreDetector(window_size = win_size, threshold=4.5)
 
 simulator = OnlineSimulator(None,
-                            [detector_1, detector_2, detector_3, detector_4],
-                            [seq_1, seq_2, seq_3, seq_4],
-                            ["attr_1", "attr_2", "attr_3", "attr_4"])
+                            [detector_1, detector_2, detector_4],
+                            [seq_1, seq_2, seq_4],
+                            ["attr_1", "attr_2", "attr_4"])
 simulator.run(plot=True, detect_rules=False)
 
 detected_change_points = simulator.get_detected_changes()
