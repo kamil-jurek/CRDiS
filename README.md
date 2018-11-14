@@ -41,7 +41,7 @@ simulator.run(plot=True, detect_rules=False)
 ```
 Result of running change detection can be found in the below picture. 
 The points of sequence in which changes detected are marked as red dotted lines. 
-![alt text](https://github.com/kamil-jurek/CRDiS/plots/readme_plot_attr1_change_detection.png)
+![attr_1 result](https://github.com/kamil-jurek/CRDiS/blob/master/plots/readme_plot_attr1_change_detection.png)
 
 ```python
 detected_change_points = simulator.get_detected_changes()
