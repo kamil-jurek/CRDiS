@@ -1,9 +1,5 @@
 # CRDiS Causal Rules Discovery in Data Streams
-## Sequence generator
-```
-  - python seqgen.py -i configs/config_file -s
-  - python plot_sequence.py -i sequences/sequence.csv -s 120000
-```
+
 ## Change detection in sequences
 The first phase of the proposed approach of finding rules aims at localizing change
 points in the sequences of data that can be later used to discover the underlying 
@@ -40,7 +36,7 @@ simulator = OnlineSimulator(None,
 simulator.run(plot=True, detect_rules=False)
 ```
 Result of running change detection can be found in the below picture. 
-The points of sequence in which changes detected are marked as red dotted lines. 
+The points of sequence in which changes were detected are marked as red dotted lines. 
 ![attr_1 result](https://github.com/kamil-jurek/CRDiS/blob/master/plots/readme_plot_attr1_change_detection.png)
 
 ```python
@@ -81,9 +77,11 @@ attr_1 at: 8760 4.0{490} -> 1.0{257}
 
 ## Prediction using discovered causal rules
 
-## Usage
-
-TODO: Write usage instructions
+## Sequence generator
+```
+  - python seqgen.py -i configs/config_file -s
+  - python plot_sequence.py -i sequences/sequence.csv -s 120000
+```
 
 ## License
 
