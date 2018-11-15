@@ -23,7 +23,7 @@ detector_4 = ZScoreDetector(window_size = win_size, threshold=4.5)
 ```
 Later `OnlineSimulator` object is being created. Online Simulator allows to 
 simulate streaming data for the purpose of online algorithm experiments.
-The first parameter is `RulesDetector` object, in case of just detecting changes that 
+The first parameter is `RulesGenerator` object, in case of just detecting changes that 
 parameter is not required. The second parameter is a list of change detector objects.
 Third one is a list of sequences and the fourth one is a list of sequences name.
 The initialized OnlineSimulator is being started by using `run()` method.
@@ -35,7 +35,7 @@ simulator = OnlineSimulator(None,
 
 simulator.run(plot=True, detect_rules=False)
 ```
-Result of running change detection can be found in the below picture. 
+Result of running change detection can be found in the picture below. 
 The points of sequence in which changes were detected are marked as red dotted lines. 
 ![attr_1 result](https://github.com/kamil-jurek/CRDiS/blob/master/plots/readme_plot_attr1_change_detection.png)
 
@@ -70,10 +70,95 @@ attr_1 at: 8280 4.0{339} -> 1.0{490}
 attr_1 at: 8760 4.0{490} -> 1.0{257}
 
 ```
- 
+Discovered change points contain information about the moment in time when changed
+occurred, what is the previous value, how long it lasted and what is the value after
+the change. 
+
+And so, for example `attr_1 at: 1500 4.0{694} -> 3.0{110}`
+means that in sequence with attribute *attr_1* at moment *1500*
+changed value from *4.0* that lasted for *694* units of time to value *3.0* and 
+had that value for next *110* units of time.
+
+#### Change Detectors
+Following change detection algorithms are implemented:
+* Geometric Moving Average - `GeometricMovingAverageDetector`
+* CUSUM algorithm - `CusumDetector`
+* Page-Hinkley test - `PageHinkleyDetector`
+* Z-Score algorithm - `ZScoreDetector`
+* ADWIN(ADaptive WINdowing) - `AdwinDetector`
 
 
 ## Mining rules in sequences
+Basing on the detected change points rules can be generated generated.
+To do that `RuleGenerator` object should me passed to the `OnlineSimulator`.
+In the example below `AllRulesGenerator` is used that generates all possible rules.
+`target_seq_index` is an index of target sequence - stream of values of attribute 
+that we want to observe – attribute that will be placed on the right-hand-side of 
+the discovered rule. `window_size` is size od the window in which rules are being generated.
+If it is set to *0* the previous change point in target sequence is used as the begin of the
+window. `round_to` describes frequency with which rule components are generated.
+```python
+rules_detector = AllRulesGenerator(target_seq_index=3,
+                                   window_size=0,
+                                   round_to=100)
+
+simulator = OnlineSimulator(rules_detector,
+                            [detector1, detector2, detector3, detector4],
+                            sequences,
+                            seq_names
+                            )
+simulator.run(plot=True, detect_rules=True, predict_seq=False)
+
+```
+Discovered rules can be extracted from `OnlineSimulator` using `get_rules_set()` method.
+Rules with all theirs statistics (support, confidence, score) can be printed using
+`print_rules()` method. Minimal rule support can be passed as parameter.
+`print_best_rules` allows to print rules with highest score for each attribute.
+```
+discovered_rules = simulator.get_rules_sets()
+print_rules(discovered_rules, 1)
+print_best_rules(discovered_rules)
+```
+The result of printing best rules can be found below.
+```
+[attr_1(2.0){400; 81%}, attr_1(3.0){400; 79%}, attr_1(4.0){200; 79%}] ==> attr_4(6.0){500; 81%}
+	# rule_support:	5
+	# lhs_support:	5
+	# confidence:	1.0
+	# rule_score:	8750.0
+	# occurences:	[1510, 3108, 5020, 7107, 8613]
+-----------------------------------------------------------------------------------------------------------
+[attr_2(4.0){700; 90%}, attr_2(5.0){200; 89%}, attr_2(1.0){100; 89%}] ==> attr_4(6.0){500; 81%}
+	# rule_support:	5
+	# lhs_support:	5
+	# confidence:	1.0
+	# rule_score:	8750.0
+	# occurences:	[1510, 3108, 5020, 7107, 8613]
+-----------------------------------------------------------------------------------------------------------
+[attr_3(1.0){200; 94%}, attr_3(4.0){100; 94%}] ==> attr_4(6.0){500; 81%}
+	# rule_support:	5
+	# lhs_support:	5
+	# confidence:	1.0
+	# rule_score:	5250.0
+	# occurences:	[1510, 3108, 5020, 7107, 8613]
+-----------------------------------------------------------------------------------------------------------
+[attr_4(1.0){1000; 0%}] ==> attr_4(6.0){500; 81%}
+	# rule_support:	5
+	# lhs_support:	5
+	# confidence:	1.0
+	# rule_score:	8750.0
+	# occurences:	[1510, 3108, 5020, 7107, 8613]
+```
+#### Rules Generators
+Following rules generators algorithms are implemented:
+* `SimpleRulesGenerator` - allows to generate rules in simple format that contains
+information only about changes in attribute values, and can be used, for example,
+to understand the reason for changes in the target sequence (e.g.
+attr1(2 → 3) ⇒ attr1(3 → 4)).
+* `AllRulesGenerator` - generates all possible rules, sorted according to score.
+* `ClosedRulesGenerator` - generates only the most specific rule, i.e.
+rule that does not subsume any other rules.
+* `DiscretizedDatasetGenerator` - allows to generate discretized data set for classical algorithms (Apriori, PrfixSpan, ...)
 
 ## Prediction using discovered causal rules
 
@@ -82,6 +167,8 @@ attr_1 at: 8760 4.0{490} -> 1.0{257}
   - python seqgen.py -i configs/config_file -s
   - python plot_sequence.py -i sequences/sequence.csv -s 120000
 ```
+
+
 
 ## License
 

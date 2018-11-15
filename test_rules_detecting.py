@@ -87,15 +87,16 @@ rules_detector = AllRulesGenerator(target_seq_index=target_seq_index,
 #                                       window_size=0,
 #                                       round_to=100)
 
-# rules_detector = DiscretizedDatasetGenerator(target_seq_index=target_seq_index,
-#                                              window_size=0,
-#                                              round_to=100)
+rules_detector = DiscretizedDatasetGenerator(target_seq_index=target_seq_index,
+                                             window_size=0,
+                                             round_to=100)
 
 simulator = OnlineSimulator(rules_detector,
                             [detector1, detector2, detector3, detector4],
                             sequences,
-                            seq_names,
-                            predict_ratio=predict_ratio)
+                            seq_names
+                            )
+
 # simulator.label_encoder = lb
 
 start_time = time.time()
@@ -103,15 +104,15 @@ start_time = time.time()
 simulator.run(plot=True, detect_rules=True, predict_seq=False)
 
 discovered_rules = simulator.get_rules_sets()
-print_detected_change_points(simulator.get_detected_changes())
+#print_detected_change_points(simulator.get_detected_changes())
 # print_rules(simulator.get_rules_sets(), 5)
 # print_combined_rules(simulator.get_combined_rules(), 0)
 # print_rules(discovered_rules, 1)
-print_best_rules(discovered_rules)
+#print_best_rules(discovered_rules)
 # print_rules_for_attr(discovered_rules, 'light', 1)
 
-# for dd in rules_detector.discretized_dataset:
-#     print(dd)
+for dd in rules_detector.discretized_dataset:
+    print(dd)
 
 end_time = time.time()
 print(end_time - start_time)
